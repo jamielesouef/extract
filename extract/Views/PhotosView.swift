@@ -6,10 +6,17 @@
 //
 
 import SwiftUI
+import Photos
 
 struct PhotosView: View {
   @Environment(PhotosStore.self) var store
   @Environment(AppState.self) var appState
+
+  private let gridColumns: [GridItem] = [
+    .init(.flexible()),
+    .init(.flexible()),
+    .init(.flexible())
+  ]
 
   var body: some View {
     VStack {
@@ -18,9 +25,9 @@ struct PhotosView: View {
       Text("Media items since last backup")
       Divider()
       ScrollView {
-        LazyVStack {
+        LazyVGrid(columns: gridColumns) {
           ForEach(store.items, id: \.self) { asset in
-            Text(asset)
+            ImageThumbnailView(asset: asset)
           }
         }
       }

@@ -13,7 +13,7 @@ import AVFoundation
 @Observable @MainActor
 final class PhotosStore {
 
-  var items: [String] = []
+  var items: [PHAsset] = []
   var authorizationStatus: Bool?
   var isLoading: Bool = false
   var count: Int { items.count }
@@ -44,13 +44,13 @@ final class PhotosStore {
 
     items.reserveCapacity(fetched.count)
 
-    fetched.enumerateObjects { [weak self] asset, _, _ in
+    fetched.enumerateObjects { [weak self] asset, id, _ in
       switch asset.mediaType {
       case .image: self?.photosCount += 1
       case .video: self?.videoCount += 1
         default : break
       }
-      self?.items.append(asset.localIdentifier)
+      self?.items.append(asset)
     }
   }
 
