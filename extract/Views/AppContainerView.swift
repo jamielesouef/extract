@@ -18,15 +18,7 @@ struct AppContainerView: View {
     Group {
       if let status = store.authorizationStatus {
         if status {
-#if os(macOS)
-          SplitViewLayout
-#else
-          if UIDevice.current.userInterfaceIdiom == .pad {
-            SplitViewLayout
-          } else {
-            iPhoneLayout
-          }
-#endif
+          photosViewForPlatform()
         } else {
           FailedPhotosAccessView()
         }
@@ -39,12 +31,30 @@ struct AppContainerView: View {
   }
 
   @ViewBuilder
+  private func photosViewForPlatform() -> some View {
+#if os(macOS)
+    SplitViewLayout
+#else
+    handleiOSViews()
+#endif
+  }
+
+  @ViewBuilder
+  private func handleiOSViews() -> some View {
+    if UIDevice.current.userInterfaceIdiom == .pad {
+      SplitViewLayout
+    } else {
+      iPhoneLayout
+    }
+  }
+
+  @ViewBuilder
   private var SplitViewLayout: some View {
     NavigationSplitView(columnVisibility: $columnVisibility) {
       sidebar
         .frame(minWidth: 200)
     } detail: {
-      detail
+      PhotosView()
     }
   }
 
@@ -54,10 +64,7 @@ struct AppContainerView: View {
     @Bindable var state = appState
 
     NavigationStack(path: $state.pathStack) {
-      Text("Hello Iphone")
-        .navigationDestination(for: String.self) { item in
-          Text("Detail for \(item)")
-        }
+      PhotosView()
     }
   }
 
@@ -68,16 +75,6 @@ struct AppContainerView: View {
       NavigationLink("Item 2", value: "Item 2")
     }
     .navigationTitle("Sidebar")
-  }
-
-  @ViewBuilder
-  private var content: some View {
-    Text("Main Content")
-  }
-
-  @ViewBuilder
-  private var detail: some View {
-    Text("Awesome")
   }
 }
 
