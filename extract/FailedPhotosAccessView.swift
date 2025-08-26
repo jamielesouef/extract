@@ -1,0 +1,31 @@
+//
+//  FailedPhotosAccessView.swift
+//  extract
+//
+//  Created by Jamie Le Souef on 26/8/2025.
+//
+
+import Foundation
+import SwiftUI
+
+struct FailedPhotosAccessView: View {
+
+  var body: some View {
+    VStack {
+      Text("**Well what did you expect?** You can't see anything here becuase you didn't give me access to your photos!. Now you have to go into settings and give me access to your photo library.\n\n Don't worry. I'll wait. \n\n\n For a while....")
+
+
+      Button("Enable Photo Access") {
+        if let url = URL(string: UIApplication.openSettingsURLString) {
+          UIApplication.shared.open(url)
+        }
+      }
+      .padding(.top, 20)
+      .buttonStyle(.borderedProminent)
+    }
+  }
+}
+
+#Preview {
+  FailedPhotosAccessView()
+}

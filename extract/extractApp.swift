@@ -9,9 +9,14 @@ import SwiftUI
 
 @main
 struct extractApp: App {
-    var body: some Scene {
-        WindowGroup {
-            ContentView()
-        }
+  @State private var appState = AppState()
+  @State private var photoStore = PhotosStore()
+  
+  var body: some Scene {
+    WindowGroup {
+      AppContainerView()
+        .environment(appState)
+        .environment(photoStore)
     }
+  }
 }
