@@ -6,8 +6,9 @@
 //
 
 import Foundation
+import SwiftUI
 
 @Observable @MainActor
 final class AppState {
-  
+  var pathStack: NavigationPath = .init()
 }
