@@ -41,11 +41,13 @@ struct AppContainerView: View {
 
   @ViewBuilder
   private func handleiOSViews() -> some View {
+#if os(iOS)
     if UIDevice.current.userInterfaceIdiom == .pad {
       SplitViewLayout
     } else {
       iPhoneLayout
     }
+#endif // os(iOS)
   }
 
   @ViewBuilder
@@ -57,7 +59,7 @@ struct AppContainerView: View {
       PhotosView()
     }
   }
-
+  
   @ViewBuilder
   private var iPhoneLayout: some View {
 

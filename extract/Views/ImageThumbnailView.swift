@@ -5,25 +5,40 @@
 //  Created by Jamie Le Souef on 26/8/2025.
 //
 
+
 import SwiftUI
 import Photos
+#if os(macOS)
+import AppKit
+#endif
+
 
 struct ImageThumbnailView: View {
 
   @Environment(\.displayScale) private var displayScale
 
   let asset: PHAsset
-  let size: CGFloat = 30
+  let size: CGFloat
 
+#if os(iOS)
   @State private var image: UIImage?
+#else
+  @State private var image: NSImage?
+#endif
   @State private var requestID: PHImageRequestID?
 
   var body: some View {
     Group {
       if let image {
+#if os(iOS)
         Image(uiImage: image)
           .resizable()
           .scaledToFill()
+#else
+        Image(nsImage: image)
+          .resizable()
+          .scaledToFill()
+#endif
       } else {
         Color.gray.opacity(0.2)
       }
@@ -63,5 +78,5 @@ struct ImageThumbnailView: View {
 }
 
 #Preview {
-  ImageThumbnailView(asset: .init())
+  ImageThumbnailView(asset: .init(), size: 100)
 }

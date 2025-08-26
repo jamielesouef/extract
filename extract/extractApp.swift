@@ -11,12 +11,17 @@ import SwiftUI
 struct extractApp: App {
   @State private var appState = AppState()
   @State private var photoStore = PhotosStore()
-  
+
   var body: some Scene {
     WindowGroup {
       AppContainerView()
         .environment(appState)
         .environment(photoStore)
+        .onGeometryChange(for: CGSize.self) { geometry in
+          geometry.size
+        } action: { newValue in
+          appState.windowSize = newValue
+        }
     }
   }
 }
