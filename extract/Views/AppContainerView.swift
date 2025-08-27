@@ -29,15 +29,14 @@ struct AppContainerView: View {
     } detail: {
       NavigationStack(path: $appState.path) {
         if let status = store.authorizationStatus, status {
-          PhotosView()
+          NavigationOptions.newPhotos.viewForPage()
         } else {
-          FailedPhotosAccessView()
+          NavigationOptions.failedPhotosAccess.viewForPage()
         }
       }
-    }
-    
-    .task {
-      await store.requestAccess()
+      .task {
+        await store.requestAccess()
+      }
     }
     .padding()
   }

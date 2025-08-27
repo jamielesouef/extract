@@ -11,6 +11,7 @@ import SwiftUI
 enum NavigationOptions: Equatable, Hashable, Identifiable {
   case newPhotos
   case backedUpPhotos
+  case failedPhotosAccess
   
   var id: String {
     switch self {
@@ -18,6 +19,8 @@ enum NavigationOptions: Equatable, Hashable, Identifiable {
       "newPhotos"
     case .backedUpPhotos:
       "backedupPhotos"
+    case .failedPhotosAccess:
+      "failedPhotosAccess"
     }
   }
   
@@ -29,6 +32,8 @@ enum NavigationOptions: Equatable, Hashable, Identifiable {
       LocalizedStringResource("New Photos", comment: "New photos to be backed up")
     case .backedUpPhotos:
       LocalizedStringResource("Backed up Photos", comment: "All photos that are in a backup location")
+    case .failedPhotosAccess:
+      LocalizedStringResource("Photos Access Required", comment: "Indicates that the app needs access to photos")
     }
   }
   
@@ -38,6 +43,8 @@ enum NavigationOptions: Equatable, Hashable, Identifiable {
       "photo.circle"
     case .backedUpPhotos:
       "lock.circle"
+    case .failedPhotosAccess:
+      "exclamationmark.triangle"
     }
   }
   
@@ -47,6 +54,8 @@ enum NavigationOptions: Equatable, Hashable, Identifiable {
       PhotosView()
     case .backedUpPhotos:
       BackupsView()
+    case .failedPhotosAccess:
+      FailedPhotosAccessView()
     }
   }
 }
