@@ -15,7 +15,7 @@ struct extractApp: App {
 
   var body: some Scene {
     WindowGroup {
-      AppContainerView()
+      ExtractSplitView()
         .environment(appState)
         .environment(photoStore)
         .onGeometryChange(for: CGSize.self) { geometry in

@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct AppContainerView: View {
+struct ExtractSplitView: View {
   
   @State private var preferedColumn: NavigationSplitViewColumn = .detail
   
@@ -38,7 +38,6 @@ struct AppContainerView: View {
         await store.requestAccess()
       }
     }
-    .padding()
   }
   
   @ViewBuilder
@@ -56,7 +55,7 @@ struct AppContainerView: View {
 }
 
 #Preview {
-  AppContainerView()
+  ExtractSplitView()
     .environment(AppState())
     .environment(PhotosStore())
 }

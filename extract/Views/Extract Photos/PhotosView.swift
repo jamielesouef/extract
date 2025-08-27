@@ -39,7 +39,6 @@ struct PhotosView: View {
       }
     }
     .ignoresSafeArea(.keyboard)
-    .ignoresSafeArea(edges: .top)
     .toolbar(removing: .title)
     
   }
