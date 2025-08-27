@@ -10,6 +10,6 @@ import SwiftUI
 
 @Observable @MainActor
 final class AppState {
-  var pathStack: NavigationPath = .init()
+  var path: NavigationPath = .init()
   var windowSize: CGSize = .zero
 }

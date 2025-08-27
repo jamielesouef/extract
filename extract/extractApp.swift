@@ -9,6 +9,7 @@ import SwiftUI
 
 @main
 struct extractApp: App {
+  
   @State private var appState = AppState()
   @State private var photoStore = PhotosStore()
 

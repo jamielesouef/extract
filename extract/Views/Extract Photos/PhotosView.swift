@@ -21,12 +21,12 @@ struct PhotosView: View {
     }
 
   var body: some View {
+    ScrollView {
     VStack {
       Text("total: \(store.count)")
       Text("Photos: \(store.photosCount.formatted()), Videos: \(store.videoCount.formatted())")
       Text("Media items since last backup")
       Divider()
-      ScrollView {
         LazyVGrid(columns: columns) {
           ForEach(store.items, id: \.self) { asset in
             ImageThumbnailView(asset: asset, size: getIdealSizeForimage())
@@ -49,4 +49,6 @@ struct PhotosView: View {
 
 #Preview {
     PhotosView()
+    .environment(AppState())
+    .environment(PhotosStore())
 }
