@@ -9,6 +9,7 @@ import SwiftUI
 import Photos
 
 struct PhotosView: View {
+  
   @Environment(PhotosStore.self) var store
   @Environment(AppState.self) var appState
   
@@ -45,8 +46,8 @@ struct PhotosView: View {
   
   private func getIdealSizeForimage() -> CGFloat {
     let maxWidthForIPhone: CGFloat = 3
-    let delta = min(appState.windowSize.height, appState.windowSize.width) / maxWidthForIPhone
-    return delta - (spacing * 2)
+    let minWidowSize = min(appState.windowSize.height, appState.windowSize.width) / maxWidthForIPhone
+    return minWidowSize - (spacing * 2)
   }
 }
 

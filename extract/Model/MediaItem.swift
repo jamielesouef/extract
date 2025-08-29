@@ -8,39 +8,23 @@
 
 import Photos
 import AVFoundation
+import SwiftData
 
-struct MediaItem: Identifiable {
 
-  struct Metadata {
-    let exif: [String: Any]
-    let iptc: [String: Any]
-    let tiff: [String: Any]
-    let gps: [String: Any]
-  }
+@Model
+class MediaItem {
 
-  enum Kind: String { case image, video, audio, livePhoto, unknown }
-  let id: String
-  let kind: Kind
-  let filename: String?
-  let uti: String?
-  let byteSize: Int64?
-  let creationDate: Date?
-  let modificationDate: Date?
-  let duration: Double
-  let pixelWidth: Int
-  let pixelHeight: Int
-  let metaData: Metadata
-  let videoMetadata: [String: String]
-}
+  enum Kind: String, Codable { case image, video, audio, livePhoto, unknown }
 
-extension MediaItem {
-  static func == (lhs: Self, rhs: Self) -> Bool {
-    lhs.id == rhs.id
-  }
-}
-
-extension MediaItem: Hashable {
-  func hash(into hasher: inout Hasher) {
-    hasher.combine(id)
+  var id: UUID
+  var mediaId: String
+  var kind: Kind
+  var filename: String?
+  
+  init(id: UUID = .init(), mediaId: String, kind: Kind, filename: String? = nil) {
+    self.id = id
+    self.mediaId = mediaId
+    self.kind = kind
+    self.filename = filename
   }
 }
