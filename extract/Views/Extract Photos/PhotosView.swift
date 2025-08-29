@@ -47,7 +47,7 @@ struct PhotosView: View {
     
   }
     .refreshable {
-//      slog("refresh")
+      slog("refresh")
       await refreshGuarded()
     }
   }

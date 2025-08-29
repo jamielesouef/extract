@@ -28,7 +28,7 @@ actor MediaIndex {
   func addMedia(media items: [MediaItem]) async throws {
     let existing: [MediaItem] = try modelContext.fetch(FetchDescriptor<MediaItem>())
     var existingIDs = Set(existing.map { $0.mediaId })
-
+    await slog(existing.count)
     for src in items {
       let id = src.mediaId
       if existingIDs.contains(id) { continue }

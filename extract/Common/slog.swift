@@ -8,7 +8,6 @@
 
 import Foundation
 
-@inlinable
 public func slog(
   _ parts: Any...,
   fileID: StaticString = #fileID,
