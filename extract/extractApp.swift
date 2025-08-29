@@ -12,7 +12,7 @@ import SwiftData
 struct extractApp: App {
   
   @State private var appState = AppState()
-  @State private var photoStore = PhotosStore()
+  @State private var photoStore = MediaStore()
   
   @State private var modelContainer: ModelContainer = {
     let scheme = Schema([MediaItem.self])

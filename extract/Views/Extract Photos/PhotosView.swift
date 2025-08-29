@@ -10,8 +10,10 @@ import Photos
 
 struct PhotosView: View {
   
-  @Environment(PhotosStore.self) var store
-  @Environment(AppState.self) var appState
+  @Environment(MediaStore.self) private var store
+  @Environment(AppState.self) private var appState
+  @Environment(\.modelContext) private var modelContext
+  @State private var isRefreshing = false
   
   private let spacing: CGFloat = 8
   private let size: CGFloat = 100
@@ -36,13 +38,37 @@ struct PhotosView: View {
         }
       }
       .task {
-        await store.requestAndLoad()
+        await refreshGuarded()
       }
+     
     }
     .ignoresSafeArea(.keyboard)
     .toolbar(removing: .title)
     
   }
+    .refreshable {
+//      slog("refresh")
+      await refreshGuarded()
+    }
+  }
+  
+  private func refreshGuarded() async {
+    if isRefreshing { return }
+    isRefreshing = true
+    defer { isRefreshing = false }
+    await getMediaAndIndex()
+  }
+
+  private func getMediaAndIndex() async {
+    await store.requestAndLoad()
+    let indexer = MediaIndex.init(modelContainer: modelContext.container)
+    do {
+      try await indexer.addMedia(media: store.items)
+    } catch {
+      slog(error)
+    }
+  }
+  
   
   private func getIdealSizeForimage() -> CGFloat {
     let maxWidthForIPhone: CGFloat = 3
