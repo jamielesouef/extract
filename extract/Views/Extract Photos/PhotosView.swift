@@ -7,6 +7,7 @@
 
 import SwiftUI
 import Photos
+import SwiftData
 
 struct PhotosView: View {
   
@@ -40,12 +41,10 @@ struct PhotosView: View {
       .task {
         await refreshGuarded()
       }
-     
+      
     }
     .ignoresSafeArea(.keyboard)
     .toolbar(removing: .title)
-    
-  }
     .refreshable {
       slog("refresh")
       await refreshGuarded()
@@ -58,7 +57,7 @@ struct PhotosView: View {
     defer { isRefreshing = false }
     await getMediaAndIndex()
   }
-
+  
   private func getMediaAndIndex() async {
     await store.requestAndLoad()
     let indexer = MediaIndex.init(modelContainer: modelContext.container)
@@ -80,5 +79,5 @@ struct PhotosView: View {
 #Preview {
   PhotosView()
     .environment(AppState())
-    .environment(PhotosStore())
+    .environment(MediaStore())
 }

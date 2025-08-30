@@ -11,7 +11,7 @@ struct ExtractSplitView: View {
   
   @State private var preferedColumn: NavigationSplitViewColumn = .detail
   
-  @Environment(PhotosStore.self) var store
+  @Environment(MediaStore.self) var store
   @Environment(AppState.self) var appState
   
   var body: some View {
@@ -57,5 +57,5 @@ struct ExtractSplitView: View {
 #Preview {
   ExtractSplitView()
     .environment(AppState())
-    .environment(PhotosStore())
+    .environment(MediaStore())
 }
