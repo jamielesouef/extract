@@ -8,73 +8,47 @@
 import SwiftUI
 
 struct AppContainerView: View {
-
-  @State private var columnVisibility: NavigationSplitViewVisibility = .all
-
+  
+  @State private var preferedColumn: NavigationSplitViewColumn = .detail
+  
   @Environment(MediaStore.self) var store
   @Environment(AppState.self) var appState
-
+  
   var body: some View {
-    Group {
-      if let status = store.authorizationStatus {
-        if status {
-          photosViewForPlatform()
+    @Bindable var appState = appState
+    
+    NavigationSplitView(preferredCompactColumn: $preferedColumn) {
+      sidebar
+        .frame(minWidth: 200)
+        .navigationDestination(for: NavigationOptions.self) { page in
+          NavigationStack(path: $appState.path) {
+            page.viewForPage()
+          }
+        }
+    } detail: {
+      NavigationStack(path: $appState.path) {
+        if let status = store.authorizationStatus, status {
+          PhotosView()
         } else {
           FailedPhotosAccessView()
         }
       }
-    }
-    .task {
-      await store.requestAccess()
-    }
-    .padding()
-  }
-
-  @ViewBuilder
-  private func photosViewForPlatform() -> some View {
-#if os(macOS)
-    SplitViewLayout
-#else
-    handleiOSViews()
-#endif
-  }
-
-  @ViewBuilder
-  private func handleiOSViews() -> some View {
-#if os(iOS)
-    if UIDevice.current.userInterfaceIdiom == .pad {
-      SplitViewLayout
-    } else {
-      iPhoneLayout
-    }
-#endif // os(iOS)
-  }
-
-  @ViewBuilder
-  private var SplitViewLayout: some View {
-    NavigationSplitView(columnVisibility: $columnVisibility) {
-      sidebar
-        .frame(minWidth: 200)
-    } detail: {
-      PhotosView()
+      
+      .task {
+        await store.requestAccess()
+      }
+      .padding()
     }
   }
   
   @ViewBuilder
-  private var iPhoneLayout: some View {
-
-    @Bindable var state = appState
-
-    NavigationStack(path: $state.pathStack) {
-      PhotosView()
-    }
-  }
-
-  @ViewBuilder
   private var sidebar: some View {
-    List {
-      NavigationLink("Item 1", value: "Item 1")
-      NavigationLink("Item 2", value: "Item 2")
+    Section {
+      ForEach(NavigationOptions.pages) { page in
+        NavigationLink(value: page) {
+          Label(page.name, systemImage: page.icon)
+        }
+      }
     }
     .navigationTitle("Sidebar")
   }
