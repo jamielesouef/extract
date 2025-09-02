@@ -14,6 +14,7 @@ struct PhotosView: View {
   @Environment(MediaStore.self) private var store
   @Environment(AppState.self) private var appState
   @Environment(\.modelContext) private var modelContext
+  
   @State private var isRefreshing = false
   
   private let spacing: CGFloat = 8
@@ -27,9 +28,11 @@ struct PhotosView: View {
   var body: some View {
     ScrollView {
       LazyVStack {
-        Text("total: \(store.count)")
-        Text("Photos: \(store.photosCount.formatted()), Videos: \(store.videoCount.formatted())")
-        Text("Media items since last backup")
+        PhotosHeaderView(
+          count: store.count,
+          photosCount: store.photosCount,
+          videoCount: store.videoCount
+        )
         Divider()
         LazyVGrid(columns: columns) {
           ForEach(store.items, id: \.self) { asset in
@@ -38,13 +41,12 @@ struct PhotosView: View {
           }
         }
       }
-      .task {
-        await refreshGuarded()
-      }
-      
     }
     .ignoresSafeArea(.keyboard)
     .toolbar(removing: .title)
+    .task {
+      await refreshGuarded()
+    }
     .refreshable {
       slog("refresh")
       await refreshGuarded()
