@@ -1,5 +1,5 @@
 //
-//  MediaIdex.swift
+//  MediaIndex.swift
 //  extract
 //
 //  Created by Jamie Le Souef on 29/8/2025.

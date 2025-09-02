@@ -45,7 +45,7 @@ struct MediaItemData: Sendable {
   }
   
   enum Status: String, Codable, Sendable {
-    case backedup, notBackedUp, unknown
+    case backedUp, notBackedUp, unknown
   }
   
   let mediaId: String

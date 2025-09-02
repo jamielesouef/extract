@@ -9,7 +9,7 @@ import SwiftUI
 
 struct ExtractSplitView: View {
   
-  @State private var preferedColumn: NavigationSplitViewColumn = .detail
+  @State private var preferredColumn: NavigationSplitViewColumn = .detail
   
   @Environment(MediaStore.self) var store
   @Environment(AppState.self) var appState
@@ -18,7 +18,7 @@ struct ExtractSplitView: View {
     
     @Bindable var appState = appState
     
-    NavigationSplitView(preferredCompactColumn: $preferedColumn) {
+    NavigationSplitView(preferredCompactColumn: $preferredColumn) {
       sidebar
         .frame(minWidth: 200)
         .navigationDestination(for: NavigationOptions.self) { page in

@@ -18,7 +18,7 @@ enum NavigationOptions: Equatable, Hashable, Identifiable {
     case .newPhotos:
       "newPhotos"
     case .backedUpPhotos:
-      "backedupPhotos"
+      "backedUpPhotos"
     case .failedPhotosAccess:
       "failedPhotosAccess"
     }
