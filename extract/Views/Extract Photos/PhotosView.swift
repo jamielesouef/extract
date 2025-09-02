@@ -62,7 +62,7 @@ struct PhotosView: View {
   
   private func getMediaAndIndex() async {
     await store.requestAndLoad()
-    let indexer = MediaIndex.init(modelContainer: modelContext.container)
+    let indexer = MediaIndex(modelContainer: modelContext.container)
     do {
       try await indexer.addMedia(media: store.items)
     } catch {

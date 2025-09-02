@@ -10,7 +10,8 @@ import Photos
 import ImageIO
 import AVFoundation
 
-@Observable @MainActor
+@Observable
+@MainActor
 final class MediaStore {
 
   var items: [PHAsset] = []

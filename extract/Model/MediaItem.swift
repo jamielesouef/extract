@@ -12,8 +12,30 @@ import SwiftData
 
 
 @Model
-final class MediaItem {
+nonisolated final class MediaItem {
 
+  @Attribute(.unique) var id: UUID
+  var mediaId: String
+  var kind: MediaItemData.Kind
+  var status: MediaItemData.Status
+  var filename: String?
+  
+  init(
+    mediaId: String,
+    kind: MediaItemData.Kind,
+    status: MediaItemData.Status,
+    filename: String? = nil
+  ) {
+    self.id = UUID()
+    self.mediaId = mediaId
+    self.kind = kind
+    self.status = status
+    self.filename = filename
+  }
+}
+
+struct MediaItemData: Sendable {
+  
   enum Kind: String, Codable, Sendable {
     case image,
          video,
@@ -22,27 +44,12 @@ final class MediaItem {
          unknown
   }
   
-  enum Status: String, Codable {
+  enum Status: String, Codable, Sendable {
     case backedup, notBackedUp, unknown
   }
-
-  var id: UUID
-  var mediaId: String
-  var kind: Kind
-  var status: Status
-  var filename: String?
   
-  init(
-    id: UUID = .init(),
-    mediaId: String,
-    kind: Kind,
-    status: Status,
-    filename: String? = nil
-  ) {
-    self.id = id
-    self.mediaId = mediaId
-    self.kind = kind
-    self.status = status
-    self.filename = filename
-  }
+  let mediaId: String
+  let kind: Kind
+  let status: Status
+  let filename: String?
 }

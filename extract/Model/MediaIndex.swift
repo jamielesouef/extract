@@ -15,28 +15,34 @@ actor MediaIndex {
   func addMedia(media items: [PHAsset]) async throws {
     let mediaItems = items.map {
       let kind =  getMediaType(from: $0.mediaType)
-      return MediaItem(
+      return MediaItemData(
         mediaId: $0.localIdentifier,
         kind: kind,
-        status: .unknown
+        status: .unknown,
+        filename: nil
       )
     }
     
     try await addMedia(media: mediaItems)
   }
   
-  func addMedia(media items: [MediaItem]) async throws {
-    let existing: [MediaItem] = try modelContext.fetch(FetchDescriptor<MediaItem>())
-    var existingIDs = Set(existing.map { $0.mediaId })
-    await slog(existing.count)
-    for src in items {
-      let id = src.mediaId
+  func addMedia(media items: [MediaItemData]) async throws {
+    
+    let descriptor = FetchDescriptor<MediaItem>()
+    
+    let existing: [MediaItem] = try modelContext.fetch(descriptor)
+    var existingIDs: Set<String> = Set(existing.map { $0.mediaId })
+   
+    for item in items {
+      let id = item.mediaId
       if existingIDs.contains(id) { continue }
+      
       let copy = MediaItem(
         mediaId: id,
-        kind: src.kind,
-        status: src.status
+        kind: item.kind,
+        status: item.status
       )
+      
       modelContext.insert(copy)
       existingIDs.insert(id)
     }
@@ -44,7 +50,7 @@ actor MediaIndex {
     try modelContext.save()
   }
   
-  private func getMediaType(from type: PHAssetMediaType) -> MediaItem.Kind {
+  private func getMediaType(from type: PHAssetMediaType) -> MediaItemData.Kind {
     switch type {
     case .image: return .image
     case .video: return .video
