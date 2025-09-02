@@ -17,6 +17,7 @@ struct extractApp: App {
   @State private var modelContainer: ModelContainer = {
     let scheme = Schema([MediaItem.self])
     let config = ModelConfiguration(isStoredInMemoryOnly: true)
+    
     return try! ModelContainer(for: scheme, configurations: config)
   }()
 

@@ -55,10 +55,6 @@
             argument = "-com.apple.CoreData.SQLDebug 2"
             isEnabled = "YES">
          </CommandLineArgument>
-         <CommandLineArgument
-            argument = ""
-            isEnabled = "YES">
-         </CommandLineArgument>
       </CommandLineArguments>
    </LaunchAction>
    <ProfileAction
