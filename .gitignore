@@ -5,6 +5,10 @@
 ## User settings
 xcuserdata/
 
+## Compatibility with Xcode 8 and earlier (ignoring not required starting Xcode 9)
+*.xcscmblueprint
+*.xccheckout
+
 ## Obj-C/Swift specific
 *.hmap
 
@@ -16,6 +20,11 @@ xcuserdata/
 ## Playgrounds
 timeline.xctimeline
 playground.xcworkspace
+
+## Code coverage files
+*.gcov
+*.gcno
+*.gcda
 
 # Swift Package Manager
 #
@@ -61,3 +70,50 @@ fastlane/report.xml
 fastlane/Preview.html
 fastlane/screenshots/**/*.png
 fastlane/test_output
+
+# Accio dependency management
+Dependencies/
+.accio/
+
+# Firebase
+GoogleService-Info.plist
+
+# Secrets and API keys
+*.pem
+*.p12
+*.key
+secrets.plist
+APIKeys.plist
+
+# IDEs and editors
+.vscode/
+.idea/
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Thumbnails
+._*
+
+# Files that might appear in the root of a volume
+.DocumentRevisions-V100
+.fseventsd
+.Spotlight-V100
+.TemporaryItems
+.Trashes
+.VolumeIcon.icns
+.com.apple.timemachine.donotpresent
+
+# Directories potentially created on remote AFP share
+.AppleDB
+.AppleDesktop
+Network Trash Folder
+Temporary Items
+.apdisk
+
+# SwiftUI Previews
+DerivedData/
+.swiftpm/
+.netrc
