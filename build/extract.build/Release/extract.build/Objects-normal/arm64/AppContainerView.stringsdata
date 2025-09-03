@@ -1,0 +1,16 @@
+{
+  "source": "/Users/jamielesouef/Developer/extract/extract/Views/AppContainerView.swift",
+  "tables": {
+    "Localizable": [
+      {
+        "comment": "",
+        "key": "Sidebar",
+        "location": {
+          "startingColumn": 22,
+          "startingLine": 53
+        }
+      }
+    ]
+  },
+  "version": 1
+}

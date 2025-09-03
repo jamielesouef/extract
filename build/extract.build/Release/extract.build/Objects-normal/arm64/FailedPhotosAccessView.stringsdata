@@ -1,0 +1,24 @@
+{
+  "source": "/Users/jamielesouef/Developer/extract/extract/Views/Extract Photos/FailedPhotosAccessView.swift",
+  "tables": {
+    "Localizable": [
+      {
+        "comment": "",
+        "key": "**Well what did you expect?** You can't see anything here becuase you didn't give me access to your photos!. Now you have to go into settings and give me access to your photo library.\n\n Don't worry. I'll wait.\n\n\n For a while....",
+        "location": {
+          "startingColumn": 12,
+          "startingLine": 15
+        }
+      },
+      {
+        "comment": "",
+        "key": "Enable Photo Access",
+        "location": {
+          "startingColumn": 14,
+          "startingLine": 26
+        }
+      }
+    ]
+  },
+  "version": 1
+}

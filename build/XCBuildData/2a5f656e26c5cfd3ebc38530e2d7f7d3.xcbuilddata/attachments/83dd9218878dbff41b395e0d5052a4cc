@@ -1,0 +1,39 @@
+{
+  "" : {
+    "diagnostics" : "/Users/jamielesouef/Developer/extract/build/extract.build/Debug/extractTests.build/Objects-normal/x86_64/extractTests-primary.dia",
+    "emit-module-dependencies" : "/Users/jamielesouef/Developer/extract/build/extract.build/Debug/extractTests.build/Objects-normal/x86_64/extractTests-primary-emit-module.d",
+    "emit-module-diagnostics" : "/Users/jamielesouef/Developer/extract/build/extract.build/Debug/extractTests.build/Objects-normal/x86_64/extractTests-primary-emit-module.dia",
+    "pch" : "/Users/jamielesouef/Developer/extract/build/extract.build/Debug/extractTests.build/Objects-normal/x86_64/extractTests-primary-Bridging-header.pch",
+    "swift-dependencies" : "/Users/jamielesouef/Developer/extract/build/extract.build/Debug/extractTests.build/Objects-normal/x86_64/extractTests-primary.swiftdeps"
+  },
+  "/Users/jamielesouef/Developer/extract/extractTests/AppStateTests.swift" : {
+    "const-values" : "/Users/jamielesouef/Developer/extract/build/extract.build/Debug/extractTests.build/Objects-normal/x86_64/AppStateTests.swiftconstvalues",
+    "dependencies" : "/Users/jamielesouef/Developer/extract/build/extract.build/Debug/extractTests.build/Objects-normal/x86_64/AppStateTests.d",
+    "diagnostics" : "/Users/jamielesouef/Developer/extract/build/extract.build/Debug/extractTests.build/Objects-normal/x86_64/AppStateTests.dia",
+    "index-unit-output-path" : "/extract.build/Debug/extractTests.build/Objects-normal/x86_64/AppStateTests.o",
+    "llvm-bc" : "/Users/jamielesouef/Developer/extract/build/extract.build/Debug/extractTests.build/Objects-normal/x86_64/AppStateTests.bc",
+    "object" : "/Users/jamielesouef/Developer/extract/build/extract.build/Debug/extractTests.build/Objects-normal/x86_64/AppStateTests.o",
+    "swift-dependencies" : "/Users/jamielesouef/Developer/extract/build/extract.build/Debug/extractTests.build/Objects-normal/x86_64/AppStateTests.swiftdeps",
+    "swiftmodule" : "/Users/jamielesouef/Developer/extract/build/extract.build/Debug/extractTests.build/Objects-normal/x86_64/AppStateTests~partial.swiftmodule"
+  },
+  "/Users/jamielesouef/Developer/extract/extractTests/MediaItemTests.swift" : {
+    "const-values" : "/Users/jamielesouef/Developer/extract/build/extract.build/Debug/extractTests.build/Objects-normal/x86_64/MediaItemTests.swiftconstvalues",
+    "dependencies" : "/Users/jamielesouef/Developer/extract/build/extract.build/Debug/extractTests.build/Objects-normal/x86_64/MediaItemTests.d",
+    "diagnostics" : "/Users/jamielesouef/Developer/extract/build/extract.build/Debug/extractTests.build/Objects-normal/x86_64/MediaItemTests.dia",
+    "index-unit-output-path" : "/extract.build/Debug/extractTests.build/Objects-normal/x86_64/MediaItemTests.o",
+    "llvm-bc" : "/Users/jamielesouef/Developer/extract/build/extract.build/Debug/extractTests.build/Objects-normal/x86_64/MediaItemTests.bc",
+    "object" : "/Users/jamielesouef/Developer/extract/build/extract.build/Debug/extractTests.build/Objects-normal/x86_64/MediaItemTests.o",
+    "swift-dependencies" : "/Users/jamielesouef/Developer/extract/build/extract.build/Debug/extractTests.build/Objects-normal/x86_64/MediaItemTests.swiftdeps",
+    "swiftmodule" : "/Users/jamielesouef/Developer/extract/build/extract.build/Debug/extractTests.build/Objects-normal/x86_64/MediaItemTests~partial.swiftmodule"
+  },
+  "/Users/jamielesouef/Developer/extract/extractTests/MediaStoreTests.swift" : {
+    "const-values" : "/Users/jamielesouef/Developer/extract/build/extract.build/Debug/extractTests.build/Objects-normal/x86_64/MediaStoreTests.swiftconstvalues",
+    "dependencies" : "/Users/jamielesouef/Developer/extract/build/extract.build/Debug/extractTests.build/Objects-normal/x86_64/MediaStoreTests.d",
+    "diagnostics" : "/Users/jamielesouef/Developer/extract/build/extract.build/Debug/extractTests.build/Objects-normal/x86_64/MediaStoreTests.dia",
+    "index-unit-output-path" : "/extract.build/Debug/extractTests.build/Objects-normal/x86_64/MediaStoreTests.o",
+    "llvm-bc" : "/Users/jamielesouef/Developer/extract/build/extract.build/Debug/extractTests.build/Objects-normal/x86_64/MediaStoreTests.bc",
+    "object" : "/Users/jamielesouef/Developer/extract/build/extract.build/Debug/extractTests.build/Objects-normal/x86_64/MediaStoreTests.o",
+    "swift-dependencies" : "/Users/jamielesouef/Developer/extract/build/extract.build/Debug/extractTests.build/Objects-normal/x86_64/MediaStoreTests.swiftdeps",
+    "swiftmodule" : "/Users/jamielesouef/Developer/extract/build/extract.build/Debug/extractTests.build/Objects-normal/x86_64/MediaStoreTests~partial.swiftmodule"
+  }
+}

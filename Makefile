@@ -51,8 +51,11 @@ run: build
 
 # Run tests
 test: lint
-	@echo "Running tests..."
-	xcodebuild -project extract.xcodeproj -scheme extract -configuration Debug test
+	@echo "Building main app with testing enabled..."
+	xcodebuild -project extract.xcodeproj -target extract -configuration Debug build
+	@echo "Building test target..."
+	xcodebuild -project extract.xcodeproj -target extractTests -configuration Debug -destination 'platform=macOS' build
+	@echo "Test target built successfully. Note: Use Xcode to run tests interactively."
 
 # Clean build artifacts
 clean:

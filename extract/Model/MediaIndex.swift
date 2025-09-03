@@ -60,8 +60,3 @@ actor MediaIndex {
     }
   }
 }
-
-/*
- Optional("FD8B1F77-1618-4B3E-8F74-C939B1AB1945/L0/001")
- Optional("CD230B59-A705-41AF-88FD-9767B7C43B66/L0/001")
- */

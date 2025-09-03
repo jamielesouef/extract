@@ -1,0 +1,4 @@
+Target dependency graph (2 targets)
+Target 'extractTests' in project 'extract'
+➜ Explicit dependency on target 'extract' in project 'extract'
+Target 'extract' in project 'extract' (no dependencies)

@@ -1,0 +1,12 @@
+{
+  "/Users/jamielesouef/Developer/extract/extractTests/AppStateTests.swift" : {
+    "abi-baseline-json" : "/Users/jamielesouef/Developer/extract/build/extract.build/Release/extractTests.build/Objects-normal/x86_64/extractTests.abi.json",
+    "const-values" : "/Users/jamielesouef/Developer/extract/build/extract.build/Release/extractTests.build/Objects-normal/x86_64/extractTests-primary.swiftconstvalues",
+    "dependencies" : "/Users/jamielesouef/Developer/extract/build/extract.build/Release/extractTests.build/Objects-normal/x86_64/extractTests-primary.d",
+    "diagnostics" : "/Users/jamielesouef/Developer/extract/build/extract.build/Release/extractTests.build/Objects-normal/x86_64/extractTests-primary.dia",
+    "objc-header" : "/Users/jamielesouef/Developer/extract/build/extract.build/Release/extractTests.build/Objects-normal/x86_64/extractTests-Swift.h",
+    "swiftdoc" : "/Users/jamielesouef/Developer/extract/build/extract.build/Release/extractTests.build/Objects-normal/x86_64/extractTests.swiftdoc",
+    "swiftmodule" : "/Users/jamielesouef/Developer/extract/build/extract.build/Release/extractTests.build/Objects-normal/x86_64/extractTests.swiftmodule",
+    "swiftsourceinfo" : "/Users/jamielesouef/Developer/extract/build/extract.build/Release/extractTests.build/Objects-normal/x86_64/extractTests.swiftsourceinfo"
+  }
+}

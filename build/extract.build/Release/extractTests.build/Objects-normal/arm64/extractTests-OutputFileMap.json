@@ -1,0 +1,26 @@
+{
+  "" : {
+    "const-values" : "/Users/jamielesouef/Developer/extract/build/extract.build/Release/extractTests.build/Objects-normal/arm64/extractTests-primary.swiftconstvalues",
+    "dependencies" : "/Users/jamielesouef/Developer/extract/build/extract.build/Release/extractTests.build/Objects-normal/arm64/extractTests-primary.d",
+    "diagnostics" : "/Users/jamielesouef/Developer/extract/build/extract.build/Release/extractTests.build/Objects-normal/arm64/extractTests-primary.dia",
+    "emit-module-dependencies" : "/Users/jamielesouef/Developer/extract/build/extract.build/Release/extractTests.build/Objects-normal/arm64/extractTests-primary-emit-module.d",
+    "emit-module-diagnostics" : "/Users/jamielesouef/Developer/extract/build/extract.build/Release/extractTests.build/Objects-normal/arm64/extractTests-primary-emit-module.dia",
+    "pch" : "/Users/jamielesouef/Developer/extract/build/extract.build/Release/extractTests.build/Objects-normal/arm64/extractTests-primary-Bridging-header.pch",
+    "swift-dependencies" : "/Users/jamielesouef/Developer/extract/build/extract.build/Release/extractTests.build/Objects-normal/arm64/extractTests-primary.swiftdeps"
+  },
+  "/Users/jamielesouef/Developer/extract/extractTests/AppStateTests.swift" : {
+    "index-unit-output-path" : "/extract.build/Release/extractTests.build/Objects-normal/arm64/AppStateTests.o",
+    "llvm-bc" : "/Users/jamielesouef/Developer/extract/build/extract.build/Release/extractTests.build/Objects-normal/arm64/AppStateTests.bc",
+    "object" : "/Users/jamielesouef/Developer/extract/build/extract.build/Release/extractTests.build/Objects-normal/arm64/AppStateTests.o"
+  },
+  "/Users/jamielesouef/Developer/extract/extractTests/MediaItemTests.swift" : {
+    "index-unit-output-path" : "/extract.build/Release/extractTests.build/Objects-normal/arm64/MediaItemTests.o",
+    "llvm-bc" : "/Users/jamielesouef/Developer/extract/build/extract.build/Release/extractTests.build/Objects-normal/arm64/MediaItemTests.bc",
+    "object" : "/Users/jamielesouef/Developer/extract/build/extract.build/Release/extractTests.build/Objects-normal/arm64/MediaItemTests.o"
+  },
+  "/Users/jamielesouef/Developer/extract/extractTests/MediaStoreTests.swift" : {
+    "index-unit-output-path" : "/extract.build/Release/extractTests.build/Objects-normal/arm64/MediaStoreTests.o",
+    "llvm-bc" : "/Users/jamielesouef/Developer/extract/build/extract.build/Release/extractTests.build/Objects-normal/arm64/MediaStoreTests.bc",
+    "object" : "/Users/jamielesouef/Developer/extract/build/extract.build/Release/extractTests.build/Objects-normal/arm64/MediaStoreTests.o"
+  }
+}
