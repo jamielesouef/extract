@@ -8,11 +8,11 @@
 import SwiftUI
 
 struct PhotosHeaderView: View {
-  
+
   let count: Int
   let photosCount: Int
   let videoCount: Int
-  
+
     var body: some View {
       Text("total: \(count)")
       Text("Photos: \(photosCount.formatted()), Videos: \(videoCount.formatted())")

@@ -12,8 +12,16 @@ struct FailedPhotosAccessView: View {
 
   var body: some View {
     VStack {
-      Text("**Well what did you expect?** You can't see anything here becuase you didn't give me access to your photos!. Now you have to go into settings and give me access to your photo library.\n\n Don't worry. I'll wait. \n\n\n For a while....")
+      Text("""
+        **Well what did you expect?** You can't see anything here becuase you didn't give me access to your photos!. \
+        Now you have to go into settings and give me access to your photo library.
 
+         Don't worry. I'll wait.
+
+
+         For a while....
+        """)
+        .multilineTextAlignment(.center)
 
       Button("Enable Photo Access") {
 #if os(iOS)

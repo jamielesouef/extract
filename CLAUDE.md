@@ -35,7 +35,16 @@ Extract is a SwiftUI-based macOS/iOS app for exporting photos and videos from iC
 
 ### Building and Running
 
-The project uses standard Xcode build system:
+The project uses standard Xcode build system with Makefile integration:
+
+**Using Makefile (Recommended):**
+- `make build` - Build with SwiftLint checks
+- `make run` - Build and launch the app
+- `make lint` - Run SwiftLint only
+- `make clean` - Clean build artifacts
+- `make help` - Show all available commands
+
+**Using Xcode:**
 - Open `extract.xcodeproj` in Xcode
 - Build and run with Cmd+R
 - No external package managers (SPM, CocoaPods, Carthage) are used

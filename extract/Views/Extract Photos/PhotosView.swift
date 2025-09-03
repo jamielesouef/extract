@@ -10,21 +10,21 @@ import Photos
 import SwiftData
 
 struct PhotosView: View {
-  
+
   @Environment(MediaStore.self) private var store
   @Environment(AppState.self) private var appState
   @Environment(\.modelContext) private var modelContext
-  
+
   @State private var isRefreshing = false
-  
+
   private let spacing: CGFloat = 8
   private let size: CGFloat = 100
   private let roundedRadius = CGSize(width: 8, height: 8)
-  
+
   private var columns: [GridItem] {
     [GridItem(.adaptive(minimum: 100), spacing: spacing)]
   }
-  
+
   var body: some View {
     ScrollView {
       LazyVStack {
@@ -52,14 +52,14 @@ struct PhotosView: View {
       await refreshGuarded()
     }
   }
-  
+
   private func refreshGuarded() async {
     if isRefreshing { return }
     isRefreshing = true
     defer { isRefreshing = false }
     await getMediaAndIndex()
   }
-  
+
   private func getMediaAndIndex() async {
     await store.requestAndLoad()
     let indexer = MediaIndex(modelContainer: modelContext.container)
@@ -69,8 +69,7 @@ struct PhotosView: View {
       slog(error)
     }
   }
-  
-  
+
   private func getIdealSizeForimage() -> CGFloat {
     let maxWidthForIPhone: CGFloat = 3
     let minWidowSize = min(appState.windowSize.height, appState.windowSize.width) / maxWidthForIPhone

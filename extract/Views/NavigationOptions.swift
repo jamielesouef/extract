@@ -5,14 +5,13 @@
 //  Created by Jamie Le Souef on 27/8/2025.
 //
 
-
 import SwiftUI
 
 enum NavigationOptions: Equatable, Hashable, Identifiable {
   case newPhotos
   case backedUpPhotos
   case failedPhotosAccess
-  
+
   var id: String {
     switch self {
     case .newPhotos:
@@ -23,9 +22,9 @@ enum NavigationOptions: Equatable, Hashable, Identifiable {
       "failedPhotosAccess"
     }
   }
-  
+
   static let pages: [NavigationOptions] = [.newPhotos, .backedUpPhotos]
-  
+
   var name: LocalizedStringResource {
     switch self {
     case .newPhotos:
@@ -36,7 +35,7 @@ enum NavigationOptions: Equatable, Hashable, Identifiable {
       LocalizedStringResource("Photos Access Required", comment: "Indicates that the app needs access to photos")
     }
   }
-  
+
   var icon: String {
     switch self {
     case .newPhotos:
@@ -47,7 +46,7 @@ enum NavigationOptions: Equatable, Hashable, Identifiable {
       "exclamationmark.triangle"
     }
   }
-  
+
   @MainActor @ViewBuilder func viewForPage() -> some View {
     switch self {
     case .newPhotos:

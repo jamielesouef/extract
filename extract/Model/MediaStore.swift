@@ -28,7 +28,6 @@ final class MediaStore {
     switch status {
     case .authorized, .limited:
       authorizationStatus = true
-      break
     case .denied, .notDetermined, .restricted:
       authorizationStatus = false
     @unknown default:
@@ -39,37 +38,42 @@ final class MediaStore {
   func loadAllAssets() async {
     isLoading = true
     defer { isLoading = false }
-    
-    let result = await Task.detached(priority: .high) { () -> (items: [PHAsset], photosCount: Int, videoCount: Int) in
+
+    struct LoadResult {
+      let items: [PHAsset]
+      let photosCount: Int
+      let videoCount: Int
+    }
+
+    let result = await Task.detached(priority: .high) { () -> LoadResult in
       try? Task.checkCancellation()
-      
+
       let options = PHFetchOptions()
       options.sortDescriptors = [NSSortDescriptor(key: "creationDate", ascending: false)]
       let fetched = PHAsset.fetchAssets(with: options)
-      
+
       var localItems: [PHAsset] = []
       var localPhotosCount: Int = 0
       var localVideoCount: Int = 0
-      
-      
+
       localItems.reserveCapacity(fetched.count)
-      
+
       fetched.enumerateObjects { asset, _, _ in
         switch asset.mediaType {
         case .image: localPhotosCount += 1
         case .video: localVideoCount += 1
-          default : break
+        default: break
         }
         localItems.append(asset)
       }
-      
-      return (localItems, localPhotosCount, localVideoCount)
+
+      return LoadResult(items: localItems, photosCount: localPhotosCount, videoCount: localVideoCount)
     }.value
-    
+
     items = result.items
     photosCount = result.photosCount
     videoCount = result.videoCount
-    
+
   }
 
   func requestAndLoad() async {

@@ -5,13 +5,11 @@
 //  Created by Jamie Le Souef on 26/8/2025.
 //
 
-
 import SwiftUI
 import Photos
 #if os(macOS)
 import AppKit
 #endif
-
 
 struct ImageThumbnailView: View {
 
@@ -43,7 +41,7 @@ struct ImageThumbnailView: View {
         Color.gray.opacity(0.2)
       }
     }
-    .frame(width: size , height: size)
+    .frame(width: size, height: size)
     .clipped()
     .onAppear { loadImageIfNeeded() }
     .onDisappear { cancelIfNeeded() }

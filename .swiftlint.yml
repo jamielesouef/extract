@@ -1,0 +1,58 @@
+# SwiftLint Configuration for Extract
+
+# Rules to disable
+disabled_rules:
+  - trailing_whitespace # Auto-fixed by Xcode
+  - vertical_whitespace # Auto-fixed by Xcode
+
+# Rules to enable
+opt_in_rules:
+  - empty_count
+  - force_unwrapping
+  - implicitly_unwrapped_optional
+  - missing_docs
+  - private_outlet
+  - redundant_nil_coalescing
+
+# Configuration
+line_length:
+  warning: 120
+  error: 200
+
+file_length:
+  warning: 500
+  error: 1000
+
+type_body_length:
+  warning: 300
+  error: 500
+
+function_body_length:
+  warning: 50
+  error: 100
+
+# Paths to include/exclude
+included:
+  - extract/
+
+excluded:
+  - Carthage/
+  - Pods/
+  - .build/
+  - DerivedData/
+  - "*.xcodeproj"
+  - "*.xcworkspace"
+
+# Custom configurations
+identifier_name:
+  min_length: 1 # Allow single-letter variables like 'i', 'x', 'y'
+  max_length: 40
+
+# Severity overrides
+force_cast: warning
+force_try: error
+
+# Rule configurations
+large_tuple:
+  warning: 3
+  error: 4

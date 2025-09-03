@@ -9,16 +9,20 @@ import SwiftUI
 import SwiftData
 
 @main
-struct extractApp: App {
-  
+struct ExtractApp: App {
+
   @State private var appState = AppState()
   @State private var photoStore = MediaStore()
-  
+
   @State private var modelContainer: ModelContainer = {
     let scheme = Schema([MediaItem.self])
     let config = ModelConfiguration(isStoredInMemoryOnly: true)
-    
-    return try! ModelContainer(for: scheme, configurations: config)
+
+    do {
+      return try ModelContainer(for: scheme, configurations: config)
+    } catch {
+      fatalError("Failed to create ModelContainer: \(error)")
+    }
   }()
 
   var body: some Scene {

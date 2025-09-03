@@ -8,15 +8,15 @@
 import SwiftUI
 
 struct AppContainerView: View {
-  
+
   @State private var preferredColumn: NavigationSplitViewColumn = .detail
-  
+
   @Environment(MediaStore.self) var store
   @Environment(AppState.self) var appState
-  
+
   var body: some View {
     @Bindable var appState = appState
-    
+
     NavigationSplitView(preferredCompactColumn: $preferredColumn) {
       sidebar
         .frame(minWidth: 200)
@@ -33,14 +33,14 @@ struct AppContainerView: View {
           FailedPhotosAccessView()
         }
       }
-      
+
       .task {
         await store.requestAccess()
       }
       .padding()
     }
   }
-  
+
   @ViewBuilder
   private var sidebar: some View {
     Section {
