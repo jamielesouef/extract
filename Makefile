@@ -28,6 +28,7 @@ install-deps:
 		exit 1; \
 	fi
 	brew install swiftlint
+	brew install swiftformat
 
 # Run SwiftLint
 lint: check-swiftlint
