@@ -5,12 +5,11 @@
 //  Created by Jamie Le Souef on 25/8/2025.
 //
 
-import SwiftUI
 import SwiftData
+import SwiftUI
 
 @main
 struct ExtractApp: App {
-
   @State private var appState = AppState()
   @State private var photoStore = MediaStore()
 

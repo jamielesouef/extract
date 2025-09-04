@@ -5,13 +5,12 @@
 //  Created by Jamie Le Souef on 26/8/2025.
 //
 
-import Photos
 import AVFoundation
+import Photos
 import SwiftData
 
 @Model
-nonisolated final class MediaItem {
-
+final nonisolated class MediaItem {
   @Attribute(.unique) var id: UUID
   var mediaId: String
   var kind: MediaItemData.Kind
@@ -24,7 +23,7 @@ nonisolated final class MediaItem {
     status: MediaItemData.Status,
     filename: String? = nil
   ) {
-    self.id = UUID()
+    id = UUID()
     self.mediaId = mediaId
     self.kind = kind
     self.status = status
@@ -33,7 +32,6 @@ nonisolated final class MediaItem {
 }
 
 struct MediaItemData: Sendable {
-
   enum Kind: String, Codable, Sendable {
     case image,
          video,

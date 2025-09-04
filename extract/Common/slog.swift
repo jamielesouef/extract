@@ -13,8 +13,8 @@ public func slog(
   line: Int = #line,
   function: StaticString = #function
 ) {
-#if DEBUG
-  let message = parts.map { String(describing: $0) }.joined(separator: " | ")
-  debugPrint("---| \(fileID)::\(function):\(line) --: \(message)")
-#endif
+  #if DEBUG
+    let message = parts.map { String(describing: $0) }.joined(separator: " | ")
+    debugPrint("---| \(fileID)::\(function):\(line) --: \(message)")
+  #endif
 }

@@ -5,16 +5,15 @@
 //  Created by Jamie Le Souef on 29/8/2025.
 //
 
-import SwiftUI
-import SwiftData
 import Photos
+import SwiftData
+import SwiftUI
 
 @ModelActor
 actor MediaIndex {
-
   func addMedia(media items: [PHAsset]) async throws {
     let mediaItems = items.map {
-      let kind =  getMediaType(from: $0.mediaType)
+      let kind = getMediaType(from: $0.mediaType)
       return MediaItemData(
         mediaId: $0.localIdentifier,
         kind: kind,
@@ -27,7 +26,6 @@ actor MediaIndex {
   }
 
   func addMedia(media items: [MediaItemData]) async throws {
-
     let descriptor = FetchDescriptor<MediaItem>()
 
     let existing: [MediaItem] = try modelContext.fetch(descriptor)

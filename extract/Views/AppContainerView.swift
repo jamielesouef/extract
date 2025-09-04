@@ -1,5 +1,5 @@
 //
-//  ContentView.swift
+//  AppContainerView.swift
 //  extract
 //
 //  Created by Jamie Le Souef on 25/8/2025.
@@ -8,7 +8,6 @@
 import SwiftUI
 
 struct AppContainerView: View {
-
   @State private var preferredColumn: NavigationSplitViewColumn = .detail
 
   @Environment(MediaStore.self) var store

@@ -1,19 +1,18 @@
 //
-//  PhotosStore.swift
+//  MediaStore.swift
 //  extract
 //
 //  Created by Jamie Le Souef on 26/8/2025.
 //
 
-import Foundation
-import Photos
-import ImageIO
 import AVFoundation
+import Foundation
+import ImageIO
+import Photos
 
 @Observable
 @MainActor
 final class MediaStore {
-
   var items: [PHAsset] = []
   var authorizationStatus: Bool?
   var isLoading: Bool = false
@@ -22,7 +21,6 @@ final class MediaStore {
   var videoCount: Int = 0
 
   func requestAccess() async {
-
     let status = await PHPhotoLibrary.requestAuthorization(for: .readWrite)
 
     switch status {
@@ -53,8 +51,8 @@ final class MediaStore {
       let fetched = PHAsset.fetchAssets(with: options)
 
       var localItems: [PHAsset] = []
-      var localPhotosCount: Int = 0
-      var localVideoCount: Int = 0
+      var localPhotosCount = 0
+      var localVideoCount = 0
 
       localItems.reserveCapacity(fetched.count)
 
@@ -73,7 +71,6 @@ final class MediaStore {
     items = result.items
     photosCount = result.photosCount
     videoCount = result.videoCount
-
   }
 
   func requestAndLoad() async {

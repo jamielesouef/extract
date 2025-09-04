@@ -5,12 +5,11 @@
 //  Created by Jamie Le Souef on 26/8/2025.
 //
 
-import SwiftUI
 import Photos
 import SwiftData
+import SwiftUI
 
 struct PhotosView: View {
-
   @Environment(MediaStore.self) private var store
   @Environment(AppState.self) private var appState
   @Environment(\.modelContext) private var modelContext

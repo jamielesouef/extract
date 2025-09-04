@@ -5,38 +5,37 @@
 //  Created by Jamie Le Souef on 26/8/2025.
 //
 
-import SwiftUI
 import Photos
+import SwiftUI
 #if os(macOS)
-import AppKit
+  import AppKit
 #endif
 
 struct ImageThumbnailView: View {
-
   @Environment(\.displayScale) private var displayScale
 
   let asset: PHAsset
   let size: CGFloat
 
-#if os(iOS)
-  @State private var image: UIImage?
-#else
-  @State private var image: NSImage?
-#endif
+  #if os(iOS)
+    @State private var image: UIImage?
+  #else
+    @State private var image: NSImage?
+  #endif
   @State private var requestID: PHImageRequestID?
 
   var body: some View {
     Group {
       if let image {
-#if os(iOS)
-        Image(uiImage: image)
-          .resizable()
-          .scaledToFill()
-#else
-        Image(nsImage: image)
-          .resizable()
-          .scaledToFill()
-#endif
+        #if os(iOS)
+          Image(uiImage: image)
+            .resizable()
+            .scaledToFill()
+        #else
+          Image(nsImage: image)
+            .resizable()
+            .scaledToFill()
+        #endif
       } else {
         Color.gray.opacity(0.2)
       }
@@ -45,7 +44,6 @@ struct ImageThumbnailView: View {
     .clipped()
     .onAppear { loadImageIfNeeded() }
     .onDisappear { cancelIfNeeded() }
-
   }
 
   private func loadImageIfNeeded() {
