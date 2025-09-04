@@ -27,8 +27,8 @@ format:
 	@echo "Running SwiftFormat..."
 	swiftformat .
 
-# Build the project (with formatting)
-build: format
+# Build the project (with formatting and tests)
+build: format test
 	@echo "Building Extract..."
 	xcodebuild -project extract.xcodeproj -scheme extract -configuration Debug build
 
