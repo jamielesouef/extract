@@ -1,0 +1,118 @@
+// MARK: - Photos Service Contract
+// Handles Photos library access and asset retrieval
+
+import Photos
+import Foundation
+
+@MainActor
+protocol PhotosServiceProtocol: ObservableObject {
+    // MARK: - Authorization
+    func requestAuthorization() async -> PHAuthorizationStatus
+    var authorizationStatus: PHAuthorizationStatus { get }
+    
+    // MARK: - Asset Discovery
+    func fetchAssets(for selection: SelectionSpec) async throws -> [PHAsset]
+    func fetchAssetCount(for selection: SelectionSpec) async throws -> Int
+    func estimateDataSize(for assets: [PHAsset]) async throws -> Int64
+    
+    // MARK: - Asset Processing
+    func requestOriginalResource(for asset: PHAsset) async throws -> AssetResource
+    func requestOriginalResources(for assets: [PHAsset], 
+                                 progressHandler: @escaping (Double) -> Void) async throws -> [AssetResource]
+    
+    // MARK: - Library Monitoring
+    func startObservingLibraryChanges()
+    func stopObservingLibraryChanges()
+}
+
+// MARK: - Supporting Types
+
+struct AssetResource {
+    let asset: PHAsset
+    let data: Data
+    let uti: String?
+    let filename: String
+    let isFromCloud: Bool
+    let requestedAt: Date
+    
+    var fileExtension: String {
+        URL(string: filename)?.pathExtension ?? ""
+    }
+    
+    var mediaType: MediaType {
+        switch asset.mediaType {
+        case .image:
+            if asset.mediaSubtypes.contains(.photoLive) {
+                return .livePhoto
+            } else if asset.mediaSubtypes.contains(.photoScreenshot) {
+                return .screenshot
+            } else if asset.mediaSubtypes.contains(.photoPanorama) {
+                return .panorama
+            } else if asset.mediaSubtypes.contains(.photoDepthEffect) {
+                return .portraitPhoto
+            } else {
+                return .photo
+            }
+        case .video:
+            if asset.mediaSubtypes.contains(.videoTimelapse) {
+                return .timelapse
+            } else if asset.mediaSubtypes.contains(.videoHighFrameRate) {
+                return .slowMotion
+            } else {
+                return .video
+            }
+        case .audio:
+            return .unknown
+        case .unknown:
+            return .unknown
+        @unknown default:
+            return .unknown
+        }
+    }
+}
+
+// MARK: - Error Types
+
+enum PhotosServiceError: LocalizedError {
+    case authorizationDenied
+    case authorizationRestricted
+    case assetNotFound(String)
+    case resourceRequestFailed(String)
+    case networkUnavailable
+    case iCloudSyncRequired
+    case insufficientStorage
+    case libraryUnavailable
+    
+    var errorDescription: String? {
+        switch self {
+        case .authorizationDenied:
+            return "Photos access denied. Please grant permission in Settings."
+        case .authorizationRestricted:
+            return "Photos access restricted by device policy."
+        case .assetNotFound(let identifier):
+            return "Photo asset not found: \(identifier)"
+        case .resourceRequestFailed(let reason):
+            return "Failed to load photo: \(reason)"
+        case .networkUnavailable:
+            return "Network unavailable for iCloud photo download."
+        case .iCloudSyncRequired:
+            return "iCloud Photos sync required to access originals."
+        case .insufficientStorage:
+            return "Insufficient device storage to download photos from iCloud."
+        case .libraryUnavailable:
+            return "Photos library is currently unavailable."
+        }
+    }
+}
+
+// MARK: - Contract Tests
+
+#if DEBUG
+protocol PhotosServiceTestProtocol {
+    func testAuthorizationRequest() async throws
+    func testAssetFetching() async throws
+    func testResourceRetrieval() async throws
+    func testLibraryMonitoring() async throws
+    func testErrorHandling() async throws
+}
+#endif
