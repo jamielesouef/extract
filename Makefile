@@ -1,11 +1,12 @@
 # Extract - Makefile
 # SwiftUI macOS/iOS app for photo library export
 
-.PHONY: help format build clean test run install-deps format-fix
+.PHONY: help format build clean test run install-deps format-fix open
 
 # Default target
 help:
 	@echo "Extract - Available commands:"
+	@echo "  make open        - Open project in Xcode"
 	@echo "  make format      - Run SwiftFormat on source code"
 	@echo "  make build       - Build the project (runs format first)"
 	@echo "  make run         - Build and run the app"
@@ -60,3 +61,8 @@ clean:
 format-fix:
 	@echo "Auto-fixing formatting issues..."
 	swiftformat .
+
+# Open project in Xcode
+open:
+	@echo "Opening Extract project in Xcode..."
+	open extract.xcodeproj
