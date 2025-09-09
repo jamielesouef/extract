@@ -80,3 +80,6 @@ Issues and PRs are welcome. Please open an issue to discuss significant changes 
 4. Use `make test` to run the test suite
 
 The project uses SwiftLint for code quality. All builds automatically run linting checks to maintain consistent code style.
+
+## Documentation
+- [Product & Technical Spec](./SPEC.md)

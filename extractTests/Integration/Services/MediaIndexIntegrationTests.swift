@@ -24,7 +24,7 @@ struct MediaIndexIntegrationTests {
     ])
 
     // New actor instance sharing the same container should see the same data
-    let _ = await MediaIndex(modelContainer: container)
+    _ = await MediaIndex(modelContainer: container)
 
     let descriptor = FetchDescriptor<MediaItem>()
     let context = ModelContext(container)
@@ -36,4 +36,3 @@ struct MediaIndexIntegrationTests {
     #expect(ids.contains("persist-2"))
   }
 }
-

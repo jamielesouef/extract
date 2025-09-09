@@ -5,7 +5,6 @@
 //  Created by Jamie Le Souef on 26/8/2025.
 //
 
-
 import AVFoundation
 import Foundation
 import ImageIO
@@ -32,6 +31,8 @@ final class MediaStore: MediaStoring {
   var count: Int { items.count }
   var photosCount: Int = 0
   var videoCount: Int = 0
+
+  private(set) var selected: Set<PHAsset> = []
 
   init(authorizer: PhotoLibraryAuthorizing = SystemPhotoLibraryAuthorizer()) {
     self.authorizer = authorizer
@@ -97,5 +98,23 @@ final class MediaStore: MediaStoring {
     } else {
       items = []
     }
+  }
+
+  func getCloudIdentifier(for asset: PHAsset) async -> String? {
+    return await Task.detached {
+      guard let creationDate = asset.creationDate else {
+        return asset.localIdentifier
+      }
+
+      let dateFormatter = ISO8601DateFormatter()
+      let dateString = dateFormatter.string(from: creationDate)
+      let mediaType = asset.mediaType == .image ? "photo" : "video"
+      let pixelWidth = asset.pixelWidth
+      let pixelHeight = asset.pixelHeight
+      let duration = asset.duration
+
+      let identifier = "\(dateString)-\(mediaType)-\(pixelWidth)x\(pixelHeight)-\(duration)"
+      return identifier.replacingOccurrences(of: ":", with: "-")
+    }.value
   }
 }

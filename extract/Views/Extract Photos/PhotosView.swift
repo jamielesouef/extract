@@ -15,6 +15,7 @@ struct PhotosView: View {
   @Environment(\.modelContext) private var modelContext
 
   @State private var isRefreshing = false
+  @State private var isInSelectMode = false
 
   private let spacing: CGFloat = 8
   private let size: CGFloat = 100
@@ -35,7 +36,7 @@ struct PhotosView: View {
         Divider()
         LazyVGrid(columns: columns) {
           ForEach(store.items, id: \.self) { asset in
-            ImageThumbnailView(asset: asset, size: getIdealSizeForimage())
+            ImageThumbnailView(asset: asset, size: getIdealSizeForimage(), isInSelectMode: isInSelectMode)
               .clipShape(RoundedRectangle(cornerSize: roundedRadius))
           }
         }
@@ -43,6 +44,17 @@ struct PhotosView: View {
     }
     .ignoresSafeArea(.keyboard)
     .toolbar(removing: .title)
+    .toolbar {
+      #if os(iOS)
+        ToolbarItem(placement: .topBarTrailing) {
+          Button(action: {
+            isInSelectMode.toggle()
+          }) {
+            Image(systemName: isInSelectMode ? "checklist" : "checklist.unchecked")
+          }
+        }
+      #endif
+    }
     .task {
       await refreshGuarded()
     }

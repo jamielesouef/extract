@@ -13,15 +13,19 @@ import SwiftUI
 
 struct ImageThumbnailView: View {
   @Environment(\.displayScale) private var displayScale
+  @Environment(MediaStore.self) private var store
 
-  let asset: PHAsset
+  // Allow nil in previews to avoid needing a real PHAsset
+  let asset: PHAsset?
   let size: CGFloat
+  let isInSelectMode: Bool
 
   #if os(iOS)
     @State private var image: UIImage?
   #else
     @State private var image: NSImage?
   #endif
+
   @State private var requestID: PHImageRequestID?
 
   var body: some View {
@@ -48,6 +52,7 @@ struct ImageThumbnailView: View {
 
   private func loadImageIfNeeded() {
     if image != nil { return }
+    guard let asset else { return }
     let options = PHImageRequestOptions()
     options.isNetworkAccessAllowed = true
     options.deliveryMode = .opportunistic
@@ -73,6 +78,34 @@ struct ImageThumbnailView: View {
   }
 }
 
-#Preview {
-  ImageThumbnailView(asset: .init(), size: 100)
+// MARK: - Inits
+
+extension ImageThumbnailView {
+  // Keep a non-optional API for production call sites
+  init(asset: PHAsset, size: CGFloat, isInSelectMode: Bool) {
+    self.asset = asset
+    self.size = size
+    self.isInSelectMode = isInSelectMode
+  }
 }
+
+#if DEBUG
+
+  // MARK: - Previews
+
+  @available(iOS 17.0, macOS 14.0, *)
+  #Preview("Selected vs Unselected") {
+    HStack(spacing: 16) {
+      VStack(spacing: 6) {
+        ImageThumbnailView(asset: nil, size: 100, isInSelectMode: false)
+        Text("Select Off").font(.caption).foregroundStyle(.secondary)
+      }
+      VStack(spacing: 6) {
+        ImageThumbnailView(asset: nil, size: 100, isInSelectMode: true)
+        Text("Select On").font(.caption).foregroundStyle(.secondary)
+      }
+    }
+    .padding()
+    .environment(MediaStore())
+  }
+#endif

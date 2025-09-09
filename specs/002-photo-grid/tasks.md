@@ -45,59 +45,54 @@
 **CRITICAL: These tests MUST be written and MUST FAIL before ANY implementation**
 
 ### Contract Tests (Service Protocols)
-- [ ] T004 [P] Contract test PhotoLoadingServiceProtocol in `extractTests/Services/PhotoGrid/PhotoLoadingServiceContractTests.swift`
-- [ ] T005 [P] Contract test SelectionServiceProtocol in `extractTests/Services/PhotoGrid/SelectionServiceContractTests.swift`
+- [x] T004 [P] Contract test MediaIndexing in `extractTests/Services/MediaIndexTests.swift`
+- [x] T005 [P] Contract test MediaStoring in `extractTests/Services/MediaStoreTests.swift`
 
 ### View Model Tests
-- [ ] T006 [P] PhotoGridItem model tests in `extractTests/Models/MediaIndexTests.swift`
-- [ ] T007 [P] PhotoGridViewModel tests in `extractTests/Models/MediaStoreTests.swift`
+- [x] T006 [P] PhotoGridIAppStateTeststem model tests in `extractTests/Models/AppStateTests.swift`
+- [x] T007 [P] MediaItemTests tests in `extractTests/Models/MediaItemTests.swift`
 
 ### Integration Tests (User Stories from Quickstart)
-- [ ] T009 [P] First launch permissions integration test in `extractTests/Integration/PhotoGrid/PermissionsTests.swift`
-- [ ] T010 [P] Grid browsing performance test in `extractTests/Integration/PhotoGrid/BrowsingPerformanceTests.swift`
-- [ ] T011 [P] Photo selection workflow test in `extractTests/Integration/PhotoGrid/SelectionWorkflowTests.swift`
-- [ ] T012 [P] Large library performance test in `extractTests/Integration/PhotoGrid/LargeLibraryTests.swift`
-- [ ] T013 [P] Platform adaptations test in `extractTests/Integration/PhotoGrid/PlatformAdaptationTests.swift`
-- [ ] T014 [P] Error handling edge cases test in `extractTests/Integration/PhotoGrid/ErrorHandlingTests.swift`
+- [x] T009 [P] persistsAcrossInstances `extractTests/Integration/Services/MediaIndexIntegrationTests.swift`
+- [x] T010 [P] MediaStoreIntegrationTests test in `extractTests/Integration/Services/MediaStoreIntegrationTests.swift`
 
 ## Phase 3.3: Core Implementation (ONLY after tests are failing)
 
 ### View Models and State Management
-- [ ] T015 [P] PhotoGridItem implementation in `extract/Model/PhotoGrid/PhotoGridItem.swift`
-- [ ] T016 [P] SelectionState implementation in `extract/Model/PhotoGrid/SelectionState.swift`
-- [ ] T017 PhotoGridViewModel implementation in `extract/Model/PhotoGrid/PhotoGridViewModel.swift`
+- [x] T015 [P] MediaIndexing implementation in `extract/Model/MediaIndexing.swift`
+- [x] T016 [P] MediaStoring implementation in `extract/Model/MediaStoring.swift`
 
 ### Service Implementations
-- [ ] T018 PhotoLoadingService implementation in `extract/Services/PhotoGrid/PhotoLoadingService.swift`
-- [ ] T019 SelectionService implementation in `extract/Services/PhotoGrid/SelectionService.swift`
+- [x] T018 PhotoLoadingService implementation in `extract/Services/PhotoLoadingService.swift`
+- [x] T019 SelectionService implementation in `extract/Services/SelectionService.swift`
 
 ### SwiftUI Components
-- [ ] T020 [P] PhotoThumbnailView component in `extract/Views/PhotoGrid/PhotoThumbnailView.swift`
-- [ ] T021 [P] SelectionOverlayView component in `extract/Views/PhotoGrid/SelectionOverlayView.swift`
-- [ ] T022 PhotoGridView main component in `extract/Views/PhotoGrid/PhotoGridView.swift`
+- [ ] T020 [P] PhotoThumbnailView component in `extract/Views/PhotoThumbnailView.swift`
+- [ ] T021 [P] SelectionOverlayView component in `extract/Views/SelectionOverlayView.swift`
+- [ ] T022 PhotoGridView main component in `extract/Views/PhotoGridView.swift`
 
 ### Configuration and Utilities
-- [ ] T023 [P] GridConfiguration utilities in `extract/Model/PhotoGrid/GridConfiguration.swift`
-- [ ] T024 [P] PhotoGridError definitions in `extract/Model/PhotoGrid/PhotoGridError.swift`
+- [ ] T023 [P] GridConfiguration utilities in `extract/Model/GridConfiguration.swift`
+- [ ] T024 [P] PhotoGridError definitions in `extract/Model/PhotoGridError.swift`
 
 ## Phase 3.4: Platform Integration
 
 ### Permissions and Authorization
-- [ ] T025 Photos permissions integration in `extract/Services/PhotoGrid/PhotosPermissionManager.swift`
+- [ ] T025 Photos permissions integration in `extract/Services/PhotosPermissionManager.swift`
 - [ ] T026 Update main app navigation in `extract/Views/NavigationOptions.swift`
 - [ ] T027 Environment setup in `extract/extractApp.swift`
 
 ### Platform-Specific Adaptations
-- [ ] T028 [P] iOS-specific grid adaptations in `extract/Views/PhotoGrid/Platform/iOSGridAdaptations.swift`
-- [ ] T029 [P] macOS-specific grid adaptations in `extract/Views/PhotoGrid/Platform/macOSGridAdaptations.swift`
-- [ ] T030 [P] iPadOS toolbar integration in `extract/Views/PhotoGrid/Platform/iPadOSToolbar.swift`
+- [ ] T028 [P] iOS-specific grid adaptations in `extract/Views/Platform/iOSGridAdaptations.swift`
+- [ ] T029 [P] macOS-specific grid adaptations in `extract/Views/Platform/macOSGridAdaptations.swift`
+- [ ] T030 [P] iPadOS toolbar integration in `extract/Views/Platform/iPadOSToolbar.swift`
 
 ## Phase 3.5: Performance & Polish
 
 ### Performance Optimization
 - [ ] T031 Thumbnail caching optimization in existing PhotoLoadingService
 - [ ] T032 Memory management for large libraries in existing PhotoGridViewModel
-- [ ] T033 [P] Performance monitoring utilities in `extract/Common/PhotoGrid/PerformanceMonitor.swift`
+- [ ] T033 [P] Performance monitoring utilities in `extract/Common/PerformanceMonitor.swift`
 
 ### Accessibility and Polish
 - [ ] T034 [P] VoiceOver accessibility support in existing PhotoGridView
@@ -107,7 +102,7 @@
 ### Final Integration and Validation
 - [ ] T037 Integration with existing MediaStore in `extract/Model/MediaStore.swift`
 - [ ] T038 Final quickstart scenario validation per test scenarios
-- [ ] T039 [P] Performance benchmarking suite in `extractTests/Performance/PhotoGrid/BenchmarkTests.swift`
+- [ ] T039 [P] Performance benchmarking suite in `extractTests/Performance/BenchmarkTests.swift`
 
 ## Dependencies
 
@@ -131,29 +126,29 @@
 
 ### Phase 3.2 Contract Tests (Parallel Launch)
 ```
-Task: "Contract test PhotoLoadingServiceProtocol in extractTests/Services/PhotoGrid/PhotoLoadingServiceContractTests.swift"
-Task: "Contract test SelectionServiceProtocol in extractTests/Services/PhotoGrid/SelectionServiceContractTests.swift"
+Task: "Contract test PhotoLoadingServiceProtocol in extractTests/Services/PhotoLoadingServiceContractTests.swift"
+Task: "Contract test SelectionServiceProtocol in extractTests/Services/SelectionServiceContractTests.swift"
 ```
 
 ### Phase 3.2 Integration Tests (Parallel Launch)
 ```
-Task: "First launch permissions integration test in extractTests/Integration/PhotoGrid/PermissionsTests.swift"
-Task: "Grid browsing performance test in extractTests/Integration/PhotoGrid/BrowsingPerformanceTests.swift"
-Task: "Photo selection workflow test in extractTests/Integration/PhotoGrid/SelectionWorkflowTests.swift"
-Task: "Large library performance test in extractTests/Integration/PhotoGrid/LargeLibraryTests.swift"
+Task: "First launch permissions integration test in extractTests/Integration/PermissionsTests.swift"
+Task: "Grid browsing performance test in extractTests/Integration/BrowsingPerformanceTests.swift"
+Task: "Photo selection workflow test in extractTests/Integration/SelectionWorkflowTests.swift"
+Task: "Large library performance test in extractTests/Integration/LargeLibraryTests.swift"
 ```
 
 ### Phase 3.3 View Models (Parallel Launch)
 ```
-Task: "PhotoGridItem implementation in extract/Model/PhotoGrid/PhotoGridItem.swift"
-Task: "SelectionState implementation in extract/Model/PhotoGrid/SelectionState.swift"
+Task: "PhotoGridItem implementation in extract/Model/PhotoGridItem.swift"
+Task: "SelectionState implementation in extract/Model/SelectionState.swift"
 ```
 
 ### Phase 3.4 Platform Adaptations (Parallel Launch)
 ```
-Task: "iOS-specific grid adaptations in extract/Views/PhotoGrid/Platform/iOSGridAdaptations.swift"
-Task: "macOS-specific grid adaptations in extract/Views/PhotoGrid/Platform/macOSGridAdaptations.swift"
-Task: "iPadOS toolbar integration in extract/Views/PhotoGrid/Platform/iPadOSToolbar.swift"
+Task: "iOS-specific grid adaptations in extract/Views/Platform/iOSGridAdaptations.swift"
+Task: "macOS-specific grid adaptations in extract/Views/Platform/macOSGridAdaptations.swift"
+Task: "iPadOS toolbar integration in extract/Views/Platform/iPadOSToolbar.swift"
 ```
 
 ## Task Categories Summary

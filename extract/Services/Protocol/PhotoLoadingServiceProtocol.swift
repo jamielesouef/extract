@@ -19,4 +19,5 @@ protocol MediaStoring: Sendable {
   func requestAccess() async
   func loadAllAssets() async
   func requestAndLoad() async
+  func getCloudIdentifier(for asset: PHAsset) async -> String?
 }

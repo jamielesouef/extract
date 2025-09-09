@@ -185,7 +185,6 @@ struct MediaIndexTests {
     #expect(savedIds.contains("new-2"))
   }
 
-
   @Test("Concurrent adds on single actor are deduplicated")
   func concurrentAddsDeduplicate() async throws {
     let schema = Schema([MediaItem.self])
@@ -224,7 +223,7 @@ struct MediaIndexTests {
     // Unique ids should be c-1..c-5 (5 total)
     #expect(savedItems.count == 5)
     let ids = Set(savedItems.map { $0.mediaId })
-    ["c-1", "c-2", "c-3", "c-4", "c-5"].forEach { id in
+    for id in ["c-1", "c-2", "c-3", "c-4", "c-5"] {
       #expect(ids.contains(id))
     }
   }

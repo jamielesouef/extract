@@ -13,7 +13,7 @@ import Testing
 // between MediaStore and its PhotoLibraryAuthorizing dependency.
 struct FakeAuthorizer: PhotoLibraryAuthorizing {
   let status: PHAuthorizationStatus
-  func requestAuthorization(for level: PHAccessLevel) async -> PHAuthorizationStatus { status }
+  func requestAuthorization(for _: PHAccessLevel) async -> PHAuthorizationStatus { status }
 }
 
 @Suite("MediaStore Integration Tests")
@@ -44,4 +44,3 @@ struct MediaStoreIntegrationTests {
     }
   }
 }
-
