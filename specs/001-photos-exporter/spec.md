@@ -4,7 +4,7 @@
 
 ## 1. Overview
 
-Photos Exporter is a privacy‑respecting, cross‑platform Apple app (iOS 18, iPadOS 18, macOS 26) that lets users browse their Photos library and create **export jobs** to download the **original, full‑resolution** assets from iCloud and write them into one or more **Archives** (destinations). Archives can target:
+Photos Exporter is a privacy‑respecting, cross‑platform Apple app (iOS 26, iPadOS 26, macOS 26) that lets users browse their Photos library and create **export jobs** to download the **original, full‑resolution** assets from iCloud and write them into one or more **Archives** (destinations). Archives can target:
 
 - Local folders (device storage, external drive on macOS)
 - Network shares (NAS via SMB/NFS/WebDAV)
@@ -27,7 +27,7 @@ Each Archive maintains a verifiable **consistency record** to ensure parity betw
 
 ## 2. Target Platforms & Tech
 
-- **Platforms**: iOS 18, iPadOS 18, macOS 26 (Apple silicon first‑class).
+- **Platforms**: iOS 26, iPadOS 26, macOS 26 (Apple silicon first‑class).
 - **Language**: Swift 6 (strict concurrency; Sendable where appropriate).
 - **Persistence**: SwiftData.
 - **Testing**: Swift Testing (unit, property, and integration suites).

@@ -5,14 +5,27 @@
 //  Created by Jamie Le Souef on 26/8/2025.
 //
 
+
 import AVFoundation
 import Foundation
 import ImageIO
 import Photos
 
+protocol PhotoLibraryAuthorizing: Sendable {
+  func requestAuthorization(for level: PHAccessLevel) async -> PHAuthorizationStatus
+}
+
+struct SystemPhotoLibraryAuthorizer: PhotoLibraryAuthorizing {
+  func requestAuthorization(for level: PHAccessLevel) async -> PHAuthorizationStatus {
+    await PHPhotoLibrary.requestAuthorization(for: level)
+  }
+}
+
 @Observable
 @MainActor
-final class MediaStore {
+final class MediaStore: MediaStoring {
+  private let authorizer: PhotoLibraryAuthorizing
+
   var items: [PHAsset] = []
   var authorizationStatus: Bool?
   var isLoading: Bool = false
@@ -20,8 +33,12 @@ final class MediaStore {
   var photosCount: Int = 0
   var videoCount: Int = 0
 
+  init(authorizer: PhotoLibraryAuthorizing = SystemPhotoLibraryAuthorizer()) {
+    self.authorizer = authorizer
+  }
+
   func requestAccess() async {
-    let status = await PHPhotoLibrary.requestAuthorization(for: .readWrite)
+    let status = await authorizer.requestAuthorization(for: .readWrite)
 
     switch status {
     case .authorized, .limited:

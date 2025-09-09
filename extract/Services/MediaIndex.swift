@@ -5,12 +5,13 @@
 //  Created by Jamie Le Souef on 29/8/2025.
 //
 
+
 import Photos
 import SwiftData
 import SwiftUI
 
 @ModelActor
-actor MediaIndex {
+actor MediaIndex: MediaIndexing {
   func addMedia(media items: [PHAsset]) async throws {
     let mediaItems = items.map {
       let kind = getMediaType(from: $0.mediaType)

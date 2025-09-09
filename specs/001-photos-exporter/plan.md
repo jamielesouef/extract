@@ -1,7 +1,7 @@
-# Implementation Plan: Photos Exporter
+# Implementation Plan: [FEATURE]
 
-**Branch**: `001-photos-exporter` | **Date**: 2025-09-08 | **Spec**: [spec.md](./spec.md)
-**Input**: Feature specification from `/Users/jamielesouef/Developer/extract/specs/001-photos-exporter/spec.md`
+**Branch**: `[###-feature-name]` | **Date**: [DATE] | **Spec**: [link]
+**Input**: Feature specification from `/specs/[###-feature-name]/spec.md`
 
 ## Execution Flow (/plan command scope)
 ```
@@ -29,51 +29,51 @@
 - Phase 3-4: Implementation execution (manual or via tools)
 
 ## Summary
-Photos Exporter is a privacy-respecting, cross-platform Apple app that allows users to browse their Photos library and create export jobs to download original, full-resolution assets from iCloud to various Archive destinations (local folders, NAS, S3-compatible storage). The app maintains verifiable consistency records to ensure parity between iCloud originals and archived copies using SwiftData persistence and Swift 6 concurrency.
+[Extract from feature spec: primary requirement + technical approach from research]
 
 ## Technical Context
-**Language/Version**: Swift 6 (strict concurrency, Sendable where appropriate)  
-**Primary Dependencies**: Photos/PhotosUI frameworks, SwiftData, BGProcessingTask  
-**Storage**: SwiftData for persistence, Keychain for credentials  
-**Testing**: Swift Testing (unit, property, and integration suites)  
-**Target Platform**: iOS 18+, iPadOS 18+, macOS 26+ (Apple silicon first-class)
-**Project Type**: mobile - native Apple app across platforms  
-**Performance Goals**: 80+ MB/s sustained throughput to local/NAS on gigabit LAN  
-**Constraints**: Privacy-first (no telemetry by default), sandbox constraints, iCloud rate limits  
-**Scale/Scope**: 10,000+ photos per job, multiple concurrent transfers, large library handling
+**Language/Version**: [e.g., Python 3.11, Swift 5.9, Rust 1.75 or NEEDS CLARIFICATION]  
+**Primary Dependencies**: [e.g., FastAPI, UIKit, LLVM or NEEDS CLARIFICATION]  
+**Storage**: [if applicable, e.g., PostgreSQL, CoreData, files or N/A]  
+**Testing**: [e.g., pytest, XCTest, cargo test or NEEDS CLARIFICATION]  
+**Target Platform**: [e.g., Linux server, iOS 15+, WASM or NEEDS CLARIFICATION]
+**Project Type**: [single/web/mobile - determines source structure]  
+**Performance Goals**: [domain-specific, e.g., 1000 req/s, 10k lines/sec, 60 fps or NEEDS CLARIFICATION]  
+**Constraints**: [domain-specific, e.g., <200ms p95, <100MB memory, offline-capable or NEEDS CLARIFICATION]  
+**Scale/Scope**: [domain-specific, e.g., 10k users, 1M LOC, 50 screens or NEEDS CLARIFICATION]
 
 ## Constitution Check
 *GATE: Must pass before Phase 0 research. Re-check after Phase 1 design.*
 
 **Simplicity**:
-- Projects: 1 (iOS/macOS app with integrated libraries)
-- Using framework directly? YES (Photos/PhotosUI, SwiftData directly)
-- Single data model? YES (SwiftData models without DTOs)
-- Avoiding patterns? YES (no Repository/UoW - direct SwiftData access)
+- Projects: [#] (max 3 - e.g., api, cli, tests)
+- Using framework directly? (no wrapper classes)
+- Single data model? (no DTOs unless serialization differs)
+- Avoiding patterns? (no Repository/UoW without proven need)
 
 **Architecture**:
-- EVERY feature as library? ADAPTED (Libraries as Swift modules within app)
-- Libraries planned: PhotosFacade, ExportEngine, ArchiveAdapters, IntegrityService
-- CLI per library: N/A (Native app, not CLI-based)
-- Library docs: Swift documentation comments + README
+- EVERY feature as library? (no direct app code)
+- Libraries listed: [name + purpose for each]
+- CLI per library: [commands with --help/--version/--format]
+- Library docs: llms.txt format planned?
 
 **Testing (NON-NEGOTIABLE)**:
-- RED-GREEN-Refactor cycle enforced? YES (Swift Testing framework)
-- Git commits show tests before implementation? YES (TDD approach)
-- Order: Contract→Integration→Unit (adapted for iOS)
-- Real dependencies used? YES (actual Photos library, file system, network)
-- Integration tests for: Archive adapters, Photos integration, SwiftData persistence
+- RED-GREEN-Refactor cycle enforced? (test MUST fail first)
+- Git commits show tests before implementation?
+- Order: Contract→Integration→E2E→Unit strictly followed?
+- Real dependencies used? (actual DBs, not mocks)
+- Integration tests for: new libraries, contract changes, shared schemas?
 - FORBIDDEN: Implementation before test, skipping RED phase
 
 **Observability**:
-- Structured logging included? YES (slog.swift already exists in project)
-- App logs unified? YES (single app target, unified logging)
-- Error context sufficient? YES (detailed error categorization planned)
+- Structured logging included?
+- Frontend logs → backend? (unified stream)
+- Error context sufficient?
 
 **Versioning**:
-- Version number assigned? 0.1.0 (MAJOR.MINOR.PATCH)
-- BUILD increments on every change? YES (automated via build system)
-- Breaking changes handled? YES (SwiftData migration plan)
+- Version number assigned? (MAJOR.MINOR.BUILD)
+- BUILD increments on every change?
+- Breaking changes handled? (parallel tests, migration plan)
 
 ## Project Structure
 
@@ -125,7 +125,7 @@ ios/ or android/
 └── [platform-specific structure]
 ```
 
-**Structure Decision**: Option 1 (Single project) - Native iOS/macOS app with standard Swift project structure
+**Structure Decision**: [DEFAULT to Option 1 unless Technical Context indicates web/mobile app]
 
 ## Phase 0: Outline & Research
 1. **Extract unknowns from Technical Context** above:
@@ -186,37 +186,17 @@ ios/ or android/
 **Task Generation Strategy**:
 - Load `/templates/tasks-template.md` as base
 - Generate tasks from Phase 1 design docs (contracts, data model, quickstart)
-- **Contract Test Tasks** [P]: One task per service protocol (4 protocols)
-- **Model Creation Tasks** [P]: SwiftData models for Archive, ExportJob, ExportItem, ArchiveRecord, AuditLog
-- **Service Implementation Tasks**: PhotosService, ExportService, ArchiveService, IntegrityService
-- **Archive Adapter Tasks** [P]: FolderAdapter, NASAdapter, S3Adapter implementations
-- **UI Integration Tasks**: Archive management UI, Export job creation, Progress monitoring
-- **Integration Test Tasks**: End-to-end user flows from quickstart.md
+- Each contract → contract test task [P]
+- Each entity → model creation task [P] 
+- Each user story → integration test task
+- Implementation tasks to make tests pass
 
 **Ordering Strategy**:
-- **Phase A - Foundation** (TDD): Contract tests → Models → Service interfaces
-- **Phase B - Services** (TDD): Service implementations → Service tests
-- **Phase C - Adapters** (Parallel): Archive adapter implementations + tests
-- **Phase D - UI Integration**: SwiftUI views → UI tests
-- **Phase E - System Tests**: Integration tests → Performance validation
-- Mark [P] for parallel execution within phases
+- TDD order: Tests before implementation 
+- Dependency order: Models before services before UI
+- Mark [P] for parallel execution (independent files)
 
-**Task Categories**:
-1. **Contract Tests** (4 tasks): Test protocol compliance before implementation
-2. **Data Models** (5 tasks): SwiftData model creation with validation
-3. **Service Layer** (8 tasks): Core business logic implementation
-4. **Archive Adapters** (6 tasks): Storage backend implementations 
-5. **UI Components** (10 tasks): SwiftUI views for all user flows
-6. **Integration Tests** (6 tasks): End-to-end scenario validation
-7. **Performance & Polish** (4 tasks): Optimization and final testing
-
-**Estimated Output**: 43 numbered, ordered tasks in tasks.md organized by TDD principles
-
-**Dependencies**:
-- Contract tests must pass before implementations
-- Models must exist before services
-- Services must exist before UI
-- All core functionality complete before integration tests
+**Estimated Output**: 25-30 numbered, ordered tasks in tasks.md
 
 **IMPORTANT**: This phase is executed by the /tasks command, NOT by /plan
 
@@ -240,17 +220,17 @@ ios/ or android/
 *This checklist is updated during execution flow*
 
 **Phase Status**:
-- [x] Phase 0: Research complete (/plan command)
-- [x] Phase 1: Design complete (/plan command)
-- [x] Phase 2: Task planning complete (/plan command - describe approach only)
+- [ ] Phase 0: Research complete (/plan command)
+- [ ] Phase 1: Design complete (/plan command)
+- [ ] Phase 2: Task planning complete (/plan command - describe approach only)
 - [ ] Phase 3: Tasks generated (/tasks command)
 - [ ] Phase 4: Implementation complete
 - [ ] Phase 5: Validation passed
 
 **Gate Status**:
-- [x] Initial Constitution Check: PASS
-- [x] Post-Design Constitution Check: PASS
-- [x] All NEEDS CLARIFICATION resolved
+- [ ] Initial Constitution Check: PASS
+- [ ] Post-Design Constitution Check: PASS
+- [ ] All NEEDS CLARIFICATION resolved
 - [ ] Complexity deviations documented
 
 ---
