@@ -40,18 +40,18 @@ struct NavigationOptionsTests {
         #expect(NavigationOptions.failedPhotosAccess.icon == "exclamationmark.triangle")
     }
     
-    @Test("NavigationOptions name property returns LocalizedStringResource")
+    @Test("NavigationOptions name property returns correct localized strings")
     @MainActor
     func testNameProperty() async {
-        // Test that the name properties exist and are LocalizedStringResource types
+        // Test that the name properties return the expected localized string keys
         let newPhotosName = NavigationOptions.newPhotos.name
         let backedUpPhotosName = NavigationOptions.backedUpPhotos.name
         let failedAccessName = NavigationOptions.failedPhotosAccess.name
         
-        // Verify they are LocalizedStringResource instances
-        #expect(newPhotosName is LocalizedStringResource)
-        #expect(backedUpPhotosName is LocalizedStringResource)
-        #expect(failedAccessName is LocalizedStringResource)
+        // Verify they return expected localized string resources with correct keys
+        #expect(String(localized: newPhotosName) == "New Photos")
+        #expect(String(localized: backedUpPhotosName) == "Backed up Photos")
+        #expect(String(localized: failedAccessName) == "Photos Access Required")
     }
     
     @Test("NavigationOptions conforms to Equatable")
@@ -118,7 +118,7 @@ struct NavigationOptionsTests {
         for option in allTestCases {
             #expect(!option.id.isEmpty)
             #expect(!option.icon.isEmpty)
-            #expect(option.name is LocalizedStringResource)
+            #expect(!String(localized: option.name).isEmpty)
         }
     }
     

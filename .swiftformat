@@ -1,7 +1,7 @@
 --acronyms ID,URL,UUID
 --allman false
---anonymous-for-each convert
---asset-literals visual-width
+--anonymousforeach convert
+--assetliterals visual-width
 --async-capturing 
 --before-marks 
 --binary-grouping 4,8
@@ -73,7 +73,7 @@
 --self-required 
 --semicolons inline
 --short-optionals except-properties
---single-line-for-each ignore
+--singlelineforeach ignore
 --smart-tabs enabled
 --some-any true
 --sort-swiftui-properties none
