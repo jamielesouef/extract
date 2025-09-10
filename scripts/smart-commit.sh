@@ -1,6 +1,6 @@
 #!/bin/bash
 # Smart commit script for Extract project
-# Analyzes git changes and creates intelligent commit messages
+# Analyzes git changes, runs tests/build, and creates intelligent commit messages
 
 set -e
 
@@ -88,6 +88,42 @@ echo "🔍 Files to be committed:"
 git diff --cached --name-only | sed 's/^/  • /'
 echo ""
 
+# Run tests and build before committing
+echo "🧪 Running tests and build verification..."
+echo "⏳ This may take a moment..."
+
+# Run SwiftFormat first
+echo "🎨 Running SwiftFormat..."
+if ! swiftformat . > /dev/null 2>&1; then
+    echo "❌ SwiftFormat failed. Please fix formatting issues."
+    exit 1
+fi
+
+# Check if SwiftFormat made any changes and stage them
+if ! git diff --quiet; then
+    echo "📝 SwiftFormat made formatting changes, staging them..."
+    git add .
+fi
+
+# Build the project
+echo "🔨 Building project..."
+if ! xcodebuild -project extract.xcodeproj -target extract -configuration Debug build > /dev/null 2>&1; then
+    echo "❌ Build failed. Please fix compilation errors before committing."
+    echo "💡 Run 'make build' to see detailed error messages."
+    exit 1
+fi
+
+# Build test target to verify tests compile
+echo "🧪 Building test target..."
+if ! xcodebuild -project extract.xcodeproj -target extractTests -configuration Debug -destination 'platform=macOS' build > /dev/null 2>&1; then
+    echo "❌ Test target build failed. Please fix test compilation errors before committing."
+    echo "💡 Run 'make test' to see detailed error messages."
+    exit 1
+fi
+
+echo "✅ All checks passed! Build and tests are working."
+echo ""
+
 # Ask for confirmation
 read -p "❓ Proceed with this commit? (y/N): " -n 1 -r
 echo
@@ -95,6 +131,8 @@ if [[ $REPLY =~ ^[Yy]$ ]]; then
     echo "✅ Creating commit..."
     git commit -m "$COMMIT_MSG"
     echo "🎉 Commit created successfully!"
+    echo "📊 Commit stats:"
+    git show --stat HEAD
 else
     echo "❌ Commit cancelled."
     exit 1
