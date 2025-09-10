@@ -64,7 +64,7 @@
 
 ### Service Implementations
 - [x] T018 PhotoLoadingService implementation in `extract/Services/PhotoLoadingService.swift`
-- [x] T019 SelectionService implementation in `extract/Services/SelectionService.swift`
+- [] T019 SelectionService implementation in `extract/Services/SelectionService.swift`
 
 ### SwiftUI Components
 - [ ] T020 [P] PhotoThumbnailView component in `extract/Views/PhotoThumbnailView.swift`

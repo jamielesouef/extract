@@ -29,22 +29,13 @@ struct ImageThumbnailView: View {
   @State private var isSelected: Bool = false
 
   var body: some View {
-    Group {
-      self.thumbnailImage
-    }
-    .clipShape(RoundedRectangle(cornerSize: .square))
-    .frame(width: self.size, height: self.size)
-    .overlay {
-      self.selectionOverlay
-    }
-    .clipped()
-    .onTapGesture {
-      if self.store.isInSelectMode {
-        self.isSelected.toggle()
-      }
-    }
-    .task { await self.loadImageIfNeeded() }
-    .onDisappear { self.cancelIfNeeded() }
+    Group { self.thumbnailImage }
+      .frame(width: self.size, height: self.size)
+      .overlay { self.selectionOverlay }
+      .clipShape(RoundedRectangle(cornerSize: .square))
+      .onTapGesture { self.toggleSelected() }
+      .task { await self.loadImageIfNeeded() }
+      .onDisappear { self.cancelIfNeeded() }
   }
 
   @ViewBuilder
@@ -84,6 +75,12 @@ struct ImageThumbnailView: View {
           #endif
         }
       }
+    }
+  }
+
+  private func toggleSelected() {
+    if self.store.isInSelectMode {
+      self.isSelected.toggle()
     }
   }
 
