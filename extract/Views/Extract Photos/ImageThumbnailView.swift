@@ -46,11 +46,11 @@ struct ImageThumbnailView: View {
     }
     .frame(width: size, height: size)
     .clipped()
-    .onAppear { loadImageIfNeeded() }
+    .task { await loadImageIfNeeded() }
     .onDisappear { cancelIfNeeded() }
   }
 
-  private func loadImageIfNeeded() {
+  private func loadImageIfNeeded() async {
     if image != nil { return }
     guard let asset else { return }
     let options = PHImageRequestOptions()
@@ -60,7 +60,7 @@ struct ImageThumbnailView: View {
 
     let targetSize = CGSize(width: size * displayScale, height: size * displayScale)
 
-    requestID = PHImageManager.default().requestImage(
+    requestID = PHCachingImageManager.default().requestImage(
       for: asset,
       targetSize: targetSize,
       contentMode: .aspectFill,

@@ -36,25 +36,18 @@ struct PhotosView: View {
         Divider()
         LazyVGrid(columns: columns) {
           ForEach(store.items, id: \.self) { asset in
-            ImageThumbnailView(asset: asset, size: getIdealSizeForimage(), isInSelectMode: isInSelectMode)
-              .clipShape(RoundedRectangle(cornerSize: roundedRadius))
+            ImageThumbnailView(
+              asset: asset,
+              size: getIdealSizeForimage(),
+              isInSelectMode: isInSelectMode
+            )
+            .clipShape(RoundedRectangle(cornerSize: roundedRadius))
           }
         }
       }
     }
     .ignoresSafeArea(.keyboard)
     .toolbar(removing: .title)
-    .toolbar {
-      #if os(iOS)
-        ToolbarItem(placement: .topBarTrailing) {
-          Button(action: {
-            isInSelectMode.toggle()
-          }) {
-            Image(systemName: isInSelectMode ? "checklist" : "checklist.unchecked")
-          }
-        }
-      #endif
-    }
     .task {
       await refreshGuarded()
     }
@@ -83,7 +76,9 @@ struct PhotosView: View {
 
   private func getIdealSizeForimage() -> CGFloat {
     let maxWidthForIPhone: CGFloat = 3
-    let minWidowSize = min(appState.windowSize.height, appState.windowSize.width) / maxWidthForIPhone
+    let minWidowSize =
+      min(appState.windowSize.height, appState.windowSize.width)
+      / maxWidthForIPhone
     return minWidowSize - (spacing * 2)
   }
 }

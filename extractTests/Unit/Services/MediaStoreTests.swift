@@ -43,7 +43,7 @@ struct MediaStoreTests {
 @Suite("MediaStore Cloud Identifier Tests")
 struct MediaStoreCloudIdentifierTests {
   // Mock PHAsset class for testing
-  class MockPHAsset: PHAsset {
+  class MockPHAsset: PHAsset, @unchecked Sendable {
     private let _creationDate: Date?
     private let _mediaType: PHAssetMediaType
     private let _pixelWidth: Int
