@@ -30,51 +30,61 @@ struct ImageThumbnailView: View {
 
   var body: some View {
     Group {
-      if let image {
-        #if os(iOS)
-          Image(uiImage: image)
-            .resizable()
-            .scaledToFill()
-        #else
-          Image(nsImage: image)
-            .resizable()
-            .scaledToFill()
-        #endif
-      } else {
-        Color.gray.opacity(0.2)
-      }
+      self.thumbnailImage
     }
     .clipShape(RoundedRectangle(cornerSize: .square))
     .frame(width: self.size, height: self.size)
     .overlay {
-      VStack {
-        Spacer()
-        HStack {
-          Spacer()
-          if self.store.isInSelectMode {
-            Image(
-              systemName: self.isSelected
-                ? "checkmark.circle.fill"
-                : "circle"
-            )
-            .font(.system(size: 20))
-            .foregroundColor(.white)
-            .padding(6)
-            #if os(iOS)
-              .glassEffect(.identity)
-            #endif
-          }
-        }
-      }
+      self.selectionOverlay
     }
+    .clipped()
     .onTapGesture {
       if self.store.isInSelectMode {
         self.isSelected.toggle()
       }
     }
-    .clipped()
     .task { await self.loadImageIfNeeded() }
     .onDisappear { self.cancelIfNeeded() }
+  }
+
+  @ViewBuilder
+  var thumbnailImage: some View {
+    if let image {
+      #if os(iOS)
+        Image(uiImage: image)
+          .resizable()
+          .scaledToFill()
+      #else
+        Image(nsImage: image)
+          .resizable()
+          .scaledToFill()
+      #endif
+    } else {
+      Color.gray.opacity(0.2)
+    }
+  }
+
+  @ViewBuilder
+  var selectionOverlay: some View {
+    VStack {
+      Spacer()
+      HStack {
+        Spacer()
+        if self.store.isInSelectMode {
+          Image(
+            systemName: self.isSelected
+              ? "checkmark.circle.fill"
+              : "circle"
+          )
+          .font(.system(size: 20))
+          .foregroundColor(.white)
+          .padding(6)
+          #if os(iOS)
+            .glassEffect(.identity)
+          #endif
+        }
+      }
+    }
   }
 
   private func loadImageIfNeeded() async {
