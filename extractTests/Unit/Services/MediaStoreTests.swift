@@ -230,4 +230,170 @@ struct MediaStoreCloudIdentifierTests {
     #expect(smallId!.contains("640x480"))
     #expect(largeId!.contains("4096x3072"))
   }
+
+  @Test("getCloudIdentifier handles zero dimensions")
+  @MainActor
+  func cloudIdentifierZeroDimensions() async throws {
+    let mediaStore = MediaStore()
+    let testDate = Date(timeIntervalSince1970: 1_609_459_200)
+
+    let zeroDimensionAsset = MockPHAsset(
+      creationDate: testDate,
+      mediaType: .image,
+      pixelWidth: 0,
+      pixelHeight: 0,
+      duration: 0.0
+    )
+
+    let identifier = await mediaStore.getCloudIdentifier(for: zeroDimensionAsset)
+
+    #expect(identifier != nil)
+    #expect(identifier!.contains("0x0"))
+    #expect(identifier!.contains("photo"))
+    #expect(identifier!.contains("0.0"))
+  }
+
+  @Test("getCloudIdentifier handles very long video duration")
+  @MainActor
+  func cloudIdentifierLongVideoDuration() async throws {
+    let mediaStore = MediaStore()
+    let testDate = Date(timeIntervalSince1970: 1_609_459_200)
+
+    let longVideoAsset = MockPHAsset(
+      creationDate: testDate,
+      mediaType: .video,
+      pixelWidth: 1920,
+      pixelHeight: 1080,
+      duration: 3661.5 // 1 hour, 1 minute, 1.5 seconds
+    )
+
+    let identifier = await mediaStore.getCloudIdentifier(for: longVideoAsset)
+
+    #expect(identifier != nil)
+    #expect(identifier!.contains("video"))
+    #expect(identifier!.contains("3661.5"))
+  }
+
+  @Test("getCloudIdentifier handles fractional duration")
+  @MainActor
+  func cloudIdentifierFractionalDuration() async throws {
+    let mediaStore = MediaStore()
+    let testDate = Date(timeIntervalSince1970: 1_609_459_200)
+
+    let fractionalAsset = MockPHAsset(
+      creationDate: testDate,
+      mediaType: .video,
+      pixelWidth: 1920,
+      pixelHeight: 1080,
+      duration: 0.123456789
+    )
+
+    let identifier = await mediaStore.getCloudIdentifier(for: fractionalAsset)
+
+    #expect(identifier != nil)
+    #expect(identifier!.contains("0.123456789"))
+  }
+
+  @Test("getCloudIdentifier replaces colons in ISO date format")
+  @MainActor
+  func cloudIdentifierReplacesColons() async throws {
+    let mediaStore = MediaStore()
+    let testDate = Date(timeIntervalSince1970: 1_609_505_523) // Contains time with colons
+
+    let mockAsset = MockPHAsset(
+      creationDate: testDate,
+      mediaType: .image,
+      pixelWidth: 1920,
+      pixelHeight: 1080
+    )
+
+    let identifier = await mediaStore.getCloudIdentifier(for: mockAsset)
+
+    #expect(identifier != nil)
+    // Should not contain any colons (they should be replaced with hyphens)
+    #expect(!identifier!.contains(":"))
+    // Should contain hyphens instead
+    #expect(identifier!.contains("-"))
+  }
+
+  @Test("getCloudIdentifier handles very old dates")
+  @MainActor
+  func cloudIdentifierVeryOldDates() async throws {
+    let mediaStore = MediaStore()
+    let veryOldDate = Date(timeIntervalSince1970: 0) // Unix epoch: 1970-01-01T00:00:00Z
+
+    let mockAsset = MockPHAsset(
+      creationDate: veryOldDate,
+      mediaType: .image,
+      pixelWidth: 640,
+      pixelHeight: 480
+    )
+
+    let identifier = await mediaStore.getCloudIdentifier(for: mockAsset)
+
+    #expect(identifier != nil)
+    #expect(identifier!.contains("1970-01-01T00-00-00Z"))
+  }
+
+  @Test("getCloudIdentifier handles future dates")
+  @MainActor
+  func cloudIdentifierFutureDates() async throws {
+    let mediaStore = MediaStore()
+    let futureDate = Date(timeIntervalSince1970: 2_000_000_000) // May 18, 2033
+
+    let mockAsset = MockPHAsset(
+      creationDate: futureDate,
+      mediaType: .video,
+      pixelWidth: 3840,
+      pixelHeight: 2160,
+      duration: 45.0
+    )
+
+    let identifier = await mediaStore.getCloudIdentifier(for: mockAsset)
+
+    #expect(identifier != nil)
+    #expect(identifier!.contains("2033-05-18"))
+  }
+
+  @Test("getCloudIdentifier handles unknown media type")
+  @MainActor
+  func cloudIdentifierUnknownMediaType() async throws {
+    let mediaStore = MediaStore()
+    let testDate = Date(timeIntervalSince1970: 1_609_459_200)
+
+    let unknownAsset = MockPHAsset(
+      creationDate: testDate,
+      mediaType: .unknown, // PHAssetMediaType.unknown
+      pixelWidth: 1920,
+      pixelHeight: 1080,
+      duration: 0.0
+    )
+
+    let identifier = await mediaStore.getCloudIdentifier(for: unknownAsset)
+
+    #expect(identifier != nil)
+    // Should default to "video" for non-image types
+    #expect(identifier!.contains("video"))
+  }
+
+  @Test("getCloudIdentifier handles audio media type")
+  @MainActor
+  func cloudIdentifierAudioMediaType() async throws {
+    let mediaStore = MediaStore()
+    let testDate = Date(timeIntervalSince1970: 1_609_459_200)
+
+    let audioAsset = MockPHAsset(
+      creationDate: testDate,
+      mediaType: .audio,
+      pixelWidth: 0,
+      pixelHeight: 0,
+      duration: 180.5
+    )
+
+    let identifier = await mediaStore.getCloudIdentifier(for: audioAsset)
+
+    #expect(identifier != nil)
+    #expect(identifier!.contains("video")) // Audio treated as video in the logic
+    #expect(identifier!.contains("180.5"))
+  }
 }

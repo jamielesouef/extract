@@ -44,29 +44,32 @@ struct ImageThumbnailView: View {
         Color.gray.opacity(0.2)
       }
     }
+    .clipShape(RoundedRectangle(cornerSize: .square))
     .frame(width: self.size, height: self.size)
     .overlay {
       VStack {
         Spacer()
         HStack {
           Spacer()
-          if store.isInSelectMode {
+          if self.store.isInSelectMode {
             Image(
-              systemName: isSelected
+              systemName: self.isSelected
                 ? "checkmark.circle.fill"
                 : "circle"
             )
             .font(.system(size: 20))
             .foregroundColor(.white)
             .padding(6)
-            .glassEffect(.identity)
+            #if os(iOS)
+              .glassEffect(.identity)
+            #endif
           }
         }
       }
     }
     .onTapGesture {
-      if store.isInSelectMode {
-        isSelected.toggle()
+      if self.store.isInSelectMode {
+        self.isSelected.toggle()
       }
     }
     .clipped()
@@ -126,19 +129,23 @@ extension ImageThumbnailView {
   @available(iOS 17.0, macOS 14.0, *)
   #Preview("Selected vs Unselected") {
     @Previewable @State var store = MediaStore()
+    @Previewable @State var store_notSelected = MediaStore()
 
     store.isInSelectMode = true
+    store_notSelected.isInSelectMode = false
     return HStack(spacing: 16) {
       VStack(spacing: 6) {
         ImageThumbnailView(asset: nil, size: 100)
+          .environment(store_notSelected)
         Text("Select Off").font(.caption).foregroundStyle(.secondary)
       }
       VStack(spacing: 6) {
         ImageThumbnailView(asset: nil, size: 100)
+          .environment(store)
         Text("Select On").font(.caption).foregroundStyle(.secondary)
       }
     }
     .padding()
-    .environment(store)
+    
   }
 #endif

@@ -21,8 +21,8 @@ struct PhotosView: View {
   private var columns: [GridItem] {
     [GridItem(
       .adaptive(
-        minimum: getIdealSizeForimage(),
-        maximum: getIdealSizeForimage()
+        minimum: self.getIdealSizeForimage(),
+        maximum: self.getIdealSizeForimage()
       ),
       spacing: Constants.Image.spacing
     )]
@@ -42,9 +42,8 @@ struct PhotosView: View {
             ImageThumbnailView(
               asset: asset,
               size: self.getIdealSizeForimage(),
-
             )
-            .clipShape(RoundedRectangle(cornerSize: .square))
+           
           }
         }
       }
@@ -79,7 +78,6 @@ struct PhotosView: View {
   }
 
   private func getIdealSizeForimage() -> CGFloat {
-   
     let minWidth = min(appState.windowSize.height, self.appState.windowSize.width)
 
     return (minWidth / Constants.Image.maxItemsForMinSpace) - Constants.Image.spacing

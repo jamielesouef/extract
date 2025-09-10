@@ -30,49 +30,47 @@ enum SelectOption: String, Identifiable {
 }
 
 struct SelectAllPhotosView: View {
-  
   @Environment(MediaStore.self) var store
-  
+
   @Namespace private var namespace
-  
+
   var body: some View {
     @Bindable var store = store
     #if os(iOS)
-    GlassEffectContainer(spacing: Constants.Glass.spacing) {
-      VStack(alignment: .center) {
-        if store.isInSelectMode {
-          ForEach(SelectOption.allCases) { option in
-            SelectPhotoOptionView(option: option)
-              .glassEffect(.regular, in: .circle)
-              .glassEffectID(option.id, in: self.namespace)
+      GlassEffectContainer(spacing: Constants.Glass.spacing) {
+        VStack(alignment: .center) {
+          if store.isInSelectMode {
+            ForEach(SelectOption.allCases) { option in
+              SelectPhotoOptionView(option: option)
+                .glassEffect(.regular, in: .circle)
+                .glassEffectID(option.id, in: self.namespace)
+            }
           }
-        }
-        Button(action: {
-          withAnimation {
-            store.isInSelectMode.toggle()
+          Button(action: {
+            withAnimation {
+              store.isInSelectMode.toggle()
+            }
+          }) {
+            Image(
+              systemName: store.isInSelectMode
+                ? "checklist" : "checklist.unchecked"
+            )
+            .frame(
+              width: Constants.SelectOption.size,
+              height: Constants.SelectOption.size
+            )
           }
-        }) {
-          Image(
-            systemName: store.isInSelectMode
-              ? "checklist" : "checklist.unchecked"
-          )
-          .frame(
-            width: Constants.SelectOption.size,
-            height: Constants.SelectOption.size
-          )
+          .buttonStyle(.glass)
+          .glassEffectID("selectToggleButton", in: self.namespace)
         }
-        .buttonStyle(.glass)
-        .glassEffectID("selectToggleButton", in: self.namespace)
       }
-    }
     #else
-    Text("No mac")
+      Text("No mac")
     #endif
   }
 }
 
 private struct SelectAllPhotosViewModifiers: ViewModifier {
-  
   func body(content: Content) -> some View {
     ZStack {
       content

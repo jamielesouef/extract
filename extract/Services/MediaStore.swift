@@ -31,8 +31,11 @@ final class MediaStore: MediaStoring {
   var count: Int { self.items.count }
   var photosCount: Int = 0
   var videoCount: Int = 0
-  
+
   var isInSelectMode: Bool = false
+  
+  // Static formatter for thread-safe reuse
+  private nonisolated(unsafe) static let iso8601Formatter = ISO8601DateFormatter()
 
   private(set) var selected: Set<AnyHashable> = []
 
@@ -116,8 +119,8 @@ final class MediaStore: MediaStoring {
         return asset.localIdentifier
       }
 
-      let dateFormatter = ISO8601DateFormatter()
-      let dateString = dateFormatter.string(from: creationDate)
+      // Use a static formatter to avoid repeated creation
+      let dateString = Self.iso8601Formatter.string(from: creationDate)
       let mediaType = asset.mediaType == .image ? "photo" : "video"
       let pixelWidth = asset.pixelWidth
       let pixelHeight = asset.pixelHeight
