@@ -1,5 +1,5 @@
 //
-//  SelectPhotoView.swift
+//  SelectAllPhotosView.swift
 //  extract
 //
 //  Created by Jamie Le Souef on 10/9/2025.
@@ -12,44 +12,44 @@ enum SelectOption: String, Identifiable {
   case selectNone
 
   var id: String {
-    return self.rawValue
+    rawValue
   }
 
   var icon: String {
     switch self {
     case .selectAll:
-      return "checkmark.circle"
+      "checkmark.circle"
     case .selectNone:
-      return "circle"
+      "circle"
     }
   }
 
   static var allCases: [Self] {
-    return [.selectAll, .selectNone]
+    [.selectAll, .selectNone]
   }
 }
 
-struct SelectPhotoView: View {
+struct SelectAllPhotosView: View {
   @State private var isShowingImagePicker: Bool = false
   @Namespace private var namespace
 
   var body: some View {
     GlassEffectContainer(spacing: Constants.Glass.spacing) {
       VStack(alignment: .center) {
-        if isShowingImagePicker {
+        if self.isShowingImagePicker {
           ForEach(SelectOption.allCases) { option in
             SelectPhotoOptionView(option: option)
               .glassEffect(.regular, in: .circle)
-              .glassEffectID(option.id, in: namespace)
+              .glassEffectID(option.id, in: self.namespace)
           }
         }
         Button(action: {
           withAnimation {
-            isShowingImagePicker.toggle()
+            self.isShowingImagePicker.toggle()
           }
         }) {
           Image(
-            systemName: isShowingImagePicker
+            systemName: self.isShowingImagePicker
               ? "checklist" : "checklist.unchecked"
           )
           .frame(
@@ -57,14 +57,35 @@ struct SelectPhotoView: View {
             height: Constants.SelectOption.size
           )
         }
-      
         .buttonStyle(.glass)
-        .glassEffectID("selectToggleButton", in: namespace)
+        .glassEffectID("selectToggleButton", in: self.namespace)
       }
     }
   }
 }
 
+private struct SelectAllPhotosViewModifiers: ViewModifier {
+  func body(content: Content) -> some View {
+    ZStack {
+      content
+      HStack {
+        Spacer()
+        VStack {
+          Spacer()
+          SelectAllPhotosView()
+            .padding()
+        }
+      }
+    }
+  }
+}
+
+extension View {
+  func showSelectAll() -> some View {
+    modifier(SelectAllPhotosViewModifiers())
+  }
+}
+
 #Preview {
-  SelectPhotoView()
+  SelectAllPhotosView()
 }

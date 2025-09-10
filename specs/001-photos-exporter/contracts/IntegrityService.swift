@@ -10,31 +10,53 @@ actor IntegrityServiceProtocol {
 
   func calculateChecksum(data: Data, algorithm: ChecksumAlgorithm) async throws -> String
   func calculateChecksumForFile(url: URL, algorithm: ChecksumAlgorithm) async throws -> String
-  func calculateChecksumStreaming(url: URL, algorithm: ChecksumAlgorithm,
-                                  chunkSize: Int, progressHandler: @escaping (Double) -> Void) async throws -> String
+  func calculateChecksumStreaming(
+    url: URL,
+    algorithm: ChecksumAlgorithm,
+    chunkSize: Int,
+    progressHandler: @escaping (Double) -> Void
+  ) async throws -> String
 
   // MARK: - Verification Operations
 
-  func verifyIntegrity(localURL: URL, expectedChecksum: String, algorithm: ChecksumAlgorithm) async throws -> IntegrityResult
-  func verifyRemoteIntegrity(adapter: ArchiveAdapter, path: String,
-                             expectedChecksum: String, algorithm: ChecksumAlgorithm) async throws -> IntegrityResult
+  func verifyIntegrity(
+    localURL: URL,
+    expectedChecksum: String,
+    algorithm: ChecksumAlgorithm
+  ) async throws -> IntegrityResult
+  func verifyRemoteIntegrity(
+    adapter: ArchiveAdapter,
+    path: String,
+    expectedChecksum: String,
+    algorithm: ChecksumAlgorithm
+  ) async throws
+    -> IntegrityResult
 
   // MARK: - Batch Verification
 
-  func verifyBatch(items: [VerificationItem],
-                   maxConcurrency: Int,
-                   progressHandler: @escaping (VerificationProgress) -> Void) async throws -> [IntegrityResult]
+  func verifyBatch(
+    items: [VerificationItem],
+    maxConcurrency: Int,
+    progressHandler: @escaping (VerificationProgress) -> Void
+  ) async throws
+    -> [IntegrityResult]
 
   // MARK: - Archive Audit
 
-  func auditArchive(archive: Archive, type: AuditType,
-                    progressHandler: @escaping (AuditProgress) -> Void) async throws -> AuditReport
+  func auditArchive(
+    archive: Archive,
+    type: AuditType,
+    progressHandler: @escaping (AuditProgress) -> Void
+  ) async throws -> AuditReport
 
   // MARK: - Repair Operations
 
   func generateRepairPlan(auditReport: AuditReport) async throws -> RepairPlan
-  func executeRepair(plan: RepairPlan,
-                     progressHandler: @escaping (RepairProgress) -> Void) async throws -> RepairResult
+  func executeRepair(
+    plan: RepairPlan,
+    progressHandler: @escaping (RepairProgress) -> Void
+  ) async throws
+    -> RepairResult
 }
 
 // MARK: - Supporting Types
@@ -252,17 +274,17 @@ enum ChecksumAlgorithm: String, CaseIterable, Sendable {
 
   var displayName: String {
     switch self {
-    case .sha256: return "SHA-256"
-    case .sha1: return "SHA-1"
-    case .md5: return "MD5"
+    case .sha256: "SHA-256"
+    case .sha1: "SHA-1"
+    case .md5: "MD5"
     }
   }
 
   var isSecure: Bool {
     switch self {
-    case .sha256: return true
-    case .sha1: return false
-    case .md5: return false
+    case .sha256: true
+    case .sha1: false
+    case .md5: false
     }
   }
 }
@@ -285,27 +307,27 @@ enum IntegrityServiceError: LocalizedError {
   var errorDescription: String? {
     switch self {
     case let .fileNotFound(path):
-      return "File not found: \(path)"
+      "File not found: \(path)"
     case let .fileNotReadable(path):
-      return "File not readable: \(path)"
+      "File not readable: \(path)"
     case let .checksumCalculationFailed(reason):
-      return "Checksum calculation failed: \(reason)"
+      "Checksum calculation failed: \(reason)"
     case let .verificationFailed(reason):
-      return "Verification failed: \(reason)"
+      "Verification failed: \(reason)"
     case let .auditAlreadyRunning(id):
-      return "Audit already running: \(id)"
+      "Audit already running: \(id)"
     case let .auditNotFound(id):
-      return "Audit not found: \(id)"
+      "Audit not found: \(id)"
     case let .repairPlanInvalid(reason):
-      return "Repair plan invalid: \(reason)"
+      "Repair plan invalid: \(reason)"
     case let .repairActionFailed(reason):
-      return "Repair action failed: \(reason)"
+      "Repair action failed: \(reason)"
     case let .unsupportedAlgorithm(algorithm):
-      return "Unsupported checksum algorithm: \(algorithm)"
+      "Unsupported checksum algorithm: \(algorithm)"
     case let .networkTimeoutDuringVerification(timeout):
-      return "Network timeout during verification: \(timeout)s"
+      "Network timeout during verification: \(timeout)s"
     case let .insufficientPermissions(operation):
-      return "Insufficient permissions for: \(operation)"
+      "Insufficient permissions for: \(operation)"
     }
   }
 }

@@ -11,9 +11,9 @@ import SwiftUI
 
 @ModelActor
 actor MediaIndex: MediaIndexing {
-  func addMedia(media items: [PHAsset]) async throws {
+  func addMedia(media items: [any PhotoAsset]) async throws {
     let mediaItems = items.map {
-      let kind = getMediaType(from: $0.mediaType)
+      let kind = self.getMediaType(from: $0.mediaType)
       return MediaItemData(
         mediaId: $0.localIdentifier,
         kind: kind,
@@ -22,14 +22,14 @@ actor MediaIndex: MediaIndexing {
       )
     }
 
-    try await addMedia(media: mediaItems)
+    try await self.addMedia(media: mediaItems)
   }
 
   func addMedia(media items: [MediaItemData]) async throws {
     let descriptor = FetchDescriptor<MediaItem>()
 
     let existing: [MediaItem] = try modelContext.fetch(descriptor)
-    var existingIDs: Set<String> = Set(existing.map { $0.mediaId })
+    var existingIDs: Set<String> = Set(existing.map(\.mediaId))
 
     for item in items {
       let id = item.mediaId

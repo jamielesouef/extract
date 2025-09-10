@@ -28,7 +28,9 @@ struct FailedPhotosAccessView: View {
             UIApplication.shared.open(url)
           }
         #elseif os(macOS)
-          if let url = URL(string: "x-apple.systempreferences:com.apple.preference.security?Privacy_Photos") {
+          if let url =
+            URL(string: "x-apple.systempreferences:com.apple.preference.security?Privacy_Photos")
+          {
             NSWorkspace.shared.open(url)
           }
         #endif

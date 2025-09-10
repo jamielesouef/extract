@@ -21,8 +21,11 @@ protocol PhotosServiceProtocol: ObservableObject {
   // MARK: - Asset Processing
 
   func requestOriginalResource(for asset: PHAsset) async throws -> AssetResource
-  func requestOriginalResources(for assets: [PHAsset],
-                                progressHandler: @escaping (Double) -> Void) async throws -> [AssetResource]
+  func requestOriginalResources(
+    for assets: [PHAsset],
+    progressHandler: @escaping (Double) -> Void
+  ) async throws
+    -> [AssetResource]
 
   // MARK: - Library Monitoring
 
@@ -41,27 +44,27 @@ struct AssetResource {
   let requestedAt: Date
 
   var fileExtension: String {
-    URL(string: filename)?.pathExtension ?? ""
+    URL(string: self.filename)?.pathExtension ?? ""
   }
 
   var mediaType: MediaType {
-    switch asset.mediaType {
+    switch self.asset.mediaType {
     case .image:
-      if asset.mediaSubtypes.contains(.photoLive) {
+      if self.asset.mediaSubtypes.contains(.photoLive) {
         return .livePhoto
-      } else if asset.mediaSubtypes.contains(.photoScreenshot) {
+      } else if self.asset.mediaSubtypes.contains(.photoScreenshot) {
         return .screenshot
-      } else if asset.mediaSubtypes.contains(.photoPanorama) {
+      } else if self.asset.mediaSubtypes.contains(.photoPanorama) {
         return .panorama
-      } else if asset.mediaSubtypes.contains(.photoDepthEffect) {
+      } else if self.asset.mediaSubtypes.contains(.photoDepthEffect) {
         return .portraitPhoto
       } else {
         return .photo
       }
     case .video:
-      if asset.mediaSubtypes.contains(.videoTimelapse) {
+      if self.asset.mediaSubtypes.contains(.videoTimelapse) {
         return .timelapse
-      } else if asset.mediaSubtypes.contains(.videoHighFrameRate) {
+      } else if self.asset.mediaSubtypes.contains(.videoHighFrameRate) {
         return .slowMotion
       } else {
         return .video
@@ -91,21 +94,21 @@ enum PhotosServiceError: LocalizedError {
   var errorDescription: String? {
     switch self {
     case .authorizationDenied:
-      return "Photos access denied. Please grant permission in Settings."
+      "Photos access denied. Please grant permission in Settings."
     case .authorizationRestricted:
-      return "Photos access restricted by device policy."
+      "Photos access restricted by device policy."
     case let .assetNotFound(identifier):
-      return "Photo asset not found: \(identifier)"
+      "Photo asset not found: \(identifier)"
     case let .resourceRequestFailed(reason):
-      return "Failed to load photo: \(reason)"
+      "Failed to load photo: \(reason)"
     case .networkUnavailable:
-      return "Network unavailable for iCloud photo download."
+      "Network unavailable for iCloud photo download."
     case .iCloudSyncRequired:
-      return "iCloud Photos sync required to access originals."
+      "iCloud Photos sync required to access originals."
     case .insufficientStorage:
-      return "Insufficient device storage to download photos from iCloud."
+      "Insufficient device storage to download photos from iCloud."
     case .libraryUnavailable:
-      return "Photos library is currently unavailable."
+      "Photos library is currently unavailable."
     }
   }
 }

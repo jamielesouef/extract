@@ -17,74 +17,81 @@ struct PhotosView: View {
   @State private var isRefreshing = false
   @State private var isInSelectMode = false
 
-  private let spacing: CGFloat = 8
   private let size: CGFloat = 100
-  private let roundedRadius = CGSize(width: 8, height: 8)
 
   private var columns: [GridItem] {
-    [GridItem(.adaptive(minimum: 100), spacing: spacing)]
+    [GridItem(.adaptive(minimum: 100), spacing: Constants.Image.spacing)]
   }
 
   var body: some View {
     ScrollView {
       LazyVStack {
         PhotosHeaderView(
-          count: store.count,
-          photosCount: store.photosCount,
-          videoCount: store.videoCount
+          count: self.store.count,
+          photosCount: self.store.photosCount,
+          videoCount: self.store.videoCount
         )
         Divider()
-        LazyVGrid(columns: columns) {
-          ForEach(store.items, id: \.self) { asset in
+        LazyVGrid(columns: self.columns) {
+          ForEach(self.store.items, id: \.localIdentifier) { asset in
             ImageThumbnailView(
               asset: asset,
-              size: getIdealSizeForimage(),
-              isInSelectMode: isInSelectMode
+              size: self.getIdealSizeForimage(),
+              isInSelectMode: self.isInSelectMode
             )
-            .clipShape(RoundedRectangle(cornerSize: roundedRadius))
+            .clipShape(RoundedRectangle(cornerSize: .square))
           }
         }
       }
     }
     .ignoresSafeArea(.keyboard)
     .toolbar(removing: .title)
+    .showSelectAll()
     .task {
-      await refreshGuarded()
+      await self.refreshGuarded()
     }
     .refreshable {
       slog("refresh")
-      await refreshGuarded()
+      await self.refreshGuarded()
     }
   }
 
   private func refreshGuarded() async {
-    if isRefreshing { return }
-    isRefreshing = true
+    if self.isRefreshing { return }
+    self.isRefreshing = true
     defer { isRefreshing = false }
-    await getMediaAndIndex()
+    await self.getMediaAndIndex()
   }
 
   private func getMediaAndIndex() async {
-    await store.requestAndLoad()
+    await self.store.requestAndLoad()
     let indexer = MediaIndex(modelContainer: modelContext.container)
     do {
-      try await indexer.addMedia(media: store.items)
+      try await indexer.addMedia(media: self.store.items)
     } catch {
       slog(error)
     }
   }
 
   private func getIdealSizeForimage() -> CGFloat {
-    let maxWidthForIPhone: CGFloat = 3
-    let minWidowSize =
-      min(appState.windowSize.height, appState.windowSize.width)
-      / maxWidthForIPhone
-    return minWidowSize - (spacing * 2)
+    let maxImagesWidth: CGFloat = 3
+    let minSize = min(appState.windowSize.height, self.appState.windowSize.width)
+
+    return minSize - (Constants.Image.spacing * maxImagesWidth)
   }
 }
 
-#Preview {
+#Preview("Photos Grid with 8 Items") {
   PhotosView()
     .environment(AppState())
-    .environment(MediaStore())
+    .environment(MediaStore(items: [
+      MockPhotoAsset(mediaType: .image),
+      MockPhotoAsset(mediaType: .image),
+      MockPhotoAsset(mediaType: .video, duration: 30.5),
+      MockPhotoAsset(mediaType: .image),
+      MockPhotoAsset(mediaType: .image),
+      MockPhotoAsset(mediaType: .video, duration: 15.2),
+      MockPhotoAsset(mediaType: .image),
+      MockPhotoAsset(mediaType: .image)
+    ]))
 }

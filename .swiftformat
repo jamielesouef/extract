@@ -1,4 +1,22 @@
-# SwiftFormat configuration
+--swiftversion 6.0
 --indent 2
---self remove
---exclude Pods,Generated,.build,DerivedData
+--maxwidth 100
+
+# Wrapping & readability
+--wraparguments before-first
+--wrapcollections before-first
+
+# Syntax clarity
+--self insert
+--stripunusedargs closure-only
+--commas inline
+--semicolons never
+
+# Whitespace & trimming
+--trimwhitespace always
+
+# Imports
+--importgrouping alphabetized
+
+# Structure & organisation
+--marktypes always

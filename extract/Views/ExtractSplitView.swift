@@ -16,8 +16,8 @@ struct ExtractSplitView: View {
   var body: some View {
     @Bindable var appState = appState
 
-    NavigationSplitView(preferredCompactColumn: $preferredColumn) {
-      sidebar
+    NavigationSplitView(preferredCompactColumn: self.$preferredColumn) {
+      self.sidebar
         .frame(minWidth: 200)
         .navigationDestination(for: NavigationOptions.self) { page in
           NavigationStack(path: $appState.path) {
@@ -33,7 +33,7 @@ struct ExtractSplitView: View {
         }
       }
       .task {
-        await store.requestAccess()
+        await self.store.requestAccess()
       }
     }
   }

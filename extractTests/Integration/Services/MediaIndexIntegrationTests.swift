@@ -20,7 +20,7 @@ struct MediaIndexIntegrationTests {
     let indexA = await MediaIndex(modelContainer: container)
     try await indexA.addMedia(media: [
       MediaItemData(mediaId: "persist-1", kind: .image, status: .unknown, filename: nil),
-      MediaItemData(mediaId: "persist-2", kind: .video, status: .notBackedUp, filename: nil),
+      MediaItemData(mediaId: "persist-2", kind: .video, status: .notBackedUp, filename: nil)
     ])
 
     // New actor instance sharing the same container should see the same data
@@ -31,7 +31,7 @@ struct MediaIndexIntegrationTests {
     let savedItems = try context.fetch(descriptor)
 
     #expect(savedItems.count == 2)
-    let ids = Set(savedItems.map { $0.mediaId })
+    let ids = Set(savedItems.map(\.mediaId))
     #expect(ids.contains("persist-1"))
     #expect(ids.contains("persist-2"))
   }

@@ -7,22 +7,31 @@
 
 import SwiftUI
 
-struct Constants {
-  
-  struct Image {
+enum Constants {
+  enum Image {
     static let size: CGFloat = 100
     static let cornerRadius: CGFloat = 8
     static let padding: CGFloat = 16
+    static let spacing: CGFloat = 8
     static let backgroundColor: Color = .secondary
   }
-  
-  struct Glass {
-    static let spacing: CGFloat = 16
+
+  enum Glass {
+    static let spacing: CGFloat = 8
   }
-  
-  struct SelectOption {
+
+  enum SelectOption {
     static let size: CGFloat = 32
     static let fontSize: CGFloat = 24
     static let padding: CGFloat = 8
+  }
+}
+
+extension CGSize {
+  static var square: Self {
+    Self(
+      width: Constants.Image.cornerRadius,
+      height: Constants.Image.cornerRadius
+    )
   }
 }

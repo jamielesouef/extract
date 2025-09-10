@@ -23,7 +23,7 @@ final nonisolated class MediaItem {
     status: MediaItemData.Status,
     filename: String? = nil
   ) {
-    id = UUID()
+    self.id = UUID()
     self.mediaId = mediaId
     self.kind = kind
     self.status = status

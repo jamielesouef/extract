@@ -25,16 +25,20 @@ struct SystemPhotoLibraryAuthorizer: PhotoLibraryAuthorizing {
 final class MediaStore: MediaStoring {
   private let authorizer: PhotoLibraryAuthorizing
 
-  var items: [PHAsset] = []
+  var items: [any PhotoAsset] = []
   var authorizationStatus: Bool?
   var isLoading: Bool = false
-  var count: Int { items.count }
+  var count: Int { self.items.count }
   var photosCount: Int = 0
   var videoCount: Int = 0
 
-  private(set) var selected: Set<PHAsset> = []
+  private(set) var selected: Set<AnyHashable> = []
 
-  init(authorizer: PhotoLibraryAuthorizing = SystemPhotoLibraryAuthorizer()) {
+  init(
+    items: [any PhotoAsset] = [],
+    authorizer: PhotoLibraryAuthorizing = SystemPhotoLibraryAuthorizer()
+  ) {
+    self.items = items
     self.authorizer = authorizer
   }
 
@@ -43,20 +47,20 @@ final class MediaStore: MediaStoring {
 
     switch status {
     case .authorized, .limited:
-      authorizationStatus = true
+      self.authorizationStatus = true
     case .denied, .notDetermined, .restricted:
-      authorizationStatus = false
+      self.authorizationStatus = false
     @unknown default:
-      authorizationStatus = false
+      self.authorizationStatus = false
     }
   }
 
   func loadAllAssets() async {
-    isLoading = true
+    self.isLoading = true
     defer { isLoading = false }
 
     struct LoadResult {
-      let items: [PHAsset]
+      let items: [any PhotoAsset]
       let photosCount: Int
       let videoCount: Int
     }
@@ -68,7 +72,7 @@ final class MediaStore: MediaStoring {
       options.sortDescriptors = [NSSortDescriptor(key: "creationDate", ascending: false)]
       let fetched = PHAsset.fetchAssets(with: options)
 
-      var localItems: [PHAsset] = []
+      var localItems: [any PhotoAsset] = []
       var localPhotosCount = 0
       var localVideoCount = 0
 
@@ -83,25 +87,29 @@ final class MediaStore: MediaStoring {
         localItems.append(asset)
       }
 
-      return LoadResult(items: localItems, photosCount: localPhotosCount, videoCount: localVideoCount)
+      return LoadResult(
+        items: localItems,
+        photosCount: localPhotosCount,
+        videoCount: localVideoCount
+      )
     }.value
 
-    items = result.items
-    photosCount = result.photosCount
-    videoCount = result.videoCount
+    self.items = result.items
+    self.photosCount = result.photosCount
+    self.videoCount = result.videoCount
   }
 
   func requestAndLoad() async {
-    await requestAccess()
-    if authorizationStatus == true {
-      await loadAllAssets()
+    await self.requestAccess()
+    if self.authorizationStatus == true {
+      await self.loadAllAssets()
     } else {
-      items = []
+      self.items = []
     }
   }
 
-  func getCloudIdentifier(for asset: PHAsset) async -> String? {
-    return await Task.detached {
+  func getCloudIdentifier(for asset: any PhotoAsset) async -> String? {
+    await Task.detached {
       guard let creationDate = asset.creationDate else {
         return asset.localIdentifier
       }

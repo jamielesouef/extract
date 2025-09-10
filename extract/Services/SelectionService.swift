@@ -12,12 +12,12 @@ protocol SelectionServicing {
 
 final class SelectionService: SelectionServicing {
   private var selected: Set<String> = []
-  
+
   func select(_ asset: String) {
-    selected.insert(asset)
+    self.selected.insert(asset)
   }
-  
+
   func deselect(_ asset: String) {
-    selected.remove(asset)
+    self.selected.remove(asset)
   }
 }

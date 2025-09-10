@@ -9,7 +9,7 @@ import Photos
 import SwiftUI
 
 protocol MediaStoring: Sendable {
-  var items: [PHAsset] { get set }
+  var items: [any PhotoAsset] { get set }
   var authorizationStatus: Bool? { get set }
   var isLoading: Bool { get set }
   var count: Int { get }
@@ -19,5 +19,5 @@ protocol MediaStoring: Sendable {
   func requestAccess() async
   func loadAllAssets() async
   func requestAndLoad() async
-  func getCloudIdentifier(for asset: PHAsset) async -> String?
+  func getCloudIdentifier(for asset: any PhotoAsset) async -> String?
 }

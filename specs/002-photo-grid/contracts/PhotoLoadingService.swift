@@ -43,11 +43,15 @@ struct ThumbnailRequest {
   let deliveryMode: PHImageRequestOptionsDeliveryMode
   let requestID: PHImageRequestID?
 
-  init(asset: PHAsset, size: CGSize, deliveryMode: PHImageRequestOptionsDeliveryMode = .opportunistic) {
+  init(
+    asset: PHAsset,
+    size: CGSize,
+    deliveryMode: PHImageRequestOptionsDeliveryMode = .opportunistic
+  ) {
     self.asset = asset
     self.size = size
     self.deliveryMode = deliveryMode
-    requestID = nil
+    self.requestID = nil
   }
 }
 
@@ -58,7 +62,7 @@ struct ThumbnailResult {
   let error: Error?
   let loadTime: TimeInterval
 
-  var isSuccess: Bool { image != nil && error == nil }
+  var isSuccess: Bool { self.image != nil && self.error == nil }
 }
 
 // MARK: - Error Types
@@ -75,19 +79,19 @@ enum PhotoLoadingError: LocalizedError {
   var errorDescription: String? {
     switch self {
     case .authorizationDenied:
-      return "Photos access denied. Please grant permission in Settings."
+      "Photos access denied. Please grant permission in Settings."
     case .authorizationRestricted:
-      return "Photos access restricted by device policy."
+      "Photos access restricted by device policy."
     case .noPhotosFound:
-      return "No photos found in the library."
+      "No photos found in the library."
     case let .thumbnailLoadFailed(asset, underlying):
-      return "Failed to load thumbnail for \(asset.localIdentifier): \(underlying?.localizedDescription ?? "Unknown error")"
+      "Failed to load thumbnail for \(asset.localIdentifier): \(underlying?.localizedDescription ?? "Unknown error")"
     case let .requestCancelled(asset):
-      return "Thumbnail request cancelled for \(asset.localIdentifier)"
+      "Thumbnail request cancelled for \(asset.localIdentifier)"
     case .networkUnavailable:
-      return "Network unavailable for iCloud photo download."
+      "Network unavailable for iCloud photo download."
     case .insufficientStorage:
-      return "Insufficient device storage for photo loading."
+      "Insufficient device storage for photo loading."
     }
   }
 }

@@ -8,10 +8,12 @@ import Foundation
 protocol ExportServiceProtocol: ObservableObject {
   // MARK: - Job Management
 
-  func createJob(name: String,
-                 archive: Archive,
-                 selection: SelectionSpec,
-                 options: ExportOptions) async throws -> ExportJob
+  func createJob(
+    name: String,
+    archive: Archive,
+    selection: SelectionSpec,
+    options: ExportOptions
+  ) async throws -> ExportJob
 
   func startJob(_ job: ExportJob) async throws
   func pauseJob(_ job: ExportJob) async throws
@@ -84,21 +86,21 @@ enum ExportServiceError: LocalizedError {
   var errorDescription: String? {
     switch self {
     case let .jobNotFound(id):
-      return "Export job not found: \(id)"
+      "Export job not found: \(id)"
     case let .jobAlreadyRunning(id):
-      return "Export job is already running: \(id)"
+      "Export job is already running: \(id)"
     case let .jobNotRunning(id):
-      return "Export job is not currently running: \(id)"
+      "Export job is not currently running: \(id)"
     case let .archiveUnavailable(name):
-      return "Archive '\(name)' is not available"
+      "Archive '\(name)' is not available"
     case let .insufficientSpace(required):
-      return "Insufficient space. Required: \(ByteCountFormatter.string(fromByteCount: required, countStyle: .file))"
+      "Insufficient space. Required: \(ByteCountFormatter.string(fromByteCount: required, countStyle: .file))"
     case let .concurrencyLimitExceeded(limit):
-      return "Cannot start job. Maximum concurrent jobs: \(limit)"
+      "Cannot start job. Maximum concurrent jobs: \(limit)"
     case let .invalidSelection(reason):
-      return "Invalid photo selection: \(reason)"
+      "Invalid photo selection: \(reason)"
     case let .configurationInvalid(reason):
-      return "Invalid export configuration: \(reason)"
+      "Invalid export configuration: \(reason)"
     }
   }
 }

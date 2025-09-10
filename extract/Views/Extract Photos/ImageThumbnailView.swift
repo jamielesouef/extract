@@ -15,8 +15,8 @@ struct ImageThumbnailView: View {
   @Environment(\.displayScale) private var displayScale
   @Environment(MediaStore.self) private var store
 
-  // Allow nil in previews to avoid needing a real PHAsset
-  let asset: PHAsset?
+  // Allow nil in previews to avoid needing a real PhotoAsset
+  let asset: (any PhotoAsset)?
   let size: CGFloat
   let isInSelectMode: Bool
 
@@ -44,36 +44,40 @@ struct ImageThumbnailView: View {
         Color.gray.opacity(0.2)
       }
     }
-    .frame(width: size, height: size)
+    .frame(width: self.size, height: self.size)
     .clipped()
-    .task { await loadImageIfNeeded() }
-    .onDisappear { cancelIfNeeded() }
+    .task { await self.loadImageIfNeeded() }
+    .onDisappear { self.cancelIfNeeded() }
   }
 
   private func loadImageIfNeeded() async {
-    if image != nil { return }
+    if self.image != nil { return }
     guard let asset else { return }
+
+    // Only load images for PHAsset instances (not mock assets in previews)
+    guard let phAsset = asset as? PHAsset else { return }
+
     let options = PHImageRequestOptions()
     options.isNetworkAccessAllowed = true
     options.deliveryMode = .opportunistic
     options.resizeMode = .fast
 
-    let targetSize = CGSize(width: size * displayScale, height: size * displayScale)
+    let targetSize = CGSize(width: size * self.displayScale, height: self.size * self.displayScale)
 
-    requestID = PHCachingImageManager.default().requestImage(
-      for: asset,
+    self.requestID = PHCachingImageManager.default().requestImage(
+      for: phAsset,
       targetSize: targetSize,
       contentMode: .aspectFill,
       options: options
     ) { img, _ in
-      image = img
+      self.image = img
     }
   }
 
   private func cancelIfNeeded() {
     if let id = requestID {
       PHImageManager.default().cancelImageRequest(id)
-      requestID = nil
+      self.requestID = nil
     }
   }
 }
@@ -82,7 +86,7 @@ struct ImageThumbnailView: View {
 
 extension ImageThumbnailView {
   // Keep a non-optional API for production call sites
-  init(asset: PHAsset, size: CGFloat, isInSelectMode: Bool) {
+  init(asset: any PhotoAsset, size: CGFloat, isInSelectMode: Bool) {
     self.asset = asset
     self.size = size
     self.isInSelectMode = isInSelectMode

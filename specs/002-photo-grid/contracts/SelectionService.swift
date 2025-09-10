@@ -45,7 +45,7 @@ struct SelectionChange {
   init(photoId: String, isSelected: Bool) {
     self.photoId = photoId
     self.isSelected = isSelected
-    timestamp = Date()
+    self.timestamp = Date()
   }
 }
 
@@ -55,9 +55,9 @@ struct SelectionMetrics {
   let averageSelectionLatency: TimeInterval
 
   init() {
-    totalSelections = 0
-    selectionTime = 0
-    averageSelectionLatency = 0
+    self.totalSelections = 0
+    self.selectionTime = 0
+    self.averageSelectionLatency = 0
   }
 }
 
@@ -85,13 +85,13 @@ enum SelectionError: LocalizedError {
   var errorDescription: String? {
     switch self {
     case let .photoNotFound(id):
-      return "Photo not found: \(id)"
+      "Photo not found: \(id)"
     case let .selectionLimitExceeded(limit):
-      return "Selection limit exceeded. Maximum: \(limit)"
+      "Selection limit exceeded. Maximum: \(limit)"
     case let .invalidSelection(reason):
-      return "Invalid selection: \(reason)"
+      "Invalid selection: \(reason)"
     case .selectionModeRequired:
-      return "Selection mode must be active for this operation"
+      "Selection mode must be active for this operation"
     }
   }
 }

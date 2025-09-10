@@ -81,7 +81,7 @@ struct NavigationOptionsTests {
   func testIdentifiableConformance() async {
     // Test that each case has a unique ID
     let options: [NavigationOptions] = [.newPhotos, .backedUpPhotos, .failedPhotosAccess]
-    let ids = options.map { $0.id }
+    let ids = options.map(\.id)
     let uniqueIds = Set(ids)
 
     #expect(ids.count == uniqueIds.count) // All IDs should be unique

@@ -15,22 +15,22 @@ struct SelectPhotoOptionView: View {
   private let duration: TimeInterval = 0.2
   var body: some View {
     Button(action: {
-      withAnimation(.spring(response: duration, dampingFraction: 0.1)) {
-        isPressed = true
+      withAnimation(.spring(response: self.duration, dampingFraction: 0.1)) {
+        self.isPressed = true
       }
-      
-      DispatchQueue.main.asyncAfter(deadline: .now() + duration) {
-        isPressed = false
+
+      DispatchQueue.main.asyncAfter(deadline: .now() + self.duration) {
+        self.isPressed = false
       }
     }) {
-      Image(systemName: option.icon)
+      Image(systemName: self.option.icon)
         .font(.system(size: Constants.SelectOption.fontSize))
         .frame(
           width: Constants.SelectOption.size,
           height: Constants.SelectOption.size
         )
         .padding(Constants.SelectOption.padding)
-        .scaleEffect(isPressed ? 1.2 : 1.0)
+        .scaleEffect(self.isPressed ? 1.2 : 1.0)
     }
     .buttonStyle(.plain)
   }

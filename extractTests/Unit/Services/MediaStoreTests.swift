@@ -59,21 +59,21 @@ struct MediaStoreCloudIdentifierTests {
       duration: TimeInterval = 0.0,
       localIdentifier: String = "test-local-id"
     ) {
-      _creationDate = creationDate
-      _mediaType = mediaType
-      _pixelWidth = pixelWidth
-      _pixelHeight = pixelHeight
-      _duration = duration
-      _localIdentifier = localIdentifier
+      self._creationDate = creationDate
+      self._mediaType = mediaType
+      self._pixelWidth = pixelWidth
+      self._pixelHeight = pixelHeight
+      self._duration = duration
+      self._localIdentifier = localIdentifier
       super.init()
     }
 
-    override var creationDate: Date? { _creationDate }
-    override var mediaType: PHAssetMediaType { _mediaType }
-    override var pixelWidth: Int { _pixelWidth }
-    override var pixelHeight: Int { _pixelHeight }
-    override var duration: TimeInterval { _duration }
-    override var localIdentifier: String { _localIdentifier }
+    override var creationDate: Date? { self._creationDate }
+    override var mediaType: PHAssetMediaType { self._mediaType }
+    override var pixelWidth: Int { self._pixelWidth }
+    override var pixelHeight: Int { self._pixelHeight }
+    override var duration: TimeInterval { self._duration }
+    override var localIdentifier: String { self._localIdentifier }
   }
 
   @Test("getCloudIdentifier generates correct identifier for photo with creation date")

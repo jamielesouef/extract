@@ -8,7 +8,11 @@ import Foundation
 protocol ArchiveServiceProtocol: ObservableObject {
   // MARK: - Archive Management
 
-  func createArchive(name: String, kind: ArchiveKind, configuration: any ArchiveConfiguration) async throws -> Archive
+  func createArchive(
+    name: String,
+    kind: ArchiveKind,
+    configuration: any ArchiveConfiguration
+  ) async throws -> Archive
   func updateArchive(_ archive: Archive, configuration: any ArchiveConfiguration) async throws
   func deleteArchive(_ archive: Archive) async throws
   func testArchiveConnection(_ archive: Archive) async throws -> ArchiveConnectionStatus
@@ -58,7 +62,11 @@ actor ArchiveAdapter {
 
   // MARK: - Integrity Operations
 
-  func verifyChecksum(path: String, expectedChecksum: String, algorithm: ChecksumAlgorithm) async throws -> Bool
+  func verifyChecksum(
+    path: String,
+    expectedChecksum: String,
+    algorithm: ChecksumAlgorithm
+  ) async throws -> Bool
   func calculateChecksum(path: String, algorithm: ChecksumAlgorithm) async throws -> String
 
   // MARK: - Metadata Operations
@@ -164,27 +172,27 @@ enum ArchiveServiceError: LocalizedError {
   var errorDescription: String? {
     switch self {
     case let .archiveNotFound(id):
-      return "Archive not found: \(id)"
+      "Archive not found: \(id)"
     case let .archiveAlreadyExists(name):
-      return "Archive already exists: \(name)"
+      "Archive already exists: \(name)"
     case let .connectionFailed(details):
-      return "Connection failed: \(details)"
+      "Connection failed: \(details)"
     case let .authenticationFailed(details):
-      return "Authentication failed: \(details)"
+      "Authentication failed: \(details)"
     case let .pathNotFound(path):
-      return "Path not found: \(path)"
+      "Path not found: \(path)"
     case let .pathAccessDenied(path):
-      return "Access denied: \(path)"
+      "Access denied: \(path)"
     case let .insufficientSpace(needed):
-      return "Insufficient space. Need: \(ByteCountFormatter.string(fromByteCount: needed, countStyle: .file))"
+      "Insufficient space. Need: \(ByteCountFormatter.string(fromByteCount: needed, countStyle: .file))"
     case let .operationNotSupported(operation):
-      return "Operation not supported: \(operation)"
+      "Operation not supported: \(operation)"
     case let .networkTimeout(timeout):
-      return "Network timeout after \(timeout) seconds"
+      "Network timeout after \(timeout) seconds"
     case let .invalidConfiguration(reason):
-      return "Invalid configuration: \(reason)"
+      "Invalid configuration: \(reason)"
     case let .auditInProgress(auditId):
-      return "Audit already in progress: \(auditId)"
+      "Audit already in progress: \(auditId)"
     }
   }
 }
