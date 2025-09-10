@@ -15,12 +15,17 @@ struct PhotosView: View {
   @Environment(\.modelContext) private var modelContext
 
   @State private var isRefreshing = false
-  @State private var isInSelectMode = false
 
   private let size: CGFloat = 100
 
   private var columns: [GridItem] {
-    [GridItem(.adaptive(minimum: 100), spacing: Constants.Image.spacing)]
+    [GridItem(
+      .adaptive(
+        minimum: getIdealSizeForimage(),
+        maximum: getIdealSizeForimage()
+      ),
+      spacing: Constants.Image.spacing
+    )]
   }
 
   var body: some View {
@@ -37,7 +42,7 @@ struct PhotosView: View {
             ImageThumbnailView(
               asset: asset,
               size: self.getIdealSizeForimage(),
-              isInSelectMode: self.isInSelectMode
+
             )
             .clipShape(RoundedRectangle(cornerSize: .square))
           }
@@ -65,19 +70,19 @@ struct PhotosView: View {
 
   private func getMediaAndIndex() async {
     await self.store.requestAndLoad()
-    let indexer = MediaIndex(modelContainer: modelContext.container)
-    do {
-      try await indexer.addMedia(media: self.store.items)
-    } catch {
-      slog(error)
-    }
+//    let indexer = MediaIndex(modelContainer: modelContext.container)
+//    do {
+//      try await indexer.addMedia(media: self.store.items)
+//    } catch {
+//      slog(error)
+//    }
   }
 
   private func getIdealSizeForimage() -> CGFloat {
-    let maxImagesWidth: CGFloat = 3
-    let minSize = min(appState.windowSize.height, self.appState.windowSize.width)
+   
+    let minWidth = min(appState.windowSize.height, self.appState.windowSize.width)
 
-    return minSize - (Constants.Image.spacing * maxImagesWidth)
+    return (minWidth / Constants.Image.maxItemsForMinSpace) - Constants.Image.spacing
   }
 }
 

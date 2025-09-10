@@ -31,6 +31,8 @@ final class MediaStore: MediaStoring {
   var count: Int { self.items.count }
   var photosCount: Int = 0
   var videoCount: Int = 0
+  
+  var isInSelectMode: Bool = false
 
   private(set) var selected: Set<AnyHashable> = []
 

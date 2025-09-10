@@ -14,6 +14,7 @@ enum Constants {
     static let padding: CGFloat = 16
     static let spacing: CGFloat = 8
     static let backgroundColor: Color = .secondary
+    static let maxItemsForMinSpace: CGFloat = 3
   }
 
   enum Glass {

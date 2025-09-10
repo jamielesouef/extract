@@ -30,13 +30,17 @@ enum SelectOption: String, Identifiable {
 }
 
 struct SelectAllPhotosView: View {
-  @State private var isShowingImagePicker: Bool = false
+  
+  @Environment(MediaStore.self) var store
+  
   @Namespace private var namespace
-
+  
   var body: some View {
+    @Bindable var store = store
+    #if os(iOS)
     GlassEffectContainer(spacing: Constants.Glass.spacing) {
       VStack(alignment: .center) {
-        if self.isShowingImagePicker {
+        if store.isInSelectMode {
           ForEach(SelectOption.allCases) { option in
             SelectPhotoOptionView(option: option)
               .glassEffect(.regular, in: .circle)
@@ -45,11 +49,11 @@ struct SelectAllPhotosView: View {
         }
         Button(action: {
           withAnimation {
-            self.isShowingImagePicker.toggle()
+            store.isInSelectMode.toggle()
           }
         }) {
           Image(
-            systemName: self.isShowingImagePicker
+            systemName: store.isInSelectMode
               ? "checklist" : "checklist.unchecked"
           )
           .frame(
@@ -61,10 +65,14 @@ struct SelectAllPhotosView: View {
         .glassEffectID("selectToggleButton", in: self.namespace)
       }
     }
+    #else
+    Text("No mac")
+    #endif
   }
 }
 
 private struct SelectAllPhotosViewModifiers: ViewModifier {
+  
   func body(content: Content) -> some View {
     ZStack {
       content
@@ -87,5 +95,10 @@ extension View {
 }
 
 #Preview {
-  SelectAllPhotosView()
+  @Previewable @State var store = MediaStore()
+  VStack {
+    SelectAllPhotosView()
+    SelectAllPhotosView()
+  }
+  .environment(store)
 }
