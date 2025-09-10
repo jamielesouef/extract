@@ -33,53 +33,126 @@ if [ "$STAGED_FILES" -eq 0 ]; then
 fi
 
 # Analyze changes and create commit message
-echo "💭 Generating commit message..."
+echo "💭 Analyzing changes to generate descriptive commit message..."
 
-# Simple heuristics for commit message generation
-COMMIT_MSG=""
+# Get detailed change information
+CHANGED_FILES=$(git diff --cached --name-only)
+ADDITIONS=$(git diff --cached --numstat | awk '{sum+=$1} END {print sum+0}')
+DELETIONS=$(git diff --cached --numstat | awk '{sum+=$2} END {print sum+0}')
+FILE_COUNT=$(echo "$CHANGED_FILES" | wc -l | xargs)
 
-# Check file types and changes
-if echo "$DIFF_STAGED" | grep -q "Test"; then
-    COMMIT_TYPE="test"
-elif echo "$DIFF_STAGED" | grep -q "View\|UI\|SwiftUI"; then
-    COMMIT_TYPE="ui"
-elif echo "$DIFF_STAGED" | grep -q "Service\|Store\|Protocol"; then
-    COMMIT_TYPE="service"
-elif echo "$DIFF_STAGED" | grep -q "Model"; then
-    COMMIT_TYPE="model"
+# Analyze what was actually changed
+CHANGES=()
+
+# Check for new files
+NEW_FILES=$(git diff --cached --name-status | grep "^A" | cut -f2)
+if [ ! -z "$NEW_FILES" ]; then
+    NEW_COUNT=$(echo "$NEW_FILES" | wc -l | xargs)
+    if echo "$NEW_FILES" | grep -q "Test"; then
+        CHANGES+=("Add $NEW_COUNT test files")
+    elif echo "$NEW_FILES" | grep -q "View"; then
+        CHANGES+=("Add new UI components")
+    elif echo "$NEW_FILES" | grep -q "Service\|Store\|Protocol"; then
+        CHANGES+=("Add new service layer")
+    else
+        CHANGES+=("Add $NEW_COUNT new files")
+    fi
+fi
+
+# Check for script/build system changes
+if echo "$CHANGED_FILES" | grep -q "scripts/\|Makefile\|\.sh"; then
+    if git diff --cached | grep -q "CHANGES.*descriptive\|commit.*message\|git.*diff"; then
+        CHANGES+=("enhance commit message generation in build scripts")
+    elif git diff --cached | grep -q "swiftformat\|build\|test"; then
+        CHANGES+=("update build automation scripts")
+    else
+        CHANGES+=("update build scripts")
+    fi
+fi
+
+# Check for specific functionality changes
+if echo "$CHANGED_FILES" | grep -q "PhotoAsset\|MockPhotoAsset"; then
+    if echo "$NEW_FILES" | grep -q "PhotoAsset"; then
+        CHANGES+=("implement PhotoAsset protocol abstraction")
+    else
+        CHANGES+=("update PhotoAsset protocol implementation")
+    fi
+fi
+
+if echo "$CHANGED_FILES" | grep -q "MediaStore"; then
+    if git diff --cached | grep -q "iso8601Formatter\|nonisolated"; then
+        CHANGES+=("optimize MediaStore with static formatter")
+    elif git diff --cached | grep -q "isInSelectMode"; then
+        CHANGES+=("add selection mode to MediaStore")
+    else
+        CHANGES+=("update MediaStore functionality")
+    fi
+fi
+
+if echo "$CHANGED_FILES" | grep -q "Selection\|Select"; then
+    if echo "$NEW_FILES" | grep -q "Select"; then
+        CHANGES+=("implement photo selection interface")
+    else
+        CHANGES+=("update photo selection functionality")
+    fi
+fi
+
+if echo "$CHANGED_FILES" | grep -q "ImageThumbnailView"; then
+    if git diff --cached | grep -q "overlay\|glassEffect"; then
+        CHANGES+=("improve ImageThumbnailView with selection overlay")
+    else
+        CHANGES+=("update ImageThumbnailView")
+    fi
+fi
+
+if echo "$CHANGED_FILES" | grep -q "Test.*\.swift"; then
+    if git diff --cached | grep -q "@Test.*getCloudIdentifier"; then
+        CHANGES+=("expand getCloudIdentifier test coverage")
+    elif [ $ADDITIONS -gt $DELETIONS ]; then
+        CHANGES+=("add comprehensive test cases")
+    else
+        CHANGES+=("update test suite")
+    fi
+fi
+
+if echo "$CHANGED_FILES" | grep -q "swiftformat\|Makefile"; then
+    CHANGES+=("update build configuration")
+fi
+
+if echo "$CHANGED_FILES" | grep -q "Constants"; then
+    CHANGES+=("update UI constants and styling")
+fi
+
+if echo "$CHANGED_FILES" | grep -q "Preview"; then
+    CHANGES+=("improve SwiftUI previews")
+fi
+
+# Generate commit message
+if [ ${#CHANGES[@]} -eq 0 ]; then
+    # Fallback for unrecognized changes
+    if [ $FILE_COUNT -eq 1 ]; then
+        FILENAME=$(basename "$CHANGED_FILES")
+        COMMIT_MSG="Update ${FILENAME%.*}"
+    else
+        COMMIT_MSG="Update $FILE_COUNT files with various improvements"
+    fi
 else
-    COMMIT_TYPE="feature"
+    # Create descriptive message from changes
+    if [ ${#CHANGES[@]} -eq 1 ]; then
+        COMMIT_MSG="${CHANGES[0]^}"
+    elif [ ${#CHANGES[@]} -eq 2 ]; then
+        COMMIT_MSG="${CHANGES[0]^} and ${CHANGES[1]}"
+    else
+        # Join first n-1 with commas, last with "and"
+        MAIN_CHANGES="${CHANGES[0]^}"
+        for (( i=1; i<${#CHANGES[@]}-1; i++ )); do
+            MAIN_CHANGES="$MAIN_CHANGES, ${CHANGES[i]}"
+        done
+        COMMIT_MSG="$MAIN_CHANGES, and ${CHANGES[-1]}"
+    fi
 fi
 
-# Generate message based on type and files
-case $COMMIT_TYPE in
-    "test")
-        COMMIT_MSG="Update tests and improve coverage"
-        ;;
-    "ui")
-        COMMIT_MSG="Update UI components and views"
-        ;;
-    "service")
-        COMMIT_MSG="Update services and data layer"
-        ;;
-    "model")
-        COMMIT_MSG="Update data models and protocols"
-        ;;
-    *)
-        COMMIT_MSG="Update project files"
-        ;;
-esac
-
-# Enhance message based on specific changes
-if echo "$DIFF_STAGED" | grep -q "PhotoAsset\|MediaStore"; then
-    COMMIT_MSG="Update photo asset handling and media store"
-elif echo "$DIFF_STAGED" | grep -q "Selection\|Select"; then
-    COMMIT_MSG="Update photo selection functionality"
-elif echo "$DIFF_STAGED" | grep -q "Format\|Swift"; then
-    COMMIT_MSG="Update code formatting and configuration"
-elif echo "$DIFF_STAGED" | grep -q "Preview\|Debug"; then
-    COMMIT_MSG="Update previews and debug components"
-fi
+echo "🔍 Detected changes: ${CHANGES[*]}"
 
 # Show preview
 echo "📝 Proposed commit message: '$COMMIT_MSG'"
