@@ -70,12 +70,5 @@ open:
 
 # Create intelligent commit using current changes
 commit:
-	@echo "Analyzing changes and creating commit..."
-	@if ! git diff --cached --quiet || ! git diff --quiet; then \
-		echo "Adding all changes..."; \
-		git add .; \
-		echo "Creating intelligent commit..."; \
-		claude code "analyze the current git changes (git status, git diff --staged, recent commits) and create a concise commit message that accurately describes what was changed. Then execute: git commit -m 'your-message-here'. Do not include any Claude references in the commit message."; \
-	else \
-		echo "No changes to commit."; \
-	fi
+	@echo "🚀 Starting smart commit process..."
+	@./scripts/smart-commit.sh
