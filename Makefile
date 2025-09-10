@@ -1,7 +1,7 @@
 # Extract - Makefile
 # SwiftUI macOS/iOS app for photo library export
 
-.PHONY: help format build clean test run install-deps format-fix open
+.PHONY: help format build clean test run install-deps format-fix open commit
 
 # Default target
 help:
@@ -13,6 +13,7 @@ help:
 	@echo "  make test        - Run unit tests"
 	@echo "  make clean       - Clean build artifacts"
 	@echo "  make install-deps - Install SwiftFormat via Homebrew"
+	@echo "  make commit      - Create intelligent commit using current changes"
 
 # Install dependencies
 install-deps:
@@ -66,3 +67,15 @@ format-fix:
 open:
 	@echo "Opening Extract project in Xcode..."
 	open extract.xcodeproj
+
+# Create intelligent commit using current changes
+commit:
+	@echo "Analyzing changes and creating commit..."
+	@if ! git diff --cached --quiet || ! git diff --quiet; then \
+		echo "Adding all changes..."; \
+		git add .; \
+		echo "Creating intelligent commit..."; \
+		claude code "analyze the current git changes (git status, git diff --staged, recent commits) and create a concise commit message that accurately describes what was changed. Then execute: git commit -m 'your-message-here'. Do not include any Claude references in the commit message."; \
+	else \
+		echo "No changes to commit."; \
+	fi

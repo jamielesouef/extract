@@ -33,7 +33,7 @@ final class MediaStore: MediaStoring {
   var videoCount: Int = 0
 
   var isInSelectMode: Bool = false
-  
+
   // Static formatter for thread-safe reuse
   private nonisolated(unsafe) static let iso8601Formatter = ISO8601DateFormatter()
 

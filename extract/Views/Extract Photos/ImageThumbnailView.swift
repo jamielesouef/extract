@@ -146,6 +146,5 @@ extension ImageThumbnailView {
       }
     }
     .padding()
-    
   }
 #endif

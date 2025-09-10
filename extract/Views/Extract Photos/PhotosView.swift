@@ -43,7 +43,6 @@ struct PhotosView: View {
               asset: asset,
               size: self.getIdealSizeForimage(),
             )
-           
           }
         }
       }
