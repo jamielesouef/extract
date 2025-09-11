@@ -16,7 +16,6 @@
 --redundanttype inferred
 
 # --- Structuring ---
---wraparguments after-first
 --wrapcollections before-first
 --xcodeindentation enabled
 

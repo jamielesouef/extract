@@ -20,24 +20,33 @@ struct PhotosView: View {
 
   private var columns: [GridItem] {
     [
-      GridItem(.adaptive(minimum: getIdealSizeForimage(),
-                         maximum: getIdealSizeForimage()),
-               spacing: Constants.Image.spacing)
+      GridItem(
+        .adaptive(
+          minimum: getIdealSizeForimage(),
+          maximum: getIdealSizeForimage()
+        ),
+        spacing: Constants.Image.spacing
+      )
     ]
   }
 
   var body: some View {
     ScrollView {
       LazyVStack {
-        PhotosHeaderView(count: store.count,
-                         photosCount: store.photosCount,
-                         videoCount: store.videoCount)
-          .photosHeaderViewFlexableModifider()
+        PhotosHeaderView(
+          count: store.count,
+          photosCount: store.photosCount,
+          videoCount: store.videoCount,
+          image: "cat-portrait"
+        )
+        .photosHeaderViewFlexableModifider()
 
         LazyVGrid(columns: columns) {
           ForEach(store.items, id: \.localIdentifier) { asset in
-            ImageThumbnailView(asset: asset,
-                               size: getIdealSizeForimage())
+            ImageThumbnailView(
+              asset: asset,
+              size: getIdealSizeForimage()
+            )
           }
         }
       }

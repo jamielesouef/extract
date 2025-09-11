@@ -11,10 +11,11 @@ struct PhotosHeaderView: View {
   let count: Int
   let photosCount: Int
   let videoCount: Int
+  let image: String
 
   private let textOpacity: CGFloat = 0.8
   var body: some View {
-    Image(decorative: "cat-portrait")
+    Image(decorative: image)
       .resizable()
       .aspectRatio(contentMode: .fill)
       .frame(minWidth: 0,
@@ -58,7 +59,12 @@ struct PhotosHeaderView: View {
   }
 }
 
-#Preview {
-  PhotosHeaderView(count: 1234, photosCount: 1000, videoCount: 234)
+#Preview("Landscape Image") {
+  PhotosHeaderView(count: 1234, photosCount: 1000, videoCount: 234, image: "cat-landscape")
+    .frame(height: 440)
+}
+
+#Preview("Portrate Image") {
+  PhotosHeaderView(count: 1234, photosCount: 1000, videoCount: 234, image: "cat-portrait")
     .frame(height: 440)
 }

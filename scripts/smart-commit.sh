@@ -4,6 +4,27 @@
 
 set -e
 
+# Parse command line arguments
+AUTO_YES=false
+while [[ $# -gt 0 ]]; do
+    case $1 in
+        --yes|-y)
+            AUTO_YES=true
+            shift
+            ;;
+        --help|-h)
+            echo "Usage: $0 [--yes|-y] [--help|-h]"
+            echo "  --yes, -y    Automatically proceed without confirmation"
+            echo "  --help, -h   Show this help message"
+            exit 0
+            ;;
+        *)
+            echo "Unknown option $1"
+            exit 1
+            ;;
+    esac
+done
+
 echo "🔍 Analyzing git changes..."
 
 # Check if there are any changes
@@ -40,6 +61,21 @@ CHANGED_FILES=$(git diff --cached --name-only)
 ADDITIONS=$(git diff --cached --numstat | awk '{sum+=$1} END {print sum+0}')
 DELETIONS=$(git diff --cached --numstat | awk '{sum+=$2} END {print sum+0}')
 FILE_COUNT=$(echo "$CHANGED_FILES" | wc -l | xargs)
+
+# Analyse file types
+SWIFT_FILES=$(echo "$CHANGED_FILES" | grep -c "\.swift$" 2>/dev/null || echo "0")
+TEST_FILES=$(echo "$CHANGED_FILES" | grep -c "Tests\.swift$" 2>/dev/null || echo "0")
+CONFIG_FILES=$(echo "$CHANGED_FILES" | grep -E "\.(json|plist|xcodeproj|pbxproj|md|yml|yaml)$" 2>/dev/null | wc -l || echo "0")
+RESOURCE_FILES=$(echo "$CHANGED_FILES" | grep -E "\.(png|jpg|jpeg|gif|svg|pdf|xcassets)$" 2>/dev/null | wc -l || echo "0")
+
+# Calculate percentages
+if [ "$FILE_COUNT" -gt 0 ]; then
+    SWIFT_PCT=$((SWIFT_FILES * 100 / FILE_COUNT))
+    TEST_PCT=$((TEST_FILES * 100 / FILE_COUNT))
+else
+    SWIFT_PCT=0
+    TEST_PCT=0
+fi
 
 # Analyze what was actually changed
 CHANGES=()
@@ -155,8 +191,86 @@ fi
 
 echo "🔍 Detected changes: ${CHANGES[*]}"
 
-# Show preview
-echo "📝 Proposed commit message: '$COMMIT_MSG'"
+# Create detailed commit body with statistics
+COMMIT_BODY=""
+COMMIT_BODY="$COMMIT_BODY"$'\n'"📊 Change Statistics:"
+COMMIT_BODY="$COMMIT_BODY"$'\n'"- Files: $FILE_COUNT modified"
+COMMIT_BODY="$COMMIT_BODY"$'\n'"- Lines: +$ADDITIONS/-$DELETIONS"
+
+if [ "$SWIFT_FILES" -gt 0 ]; then
+    COMMIT_BODY="$COMMIT_BODY"$'\n'"- Swift: $SWIFT_FILES files ($SWIFT_PCT%)"
+fi
+
+if [ "$TEST_FILES" -gt 0 ]; then
+    COMMIT_BODY="$COMMIT_BODY"$'\n'"- Tests: $TEST_FILES files ($TEST_PCT%)"
+fi
+
+if [ "$CONFIG_FILES" -gt 0 ]; then
+    COMMIT_BODY="$COMMIT_BODY"$'\n'"- Config: $CONFIG_FILES files"
+fi
+
+if [ "$RESOURCE_FILES" -gt 0 ]; then
+    COMMIT_BODY="$COMMIT_BODY"$'\n'"- Resources: $RESOURCE_FILES files"
+fi
+
+# Add file breakdown by category
+COMMIT_BODY="$COMMIT_BODY"$'\n'$'\n'"📁 Modified Files by Type:"
+
+# Add Swift files (excluding tests)
+SWIFT_LIST=$(echo "$CHANGED_FILES" | grep "\.swift$" 2>/dev/null | grep -v "Tests\.swift$" 2>/dev/null || echo "")
+if [ ! -z "$SWIFT_LIST" ]; then
+    COMMIT_BODY="$COMMIT_BODY"$'\n'"  Swift:"
+    for file in $SWIFT_LIST; do
+        COMMIT_BODY="$COMMIT_BODY"$'\n'"    • $file"
+    done
+fi
+
+# Add test files
+TEST_LIST=$(echo "$CHANGED_FILES" | grep "Tests\.swift$" 2>/dev/null || echo "")
+if [ ! -z "$TEST_LIST" ]; then
+    COMMIT_BODY="$COMMIT_BODY"$'\n'"  Tests:"
+    for file in $TEST_LIST; do
+        COMMIT_BODY="$COMMIT_BODY"$'\n'"    • $file"
+    done
+fi
+
+# Add configuration files
+CONFIG_LIST=$(echo "$CHANGED_FILES" | grep -E "\.(json|plist|xcodeproj|pbxproj|md|yml|yaml)$" 2>/dev/null || echo "")
+if [ ! -z "$CONFIG_LIST" ]; then
+    COMMIT_BODY="$COMMIT_BODY"$'\n'"  Config:"
+    for file in $CONFIG_LIST; do
+        COMMIT_BODY="$COMMIT_BODY"$'\n'"    • $file"
+    done
+fi
+
+# Add resource files
+RESOURCE_LIST=$(echo "$CHANGED_FILES" | grep -E "\.(png|jpg|jpeg|gif|svg|pdf|xcassets)$" 2>/dev/null || echo "")
+if [ ! -z "$RESOURCE_LIST" ]; then
+    COMMIT_BODY="$COMMIT_BODY"$'\n'"  Resources:"
+    for file in $RESOURCE_LIST; do
+        COMMIT_BODY="$COMMIT_BODY"$'\n'"    • $file"
+    done
+fi
+
+# Create full commit message with body
+FULL_COMMIT_MSG="$COMMIT_MSG$COMMIT_BODY"
+
+# Show preview with enhanced details
+echo ""
+echo "📝 Proposed commit message:"
+echo "┌─ TITLE ─────────────────────────────────────────────────┐"
+echo "│ $COMMIT_MSG"
+echo "└─────────────────────────────────────────────────────────┘"
+echo ""
+echo "📊 Commit details preview:"
+echo "   Files changed: $FILE_COUNT"
+echo "   Lines changed: +$ADDITIONS/-$DELETIONS"
+if [ "$SWIFT_FILES" -gt 0 ]; then
+    echo "   Swift files: $SWIFT_FILES ($SWIFT_PCT%)"
+fi
+if [ "$TEST_FILES" -gt 0 ]; then
+    echo "   Test files: $TEST_FILES ($TEST_PCT%)"
+fi
 echo ""
 echo "🔍 Files to be committed:"
 git diff --cached --name-only | sed 's/^/  • /'
@@ -198,15 +312,39 @@ fi
 echo "✅ All checks passed! Build and tests are working."
 echo ""
 
-# Ask for confirmation
-read -p "❓ Proceed with this commit? (y/N): " -n 1 -r
-echo
-if [[ $REPLY =~ ^[Yy]$ ]]; then
+# Ask for confirmation (unless auto-yes is enabled)
+if [ "$AUTO_YES" = true ]; then
+    echo "✅ Auto-proceeding with commit (--yes flag enabled)..."
+    PROCEED=true
+else
+    read -p "❓ Proceed with this commit? (y/N): " -n 1 -r
+    echo
+    if [[ $REPLY =~ ^[Yy]$ ]]; then
+        PROCEED=true
+    else
+        PROCEED=false
+    fi
+fi
+
+if [ "$PROCEED" = true ]; then
     echo "✅ Creating commit..."
-    git commit -m "$COMMIT_MSG"
+    
+    # Create commit with detailed body
+    git commit -m "$(cat <<EOF
+$COMMIT_MSG$COMMIT_BODY
+
+🤖 Generated with [Claude Code](https://claude.ai/code)
+
+Co-Authored-By: Claude <noreply@anthropic.com>
+EOF
+)"
+    
     echo "🎉 Commit created successfully!"
     echo "📊 Commit stats:"
     git show --stat HEAD
+    echo ""
+    echo "📝 Full commit message:"
+    git show --format=full -s HEAD
 else
     echo "❌ Commit cancelled."
     exit 1

@@ -71,4 +71,4 @@ open:
 # Create intelligent commit using current changes
 commit:
 	@echo "🚀 Starting smart commit process..."
-	@./scripts/smart-commit.sh
+	@./scripts/smart-commit.sh --yes
