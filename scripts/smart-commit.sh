@@ -193,25 +193,6 @@ echo "🔍 Detected changes: ${CHANGES[*]}"
 
 # Create detailed commit body with statistics
 COMMIT_BODY=""
-COMMIT_BODY="$COMMIT_BODY"$'\n'"📊 Change Statistics:"
-COMMIT_BODY="$COMMIT_BODY"$'\n'"- Files: $FILE_COUNT modified"
-COMMIT_BODY="$COMMIT_BODY"$'\n'"- Lines: +$ADDITIONS/-$DELETIONS"
-
-if [ "$SWIFT_FILES" -gt 0 ]; then
-    COMMIT_BODY="$COMMIT_BODY"$'\n'"- Swift: $SWIFT_FILES files ($SWIFT_PCT%)"
-fi
-
-if [ "$TEST_FILES" -gt 0 ]; then
-    COMMIT_BODY="$COMMIT_BODY"$'\n'"- Tests: $TEST_FILES files ($TEST_PCT%)"
-fi
-
-if [ "$CONFIG_FILES" -gt 0 ]; then
-    COMMIT_BODY="$COMMIT_BODY"$'\n'"- Config: $CONFIG_FILES files"
-fi
-
-if [ "$RESOURCE_FILES" -gt 0 ]; then
-    COMMIT_BODY="$COMMIT_BODY"$'\n'"- Resources: $RESOURCE_FILES files"
-fi
 
 # Add file breakdown by category
 COMMIT_BODY="$COMMIT_BODY"$'\n'$'\n'"📁 Modified Files by Type:"
