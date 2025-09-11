@@ -67,9 +67,9 @@
 - [] T019 SelectionService implementation in `extract/Services/SelectionService.swift`
 
 ### SwiftUI Components
-- [ ] T020 [P] PhotoThumbnailView component in `extract/Views/PhotoThumbnailView.swift`
-- [ ] T021 [P] SelectionOverlayView component in `extract/Views/SelectionOverlayView.swift`
-- [ ] T022 PhotoGridView main component in `extract/Views/PhotoGridView.swift`
+- [x] T020 [P] PhotoThumbnailView component in `extract/Views/PhotoThumbnailView.swift`
+- [x] T021 [P] SelectionOverlayView component in `extract/Views/SelectionOverlayView.swift`
+- [x] T022 PhotoGridView main component in `extract/Views/PhotoGridView.swift`
 
 ### Configuration and Utilities
 - [ ] T023 [P] GridConfiguration utilities in `extract/Model/GridConfiguration.swift`

@@ -1,7 +1,7 @@
 # Extract - Makefile
 # SwiftUI macOS/iOS app for photo library export
 
-.PHONY: help format build clean test run install-deps format-fix open commit
+.PHONY: help format build clean test run setup format-fix open commit
 
 # Default target
 help:
@@ -12,17 +12,22 @@ help:
 	@echo "  make run         - Build and run the app"
 	@echo "  make test        - Run unit tests"
 	@echo "  make clean       - Clean build artifacts"
-	@echo "  make install-deps - Install SwiftFormat via Homebrew"
+	@echo "  make setup       - Install development dependencies (SwiftFormat, GitHub CLI)"
 	@echo "  make commit      - Create intelligent commit using current changes"
 
-# Install dependencies
-install-deps:
-	@echo "Installing SwiftFormat..."
+# Install development dependencies
+setup:
+	@echo "Setting up development environment..."
 	@if ! which brew > /dev/null; then \
 		echo "Error: Homebrew not found. Please install Homebrew first."; \
 		exit 1; \
 	fi
+	@echo "Installing SwiftFormat..."
 	brew install swiftformat
+	@echo "Installing GitHub CLI..."
+	brew install gh
+	@echo "✅ Development environment setup complete!"
+	@echo "💡 You can now use 'gh auth login' to authenticate with GitHub"
 
 # Run SwiftFormat
 format:

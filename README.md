@@ -31,10 +31,11 @@ cd extract
 ### Prerequisites
 - **Xcode 16** or later
 - **SwiftFormat** (for code formatting)
+- **GitHub CLI** (for pull requests and GitHub integration)
 
 Install dependencies:
 ```bash
-make install-deps  # Installs SwiftFormat via Homebrew
+make setup  # Installs SwiftFormat and GitHub CLI via Homebrew
 ```
 
 ### Building the Project
@@ -77,13 +78,13 @@ Then build and run with Cmd+R.
 Issues and PRs are welcome. Please open an issue to discuss significant changes before submitting a PR.
 
 #### Development Workflow
-1. Clone the repository and run `make install-deps`
+1. Clone the repository and run `make setup`
 2. Use `make build` to ensure code passes formatting before committing
 3. Run `make format` to format code style
 4. Use `make test` to run the test suite
 5. Use `make commit` for intelligent commit creation
 
-The project uses SwiftFormat for code formatting. All builds automatically run formatting checks to maintain consistent code style.
+The project uses SwiftFormat for code formatting and GitHub CLI for pull request management. All builds automatically run formatting checks to maintain consistent code style.
 
 ## Documentation
 - [Product & Technical Spec](./SPEC.md)

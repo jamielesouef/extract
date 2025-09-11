@@ -13,7 +13,7 @@ import Testing
 struct NavigationOptionsTests {
   @Test("NavigationOptions id property returns correct string values")
   @MainActor
-  func testIdProperty() async {
+  func idProperty() async {
     #expect(NavigationOptions.newPhotos.id == "newPhotos")
     #expect(NavigationOptions.backedUpPhotos.id == "backedUpPhotos")
     #expect(NavigationOptions.failedPhotosAccess.id == "failedPhotosAccess")
@@ -21,7 +21,7 @@ struct NavigationOptionsTests {
 
   @Test("NavigationOptions pages static property contains correct cases")
   @MainActor
-  func testPagesProperty() async {
+  func pagesProperty() async {
     let expectedPages: [NavigationOptions] = [.newPhotos, .backedUpPhotos]
 
     #expect(NavigationOptions.pages == expectedPages)
@@ -33,7 +33,7 @@ struct NavigationOptionsTests {
 
   @Test("NavigationOptions icon property returns correct SF Symbols")
   @MainActor
-  func testIconProperty() async {
+  func iconProperty() async {
     #expect(NavigationOptions.newPhotos.icon == "photo.circle")
     #expect(NavigationOptions.backedUpPhotos.icon == "lock.circle")
     #expect(NavigationOptions.failedPhotosAccess.icon == "exclamationmark.triangle")
@@ -41,7 +41,7 @@ struct NavigationOptionsTests {
 
   @Test("NavigationOptions name property returns correct localized strings")
   @MainActor
-  func testNameProperty() async {
+  func nameProperty() async {
     // Test that the name properties return the expected localized string keys
     let newPhotosName = NavigationOptions.newPhotos.name
     let backedUpPhotosName = NavigationOptions.backedUpPhotos.name
@@ -55,7 +55,7 @@ struct NavigationOptionsTests {
 
   @Test("NavigationOptions conforms to Equatable")
   @MainActor
-  func testEquatableConformance() async {
+  func equatableConformance() async {
     #expect(NavigationOptions.newPhotos == NavigationOptions.newPhotos)
     #expect(NavigationOptions.backedUpPhotos == NavigationOptions.backedUpPhotos)
     #expect(NavigationOptions.failedPhotosAccess == NavigationOptions.failedPhotosAccess)
@@ -67,7 +67,7 @@ struct NavigationOptionsTests {
 
   @Test("NavigationOptions conforms to Hashable")
   @MainActor
-  func testHashableConformance() async {
+  func hashableConformance() async {
     let set: Set<NavigationOptions> = [.newPhotos, .backedUpPhotos, .failedPhotosAccess]
 
     #expect(set.count == 3)
@@ -78,7 +78,7 @@ struct NavigationOptionsTests {
 
   @Test("NavigationOptions conforms to Identifiable")
   @MainActor
-  func testIdentifiableConformance() async {
+  func identifiableConformance() async {
     // Test that each case has a unique ID
     let options: [NavigationOptions] = [.newPhotos, .backedUpPhotos, .failedPhotosAccess]
     let ids = options.map(\.id)
@@ -109,7 +109,7 @@ struct NavigationOptionsTests {
 
   @Test("NavigationOptions all cases coverage")
   @MainActor
-  func testAllCases() async {
+  func allCases() async {
     // Test that we have all the expected cases
     let allTestCases: [NavigationOptions] = [.newPhotos, .backedUpPhotos, .failedPhotosAccess]
 
@@ -123,7 +123,7 @@ struct NavigationOptionsTests {
 
   @Test("NavigationOptions pages excludes failedPhotosAccess")
   @MainActor
-  func testPagesExcludesFailedAccess() async {
+  func pagesExcludesFailedAccess() async {
     // Verify that failedPhotosAccess is not included in the pages array
     // This is important for navigation UI that shouldn't show the error state
 
