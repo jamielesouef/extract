@@ -148,7 +148,8 @@ else
         for (( i=1; i<${#CHANGES[@]}-1; i++ )); do
             MAIN_CHANGES="$MAIN_CHANGES, ${CHANGES[i]}"
         done
-        COMMIT_MSG="$MAIN_CHANGES, and ${CHANGES[-1]}"
+        LAST_INDEX=$((${#CHANGES[@]} - 1))
+        COMMIT_MSG="$MAIN_CHANGES, and ${CHANGES[$LAST_INDEX]}"
     fi
 fi
 

@@ -14,11 +14,9 @@ struct MediaItemTests {
   @Test("MediaItem initializes with correct values")
   func mediaItemInitialization() {
     let testID = "test-asset-id"
-    let mediaItem = MediaItem(
-      mediaId: testID,
-      kind: MediaItemData.Kind.image,
-      status: MediaItemData.Status.notBackedUp
-    )
+    let mediaItem = MediaItem(mediaId: testID,
+                              kind: MediaItemData.Kind.image,
+                              status: MediaItemData.Status.notBackedUp)
 
     #expect(mediaItem.mediaId == testID)
     #expect(mediaItem.kind == MediaItemData.Kind.image)
@@ -30,12 +28,10 @@ struct MediaItemTests {
   func mediaItemWithFilename() {
     let testID = "test-asset-id"
     let testFilename = "test.jpg"
-    let mediaItem = MediaItem(
-      mediaId: testID,
-      kind: MediaItemData.Kind.image,
-      status: MediaItemData.Status.notBackedUp,
-      filename: testFilename
-    )
+    let mediaItem = MediaItem(mediaId: testID,
+                              kind: MediaItemData.Kind.image,
+                              status: MediaItemData.Status.notBackedUp,
+                              filename: testFilename)
 
     #expect(mediaItem.mediaId == testID)
     #expect(mediaItem.kind == MediaItemData.Kind.image)

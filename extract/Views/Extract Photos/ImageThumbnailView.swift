@@ -26,16 +26,16 @@ struct ImageThumbnailView: View {
   #endif
 
   @State private var requestID: PHImageRequestID?
-  @State private var isSelected: Bool = false
+  @State private var isSelected = false
 
   var body: some View {
-    Group { self.thumbnailImage }
-      .frame(width: self.size, height: self.size)
-      .overlay { self.selectionOverlay }
+    Group { thumbnailImage }
+      .frame(width: size, height: size)
+      .overlay { selectionOverlay }
       .clipShape(RoundedRectangle(cornerSize: .square))
-      .onTapGesture { self.toggleSelected() }
-      .task { await self.loadImageIfNeeded() }
-      .onDisappear { self.cancelIfNeeded() }
+      .onTapGesture { toggleSelected() }
+      .task { await loadImageIfNeeded() }
+      .onDisappear { cancelIfNeeded() }
   }
 
   @ViewBuilder
@@ -61,9 +61,9 @@ struct ImageThumbnailView: View {
       Spacer()
       HStack {
         Spacer()
-        if self.store.isInSelectMode {
+        if store.isInSelectMode {
           Image(
-            systemName: self.isSelected
+            systemName: isSelected
               ? "checkmark.circle.fill"
               : "circle"
           )
@@ -79,13 +79,13 @@ struct ImageThumbnailView: View {
   }
 
   private func toggleSelected() {
-    if self.store.isInSelectMode {
-      self.isSelected.toggle()
+    if store.isInSelectMode {
+      isSelected.toggle()
     }
   }
 
   private func loadImageIfNeeded() async {
-    if self.image != nil { return }
+    if image != nil { return }
     guard let asset else { return }
 
     // Only load images for PHAsset instances (not mock assets in previews)
@@ -96,25 +96,22 @@ struct ImageThumbnailView: View {
     options.deliveryMode = .opportunistic
     options.resizeMode = .fast
 
-    let targetSize = CGSize(
-      width: size * self.displayScale,
-      height: self.size * self.displayScale
-    )
+    let targetSize = CGSize(width: size * displayScale,
+                            height: size * displayScale)
 
-    self.requestID = PHCachingImageManager.default().requestImage(
-      for: phAsset,
-      targetSize: targetSize,
-      contentMode: .aspectFill,
-      options: options
-    ) { img, _ in
-      self.image = img
+    requestID = PHCachingImageManager.default().requestImage(for: phAsset,
+                                                             targetSize: targetSize,
+                                                             contentMode: .aspectFill,
+                                                             options: options)
+    { img, _ in
+      image = img
     }
   }
 
   private func cancelIfNeeded() {
     if let id = requestID {
       PHImageManager.default().cancelImageRequest(id)
-      self.requestID = nil
+      requestID = nil
     }
   }
 }

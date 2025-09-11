@@ -43,15 +43,14 @@ struct ThumbnailRequest {
   let deliveryMode: PHImageRequestOptionsDeliveryMode
   let requestID: PHImageRequestID?
 
-  init(
-    asset: PHAsset,
-    size: CGSize,
-    deliveryMode: PHImageRequestOptionsDeliveryMode = .opportunistic
-  ) {
+  init(asset: PHAsset,
+       size: CGSize,
+       deliveryMode: PHImageRequestOptionsDeliveryMode = .opportunistic)
+  {
     self.asset = asset
     self.size = size
     self.deliveryMode = deliveryMode
-    self.requestID = nil
+    requestID = nil
   }
 }
 
@@ -62,7 +61,7 @@ struct ThumbnailResult {
   let error: Error?
   let loadTime: TimeInterval
 
-  var isSuccess: Bool { self.image != nil && self.error == nil }
+  var isSuccess: Bool { image != nil && error == nil }
 }
 
 // MARK: - Error Types

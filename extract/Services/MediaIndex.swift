@@ -13,16 +13,14 @@ import SwiftUI
 actor MediaIndex: MediaIndexing {
   func addMedia(media items: [any PhotoAsset]) async throws {
     let mediaItems = items.map {
-      let kind = self.getMediaType(from: $0.mediaType)
-      return MediaItemData(
-        mediaId: $0.localIdentifier,
-        kind: kind,
-        status: .unknown,
-        filename: nil
-      )
+      let kind = getMediaType(from: $0.mediaType)
+      return MediaItemData(mediaId: $0.localIdentifier,
+                           kind: kind,
+                           status: .unknown,
+                           filename: nil)
     }
 
-    try await self.addMedia(media: mediaItems)
+    try await addMedia(media: mediaItems)
   }
 
   func addMedia(media items: [MediaItemData]) async throws {
@@ -35,11 +33,9 @@ actor MediaIndex: MediaIndexing {
       let id = item.mediaId
       if existingIDs.contains(id) { continue }
 
-      let copy = MediaItem(
-        mediaId: id,
-        kind: item.kind,
-        status: item.status
-      )
+      let copy = MediaItem(mediaId: id,
+                           kind: item.kind,
+                           status: item.status)
 
       modelContext.insert(copy)
       existingIDs.insert(id)

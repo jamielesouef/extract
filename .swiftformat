@@ -1,22 +1,30 @@
+# SwiftFormat configuration
+
+# --- Basics ---
 --swiftversion 6.0
 --indent 2
---maxwidth 100
-
-# Wrapping & readability
---wraparguments before-first
---wrapcollections before-first
-
-# Syntax clarity
---self insert
---stripunusedargs closure-only
---commas inline
 --semicolons never
+--allman false
+--stripunusedargs closure-only
 
-# Whitespace & trimming
---trimwhitespace always
+# --- Self handling ---
+--self remove   # remove unneeded `self.`
 
-# Imports
+# --- Imports ---
 --importgrouping alphabetized
+--importgrouping testable-top
+--redundanttype inferred
 
-# Structure & organisation
+# --- Structuring ---
+--wraparguments after-first
+--wrapcollections before-first
+--xcodeindentation enabled
+
+# --- Files ---
+--symlinks ignore
+--exclude Generated, GraphQL
+
+# --- Linting / Safety ---
+--commas inline
+--stripunusedargs closure-only
 --marktypes always

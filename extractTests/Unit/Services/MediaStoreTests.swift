@@ -51,29 +51,28 @@ struct MediaStoreCloudIdentifierTests {
     private let _duration: TimeInterval
     private let _localIdentifier: String
 
-    init(
-      creationDate: Date?,
-      mediaType: PHAssetMediaType,
-      pixelWidth: Int = 1920,
-      pixelHeight: Int = 1080,
-      duration: TimeInterval = 0.0,
-      localIdentifier: String = "test-local-id"
-    ) {
-      self._creationDate = creationDate
-      self._mediaType = mediaType
-      self._pixelWidth = pixelWidth
-      self._pixelHeight = pixelHeight
-      self._duration = duration
-      self._localIdentifier = localIdentifier
+    init(creationDate: Date?,
+         mediaType: PHAssetMediaType,
+         pixelWidth: Int = 1920,
+         pixelHeight: Int = 1080,
+         duration: TimeInterval = 0.0,
+         localIdentifier: String = "test-local-id")
+    {
+      _creationDate = creationDate
+      _mediaType = mediaType
+      _pixelWidth = pixelWidth
+      _pixelHeight = pixelHeight
+      _duration = duration
+      _localIdentifier = localIdentifier
       super.init()
     }
 
-    override var creationDate: Date? { self._creationDate }
-    override var mediaType: PHAssetMediaType { self._mediaType }
-    override var pixelWidth: Int { self._pixelWidth }
-    override var pixelHeight: Int { self._pixelHeight }
-    override var duration: TimeInterval { self._duration }
-    override var localIdentifier: String { self._localIdentifier }
+    override var creationDate: Date? { _creationDate }
+    override var mediaType: PHAssetMediaType { _mediaType }
+    override var pixelWidth: Int { _pixelWidth }
+    override var pixelHeight: Int { _pixelHeight }
+    override var duration: TimeInterval { _duration }
+    override var localIdentifier: String { _localIdentifier }
   }
 
   @Test("getCloudIdentifier generates correct identifier for photo with creation date")
@@ -82,13 +81,11 @@ struct MediaStoreCloudIdentifierTests {
     let mediaStore = MediaStore()
     let testDate = Date(timeIntervalSince1970: 1_609_459_200) // 2021-01-01T00:00:00Z
 
-    let mockAsset = MockPHAsset(
-      creationDate: testDate,
-      mediaType: .image,
-      pixelWidth: 1920,
-      pixelHeight: 1080,
-      duration: 0.0
-    )
+    let mockAsset = MockPHAsset(creationDate: testDate,
+                                mediaType: .image,
+                                pixelWidth: 1920,
+                                pixelHeight: 1080,
+                                duration: 0.0)
 
     let identifier = await mediaStore.getCloudIdentifier(for: mockAsset)
 
@@ -105,13 +102,11 @@ struct MediaStoreCloudIdentifierTests {
     let mediaStore = MediaStore()
     let testDate = Date(timeIntervalSince1970: 1_609_459_200) // 2021-01-01T00:00:00Z
 
-    let mockAsset = MockPHAsset(
-      creationDate: testDate,
-      mediaType: .video,
-      pixelWidth: 3840,
-      pixelHeight: 2160,
-      duration: 30.5
-    )
+    let mockAsset = MockPHAsset(creationDate: testDate,
+                                mediaType: .video,
+                                pixelWidth: 3840,
+                                pixelHeight: 2160,
+                                duration: 30.5)
 
     let identifier = await mediaStore.getCloudIdentifier(for: mockAsset)
 
@@ -128,11 +123,9 @@ struct MediaStoreCloudIdentifierTests {
     let mediaStore = MediaStore()
     let testLocalId = "test-fallback-id-12345"
 
-    let mockAsset = MockPHAsset(
-      creationDate: nil,
-      mediaType: .image,
-      localIdentifier: testLocalId
-    )
+    let mockAsset = MockPHAsset(creationDate: nil,
+                                mediaType: .image,
+                                localIdentifier: testLocalId)
 
     let identifier = await mediaStore.getCloudIdentifier(for: mockAsset)
 
@@ -144,26 +137,20 @@ struct MediaStoreCloudIdentifierTests {
   func cloudIdentifierUniqueness() async throws {
     let mediaStore = MediaStore()
 
-    let asset1 = MockPHAsset(
-      creationDate: Date(timeIntervalSince1970: 1_609_459_200),
-      mediaType: .image,
-      pixelWidth: 1920,
-      pixelHeight: 1080
-    )
+    let asset1 = MockPHAsset(creationDate: Date(timeIntervalSince1970: 1_609_459_200),
+                             mediaType: .image,
+                             pixelWidth: 1920,
+                             pixelHeight: 1080)
 
-    let asset2 = MockPHAsset(
-      creationDate: Date(timeIntervalSince1970: 1_609_459_260), // 1 minute later
-      mediaType: .image,
-      pixelWidth: 1920,
-      pixelHeight: 1080
-    )
+    let asset2 = MockPHAsset(creationDate: Date(timeIntervalSince1970: 1_609_459_260), // 1 minute later
+                             mediaType: .image,
+                             pixelWidth: 1920,
+                             pixelHeight: 1080)
 
-    let asset3 = MockPHAsset(
-      creationDate: Date(timeIntervalSince1970: 1_609_459_200), // Same time as asset1
-      mediaType: .video, // Different media type
-      pixelWidth: 1920,
-      pixelHeight: 1080
-    )
+    let asset3 = MockPHAsset(creationDate: Date(timeIntervalSince1970: 1_609_459_200), // Same time as asset1
+                             mediaType: .video, // Different media type
+                             pixelWidth: 1920,
+                             pixelHeight: 1080)
 
     let id1 = await mediaStore.getCloudIdentifier(for: asset1)
     let id2 = await mediaStore.getCloudIdentifier(for: asset2)
@@ -181,21 +168,17 @@ struct MediaStoreCloudIdentifierTests {
     let mediaStore = MediaStore()
     let testDate = Date(timeIntervalSince1970: 1_609_459_200)
 
-    let asset1 = MockPHAsset(
-      creationDate: testDate,
-      mediaType: .image,
-      pixelWidth: 1920,
-      pixelHeight: 1080,
-      duration: 0.0
-    )
+    let asset1 = MockPHAsset(creationDate: testDate,
+                             mediaType: .image,
+                             pixelWidth: 1920,
+                             pixelHeight: 1080,
+                             duration: 0.0)
 
-    let asset2 = MockPHAsset(
-      creationDate: testDate,
-      mediaType: .image,
-      pixelWidth: 1920,
-      pixelHeight: 1080,
-      duration: 0.0
-    )
+    let asset2 = MockPHAsset(creationDate: testDate,
+                             mediaType: .image,
+                             pixelWidth: 1920,
+                             pixelHeight: 1080,
+                             duration: 0.0)
 
     let id1 = await mediaStore.getCloudIdentifier(for: asset1)
     let id2 = await mediaStore.getCloudIdentifier(for: asset2)
@@ -209,19 +192,15 @@ struct MediaStoreCloudIdentifierTests {
     let mediaStore = MediaStore()
     let testDate = Date(timeIntervalSince1970: 1_609_459_200)
 
-    let smallAsset = MockPHAsset(
-      creationDate: testDate,
-      mediaType: .image,
-      pixelWidth: 640,
-      pixelHeight: 480
-    )
+    let smallAsset = MockPHAsset(creationDate: testDate,
+                                 mediaType: .image,
+                                 pixelWidth: 640,
+                                 pixelHeight: 480)
 
-    let largeAsset = MockPHAsset(
-      creationDate: testDate,
-      mediaType: .image,
-      pixelWidth: 4096,
-      pixelHeight: 3072
-    )
+    let largeAsset = MockPHAsset(creationDate: testDate,
+                                 mediaType: .image,
+                                 pixelWidth: 4096,
+                                 pixelHeight: 3072)
 
     let smallId = await mediaStore.getCloudIdentifier(for: smallAsset)
     let largeId = await mediaStore.getCloudIdentifier(for: largeAsset)
@@ -237,13 +216,11 @@ struct MediaStoreCloudIdentifierTests {
     let mediaStore = MediaStore()
     let testDate = Date(timeIntervalSince1970: 1_609_459_200)
 
-    let zeroDimensionAsset = MockPHAsset(
-      creationDate: testDate,
-      mediaType: .image,
-      pixelWidth: 0,
-      pixelHeight: 0,
-      duration: 0.0
-    )
+    let zeroDimensionAsset = MockPHAsset(creationDate: testDate,
+                                         mediaType: .image,
+                                         pixelWidth: 0,
+                                         pixelHeight: 0,
+                                         duration: 0.0)
 
     let identifier = await mediaStore.getCloudIdentifier(for: zeroDimensionAsset)
 
@@ -259,12 +236,11 @@ struct MediaStoreCloudIdentifierTests {
     let mediaStore = MediaStore()
     let testDate = Date(timeIntervalSince1970: 1_609_459_200)
 
-    let longVideoAsset = MockPHAsset(
-      creationDate: testDate,
-      mediaType: .video,
-      pixelWidth: 1920,
-      pixelHeight: 1080,
-      duration: 3661.5 // 1 hour, 1 minute, 1.5 seconds
+    let longVideoAsset = MockPHAsset(creationDate: testDate,
+                                     mediaType: .video,
+                                     pixelWidth: 1920,
+                                     pixelHeight: 1080,
+                                     duration: 3661.5 // 1 hour, 1 minute, 1.5 seconds
     )
 
     let identifier = await mediaStore.getCloudIdentifier(for: longVideoAsset)
@@ -280,13 +256,11 @@ struct MediaStoreCloudIdentifierTests {
     let mediaStore = MediaStore()
     let testDate = Date(timeIntervalSince1970: 1_609_459_200)
 
-    let fractionalAsset = MockPHAsset(
-      creationDate: testDate,
-      mediaType: .video,
-      pixelWidth: 1920,
-      pixelHeight: 1080,
-      duration: 0.123456789
-    )
+    let fractionalAsset = MockPHAsset(creationDate: testDate,
+                                      mediaType: .video,
+                                      pixelWidth: 1920,
+                                      pixelHeight: 1080,
+                                      duration: 0.123456789)
 
     let identifier = await mediaStore.getCloudIdentifier(for: fractionalAsset)
 
@@ -300,12 +274,10 @@ struct MediaStoreCloudIdentifierTests {
     let mediaStore = MediaStore()
     let testDate = Date(timeIntervalSince1970: 1_609_505_523) // Contains time with colons
 
-    let mockAsset = MockPHAsset(
-      creationDate: testDate,
-      mediaType: .image,
-      pixelWidth: 1920,
-      pixelHeight: 1080
-    )
+    let mockAsset = MockPHAsset(creationDate: testDate,
+                                mediaType: .image,
+                                pixelWidth: 1920,
+                                pixelHeight: 1080)
 
     let identifier = await mediaStore.getCloudIdentifier(for: mockAsset)
 
@@ -322,12 +294,10 @@ struct MediaStoreCloudIdentifierTests {
     let mediaStore = MediaStore()
     let veryOldDate = Date(timeIntervalSince1970: 0) // Unix epoch: 1970-01-01T00:00:00Z
 
-    let mockAsset = MockPHAsset(
-      creationDate: veryOldDate,
-      mediaType: .image,
-      pixelWidth: 640,
-      pixelHeight: 480
-    )
+    let mockAsset = MockPHAsset(creationDate: veryOldDate,
+                                mediaType: .image,
+                                pixelWidth: 640,
+                                pixelHeight: 480)
 
     let identifier = await mediaStore.getCloudIdentifier(for: mockAsset)
 
@@ -341,13 +311,11 @@ struct MediaStoreCloudIdentifierTests {
     let mediaStore = MediaStore()
     let futureDate = Date(timeIntervalSince1970: 2_000_000_000) // May 18, 2033
 
-    let mockAsset = MockPHAsset(
-      creationDate: futureDate,
-      mediaType: .video,
-      pixelWidth: 3840,
-      pixelHeight: 2160,
-      duration: 45.0
-    )
+    let mockAsset = MockPHAsset(creationDate: futureDate,
+                                mediaType: .video,
+                                pixelWidth: 3840,
+                                pixelHeight: 2160,
+                                duration: 45.0)
 
     let identifier = await mediaStore.getCloudIdentifier(for: mockAsset)
 
@@ -361,13 +329,11 @@ struct MediaStoreCloudIdentifierTests {
     let mediaStore = MediaStore()
     let testDate = Date(timeIntervalSince1970: 1_609_459_200)
 
-    let unknownAsset = MockPHAsset(
-      creationDate: testDate,
-      mediaType: .unknown, // PHAssetMediaType.unknown
-      pixelWidth: 1920,
-      pixelHeight: 1080,
-      duration: 0.0
-    )
+    let unknownAsset = MockPHAsset(creationDate: testDate,
+                                   mediaType: .unknown, // PHAssetMediaType.unknown
+                                   pixelWidth: 1920,
+                                   pixelHeight: 1080,
+                                   duration: 0.0)
 
     let identifier = await mediaStore.getCloudIdentifier(for: unknownAsset)
 
@@ -382,13 +348,11 @@ struct MediaStoreCloudIdentifierTests {
     let mediaStore = MediaStore()
     let testDate = Date(timeIntervalSince1970: 1_609_459_200)
 
-    let audioAsset = MockPHAsset(
-      creationDate: testDate,
-      mediaType: .audio,
-      pixelWidth: 0,
-      pixelHeight: 0,
-      duration: 180.5
-    )
+    let audioAsset = MockPHAsset(creationDate: testDate,
+                                 mediaType: .audio,
+                                 pixelWidth: 0,
+                                 pixelHeight: 0,
+                                 duration: 180.5)
 
     let identifier = await mediaStore.getCloudIdentifier(for: audioAsset)
 

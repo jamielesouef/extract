@@ -17,6 +17,10 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		E45E4AD42E7247D800524D46 /* CLAUDE.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = CLAUDE.md; sourceTree = "<group>"; };
+		E45E4AD52E7247D800524D46 /* LICENSE.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = LICENSE.md; sourceTree = "<group>"; };
+		E45E4AD62E7247D800524D46 /* Makefile */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.make; path = Makefile; sourceTree = "<group>"; };
+		E45E4AD72E7247D800524D46 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		E4BC458F2E5BE43A000E32A5 /* extract.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = extract.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E4BC45A22E5BE43A000E32A5 /* extractTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = extractTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -71,6 +75,10 @@
 				E4BC45912E5BE43A000E32A5 /* extract */,
 				E4BC45A32E5BE43A000E32A5 /* extractTests */,
 				E4BC45902E5BE43A000E32A5 /* Products */,
+				E45E4AD42E7247D800524D46 /* CLAUDE.md */,
+				E45E4AD52E7247D800524D46 /* LICENSE.md */,
+				E45E4AD62E7247D800524D46 /* Makefile */,
+				E45E4AD72E7247D800524D46 /* README.md */,
 			);
 			sourceTree = "<group>";
 		};

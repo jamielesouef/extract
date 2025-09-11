@@ -34,32 +34,31 @@ struct MockPhotoAsset: PhotoAsset, @unchecked Sendable {
   private let _pixelHeight: Int
   private let _duration: TimeInterval
 
-  nonisolated var localIdentifier: String { self._localIdentifier }
-  nonisolated var mediaType: PHAssetMediaType { self._mediaType }
-  nonisolated var creationDate: Date? { self._creationDate }
-  nonisolated var pixelWidth: Int { self._pixelWidth }
-  nonisolated var pixelHeight: Int { self._pixelHeight }
-  nonisolated var duration: TimeInterval { self._duration }
+  nonisolated var localIdentifier: String { _localIdentifier }
+  nonisolated var mediaType: PHAssetMediaType { _mediaType }
+  nonisolated var creationDate: Date? { _creationDate }
+  nonisolated var pixelWidth: Int { _pixelWidth }
+  nonisolated var pixelHeight: Int { _pixelHeight }
+  nonisolated var duration: TimeInterval { _duration }
 
-  init(
-    localIdentifier: String = UUID().uuidString,
-    mediaType: PHAssetMediaType = .image,
-    creationDate: Date? = Date(),
-    pixelWidth: Int = 1920,
-    pixelHeight: Int = 1080,
-    duration: TimeInterval = 0.0
-  ) {
-    self._localIdentifier = localIdentifier
-    self._mediaType = mediaType
-    self._creationDate = creationDate
-    self._pixelWidth = pixelWidth
-    self._pixelHeight = pixelHeight
-    self._duration = duration
+  init(localIdentifier: String = UUID().uuidString,
+       mediaType: PHAssetMediaType = .image,
+       creationDate: Date? = Date(),
+       pixelWidth: Int = 1920,
+       pixelHeight: Int = 1080,
+       duration: TimeInterval = 0.0)
+  {
+    _localIdentifier = localIdentifier
+    _mediaType = mediaType
+    _creationDate = creationDate
+    _pixelWidth = pixelWidth
+    _pixelHeight = pixelHeight
+    _duration = duration
   }
 
   // Manual Hashable conformance to avoid MainActor isolation
   nonisolated func hash(into hasher: inout Hasher) {
-    hasher.combine(self._localIdentifier)
+    hasher.combine(_localIdentifier)
   }
 
   nonisolated static func == (lhs: MockPhotoAsset, rhs: MockPhotoAsset) -> Bool {

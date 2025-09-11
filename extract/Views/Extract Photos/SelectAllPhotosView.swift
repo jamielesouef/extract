@@ -43,7 +43,7 @@ struct SelectAllPhotosView: View {
             ForEach(SelectOption.allCases) { option in
               SelectPhotoOptionView(option: option)
                 .glassEffect(.regular, in: .circle)
-                .glassEffectID(option.id, in: self.namespace)
+                .glassEffectID(option.id, in: namespace)
             }
           }
           Button(action: {
@@ -55,13 +55,11 @@ struct SelectAllPhotosView: View {
               systemName: store.isInSelectMode
                 ? "checklist" : "checklist.unchecked"
             )
-            .frame(
-              width: Constants.SelectOption.size,
-              height: Constants.SelectOption.size
-            )
+            .frame(width: Constants.SelectOption.size,
+                   height: Constants.SelectOption.size)
           }
           .buttonStyle(.glass)
-          .glassEffectID("selectToggleButton", in: self.namespace)
+          .glassEffectID("selectToggleButton", in: namespace)
         }
       }
     #else

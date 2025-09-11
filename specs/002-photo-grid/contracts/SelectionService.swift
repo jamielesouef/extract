@@ -45,7 +45,7 @@ struct SelectionChange {
   init(photoId: String, isSelected: Bool) {
     self.photoId = photoId
     self.isSelected = isSelected
-    self.timestamp = Date()
+    timestamp = Date()
   }
 }
 
@@ -55,9 +55,9 @@ struct SelectionMetrics {
   let averageSelectionLatency: TimeInterval
 
   init() {
-    self.totalSelections = 0
-    self.selectionTime = 0
-    self.averageSelectionLatency = 0
+    totalSelections = 0
+    selectionTime = 0
+    averageSelectionLatency = 0
   }
 }
 
@@ -104,19 +104,15 @@ struct SelectionConfiguration {
   let persistSelectionOnExit: Bool
   let selectionFeedbackStyle: SelectionFeedbackStyle
 
-  static let `default` = SelectionConfiguration(
-    maxSelections: nil,
-    allowMultipleSelection: true,
-    persistSelectionOnExit: false,
-    selectionFeedbackStyle: .checkmark
-  )
+  static let `default` = SelectionConfiguration(maxSelections: nil,
+                                                allowMultipleSelection: true,
+                                                persistSelectionOnExit: false,
+                                                selectionFeedbackStyle: .checkmark)
 
-  static let limited = SelectionConfiguration(
-    maxSelections: 100,
-    allowMultipleSelection: true,
-    persistSelectionOnExit: false,
-    selectionFeedbackStyle: .checkmark
-  )
+  static let limited = SelectionConfiguration(maxSelections: 100,
+                                              allowMultipleSelection: true,
+                                              persistSelectionOnExit: false,
+                                              selectionFeedbackStyle: .checkmark)
 }
 
 enum SelectionFeedbackStyle {

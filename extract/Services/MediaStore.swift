@@ -27,22 +27,21 @@ final class MediaStore: MediaStoring {
 
   var items: [any PhotoAsset] = []
   var authorizationStatus: Bool?
-  var isLoading: Bool = false
-  var count: Int { self.items.count }
-  var photosCount: Int = 0
-  var videoCount: Int = 0
+  var isLoading = false
+  var count: Int { items.count }
+  var photosCount = 0
+  var videoCount = 0
 
-  var isInSelectMode: Bool = false
+  var isInSelectMode = false
 
   // Static formatter for thread-safe reuse
   private nonisolated(unsafe) static let iso8601Formatter = ISO8601DateFormatter()
 
   private(set) var selected: Set<AnyHashable> = []
 
-  init(
-    items: [any PhotoAsset] = [],
-    authorizer: PhotoLibraryAuthorizing = SystemPhotoLibraryAuthorizer()
-  ) {
+  init(items: [any PhotoAsset] = [],
+       authorizer: PhotoLibraryAuthorizing = SystemPhotoLibraryAuthorizer())
+  {
     self.items = items
     self.authorizer = authorizer
   }
@@ -52,16 +51,16 @@ final class MediaStore: MediaStoring {
 
     switch status {
     case .authorized, .limited:
-      self.authorizationStatus = true
+      authorizationStatus = true
     case .denied, .notDetermined, .restricted:
-      self.authorizationStatus = false
+      authorizationStatus = false
     @unknown default:
-      self.authorizationStatus = false
+      authorizationStatus = false
     }
   }
 
   func loadAllAssets() async {
-    self.isLoading = true
+    isLoading = true
     defer { isLoading = false }
 
     struct LoadResult {
@@ -92,24 +91,22 @@ final class MediaStore: MediaStoring {
         localItems.append(asset)
       }
 
-      return LoadResult(
-        items: localItems,
-        photosCount: localPhotosCount,
-        videoCount: localVideoCount
-      )
+      return LoadResult(items: localItems,
+                        photosCount: localPhotosCount,
+                        videoCount: localVideoCount)
     }.value
 
-    self.items = result.items
-    self.photosCount = result.photosCount
-    self.videoCount = result.videoCount
+    items = result.items
+    photosCount = result.photosCount
+    videoCount = result.videoCount
   }
 
   func requestAndLoad() async {
-    await self.requestAccess()
-    if self.authorizationStatus == true {
-      await self.loadAllAssets()
+    await requestAccess()
+    if authorizationStatus == true {
+      await loadAllAssets()
     } else {
-      self.items = []
+      items = []
     }
   }
 

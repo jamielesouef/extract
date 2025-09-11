@@ -8,12 +8,10 @@ import Foundation
 protocol ExportServiceProtocol: ObservableObject {
   // MARK: - Job Management
 
-  func createJob(
-    name: String,
-    archive: Archive,
-    selection: SelectionSpec,
-    options: ExportOptions
-  ) async throws -> ExportJob
+  func createJob(name: String,
+                 archive: Archive,
+                 selection: SelectionSpec,
+                 options: ExportOptions) async throws -> ExportJob
 
   func startJob(_ job: ExportJob) async throws
   func pauseJob(_ job: ExportJob) async throws

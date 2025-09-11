@@ -27,13 +27,13 @@ struct ExtractApp: App {
   var body: some Scene {
     WindowGroup {
       ExtractSplitView()
-        .environment(self.appState)
-        .environment(self.photoStore)
-        .modelContainer(self.modelContainer)
+        .environment(appState)
+        .environment(photoStore)
+        .modelContainer(modelContainer)
         .onGeometryChange(for: CGSize.self) { geometry in
           geometry.size
         } action: { newValue in
-          self.appState.windowSize = newValue
+          appState.windowSize = newValue
         }
     }
   }

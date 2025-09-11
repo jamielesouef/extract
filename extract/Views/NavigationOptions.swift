@@ -30,15 +30,11 @@ enum NavigationOptions: Equatable, Hashable, Identifiable {
     case .newPhotos:
       LocalizedStringResource("New Photos", comment: "New photos to be backed up")
     case .backedUpPhotos:
-      LocalizedStringResource(
-        "Backed up Photos",
-        comment: "All photos that are in a backup location"
-      )
+      LocalizedStringResource("Backed up Photos",
+                              comment: "All photos that are in a backup location")
     case .failedPhotosAccess:
-      LocalizedStringResource(
-        "Photos Access Required",
-        comment: "Indicates that the app needs access to photos"
-      )
+      LocalizedStringResource("Photos Access Required",
+                              comment: "Indicates that the app needs access to photos")
     }
   }
 

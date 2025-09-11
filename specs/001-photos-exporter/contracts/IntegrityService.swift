@@ -10,52 +10,40 @@ actor IntegrityServiceProtocol {
 
   func calculateChecksum(data: Data, algorithm: ChecksumAlgorithm) async throws -> String
   func calculateChecksumForFile(url: URL, algorithm: ChecksumAlgorithm) async throws -> String
-  func calculateChecksumStreaming(
-    url: URL,
-    algorithm: ChecksumAlgorithm,
-    chunkSize: Int,
-    progressHandler: @escaping (Double) -> Void
-  ) async throws -> String
+  func calculateChecksumStreaming(url: URL,
+                                  algorithm: ChecksumAlgorithm,
+                                  chunkSize: Int,
+                                  progressHandler: @escaping (Double) -> Void) async throws -> String
 
   // MARK: - Verification Operations
 
-  func verifyIntegrity(
-    localURL: URL,
-    expectedChecksum: String,
-    algorithm: ChecksumAlgorithm
-  ) async throws -> IntegrityResult
-  func verifyRemoteIntegrity(
-    adapter: ArchiveAdapter,
-    path: String,
-    expectedChecksum: String,
-    algorithm: ChecksumAlgorithm
-  ) async throws
+  func verifyIntegrity(localURL: URL,
+                       expectedChecksum: String,
+                       algorithm: ChecksumAlgorithm) async throws -> IntegrityResult
+  func verifyRemoteIntegrity(adapter: ArchiveAdapter,
+                             path: String,
+                             expectedChecksum: String,
+                             algorithm: ChecksumAlgorithm) async throws
     -> IntegrityResult
 
   // MARK: - Batch Verification
 
-  func verifyBatch(
-    items: [VerificationItem],
-    maxConcurrency: Int,
-    progressHandler: @escaping (VerificationProgress) -> Void
-  ) async throws
+  func verifyBatch(items: [VerificationItem],
+                   maxConcurrency: Int,
+                   progressHandler: @escaping (VerificationProgress) -> Void) async throws
     -> [IntegrityResult]
 
   // MARK: - Archive Audit
 
-  func auditArchive(
-    archive: Archive,
-    type: AuditType,
-    progressHandler: @escaping (AuditProgress) -> Void
-  ) async throws -> AuditReport
+  func auditArchive(archive: Archive,
+                    type: AuditType,
+                    progressHandler: @escaping (AuditProgress) -> Void) async throws -> AuditReport
 
   // MARK: - Repair Operations
 
   func generateRepairPlan(auditReport: AuditReport) async throws -> RepairPlan
-  func executeRepair(
-    plan: RepairPlan,
-    progressHandler: @escaping (RepairProgress) -> Void
-  ) async throws
+  func executeRepair(plan: RepairPlan,
+                     progressHandler: @escaping (RepairProgress) -> Void) async throws
     -> RepairResult
 }
 

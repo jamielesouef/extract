@@ -17,13 +17,12 @@ final nonisolated class MediaItem {
   var status: MediaItemData.Status
   var filename: String?
 
-  init(
-    mediaId: String,
-    kind: MediaItemData.Kind,
-    status: MediaItemData.Status,
-    filename: String? = nil
-  ) {
-    self.id = UUID()
+  init(mediaId: String,
+       kind: MediaItemData.Kind,
+       status: MediaItemData.Status,
+       filename: String? = nil)
+  {
+    id = UUID()
     self.mediaId = mediaId
     self.kind = kind
     self.status = status

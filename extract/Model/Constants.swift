@@ -30,9 +30,7 @@ enum Constants {
 
 extension CGSize {
   static var square: Self {
-    Self(
-      width: Constants.Image.cornerRadius,
-      height: Constants.Image.cornerRadius
-    )
+    Self(width: Constants.Image.cornerRadius,
+         height: Constants.Image.cornerRadius)
   }
 }

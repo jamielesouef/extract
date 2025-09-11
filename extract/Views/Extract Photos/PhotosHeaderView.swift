@@ -13,8 +13,8 @@ struct PhotosHeaderView: View {
   let videoCount: Int
 
   var body: some View {
-    Text("total: \(self.count)")
-    Text("Photos: \(self.photosCount.formatted()), Videos: \(self.videoCount.formatted())")
+    Text("total: \(count)")
+    Text("Photos: \(photosCount.formatted()), Videos: \(videoCount.formatted())")
     Text("Media items since last backup")
   }
 }

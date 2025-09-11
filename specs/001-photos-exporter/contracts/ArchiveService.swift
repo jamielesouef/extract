@@ -8,11 +8,9 @@ import Foundation
 protocol ArchiveServiceProtocol: ObservableObject {
   // MARK: - Archive Management
 
-  func createArchive(
-    name: String,
-    kind: ArchiveKind,
-    configuration: any ArchiveConfiguration
-  ) async throws -> Archive
+  func createArchive(name: String,
+                     kind: ArchiveKind,
+                     configuration: any ArchiveConfiguration) async throws -> Archive
   func updateArchive(_ archive: Archive, configuration: any ArchiveConfiguration) async throws
   func deleteArchive(_ archive: Archive) async throws
   func testArchiveConnection(_ archive: Archive) async throws -> ArchiveConnectionStatus
@@ -62,11 +60,9 @@ actor ArchiveAdapter {
 
   // MARK: - Integrity Operations
 
-  func verifyChecksum(
-    path: String,
-    expectedChecksum: String,
-    algorithm: ChecksumAlgorithm
-  ) async throws -> Bool
+  func verifyChecksum(path: String,
+                      expectedChecksum: String,
+                      algorithm: ChecksumAlgorithm) async throws -> Bool
   func calculateChecksum(path: String, algorithm: ChecksumAlgorithm) async throws -> String
 
   // MARK: - Metadata Operations

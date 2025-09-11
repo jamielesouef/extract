@@ -21,10 +21,8 @@ protocol PhotosServiceProtocol: ObservableObject {
   // MARK: - Asset Processing
 
   func requestOriginalResource(for asset: PHAsset) async throws -> AssetResource
-  func requestOriginalResources(
-    for assets: [PHAsset],
-    progressHandler: @escaping (Double) -> Void
-  ) async throws
+  func requestOriginalResources(for assets: [PHAsset],
+                                progressHandler: @escaping (Double) -> Void) async throws
     -> [AssetResource]
 
   // MARK: - Library Monitoring
@@ -44,27 +42,27 @@ struct AssetResource {
   let requestedAt: Date
 
   var fileExtension: String {
-    URL(string: self.filename)?.pathExtension ?? ""
+    URL(string: filename)?.pathExtension ?? ""
   }
 
   var mediaType: MediaType {
-    switch self.asset.mediaType {
+    switch asset.mediaType {
     case .image:
-      if self.asset.mediaSubtypes.contains(.photoLive) {
+      if asset.mediaSubtypes.contains(.photoLive) {
         return .livePhoto
-      } else if self.asset.mediaSubtypes.contains(.photoScreenshot) {
+      } else if asset.mediaSubtypes.contains(.photoScreenshot) {
         return .screenshot
-      } else if self.asset.mediaSubtypes.contains(.photoPanorama) {
+      } else if asset.mediaSubtypes.contains(.photoPanorama) {
         return .panorama
-      } else if self.asset.mediaSubtypes.contains(.photoDepthEffect) {
+      } else if asset.mediaSubtypes.contains(.photoDepthEffect) {
         return .portraitPhoto
       } else {
         return .photo
       }
     case .video:
-      if self.asset.mediaSubtypes.contains(.videoTimelapse) {
+      if asset.mediaSubtypes.contains(.videoTimelapse) {
         return .timelapse
-      } else if self.asset.mediaSubtypes.contains(.videoHighFrameRate) {
+      } else if asset.mediaSubtypes.contains(.videoHighFrameRate) {
         return .slowMotion
       } else {
         return .video

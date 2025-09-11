@@ -16,8 +16,8 @@ struct AppContainerView: View {
   var body: some View {
     @Bindable var appState = appState
 
-    NavigationSplitView(preferredCompactColumn: self.$preferredColumn) {
-      self.sidebar
+    NavigationSplitView(preferredCompactColumn: $preferredColumn) {
+      sidebar
         .frame(minWidth: 200)
         .navigationDestination(for: NavigationOptions.self) { page in
           NavigationStack(path: $appState.path) {
@@ -34,7 +34,7 @@ struct AppContainerView: View {
       }
 
       .task {
-        await self.store.requestAccess()
+        await store.requestAccess()
       }
       .padding()
     }

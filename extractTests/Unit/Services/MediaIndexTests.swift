@@ -23,18 +23,14 @@ struct MediaIndexTests {
 
     // Create test data
     let testItems = [
-      MediaItemData(
-        mediaId: "test-1",
-        kind: .image,
-        status: .notBackedUp,
-        filename: "test1.jpg"
-      ),
-      MediaItemData(
-        mediaId: "test-2",
-        kind: .video,
-        status: .unknown,
-        filename: "test2.mp4"
-      )
+      MediaItemData(mediaId: "test-1",
+                    kind: .image,
+                    status: .notBackedUp,
+                    filename: "test1.jpg"),
+      MediaItemData(mediaId: "test-2",
+                    kind: .video,
+                    status: .unknown,
+                    filename: "test2.mp4")
     ]
 
     // Add media items
@@ -69,12 +65,10 @@ struct MediaIndexTests {
 
     let mediaIndex = await MediaIndex(modelContainer: container)
 
-    let testItem = MediaItemData(
-      mediaId: "duplicate-test",
-      kind: .image,
-      status: .notBackedUp,
-      filename: "duplicate.jpg"
-    )
+    let testItem = MediaItemData(mediaId: "duplicate-test",
+                                 kind: .image,
+                                 status: .notBackedUp,
+                                 filename: "duplicate.jpg")
 
     // Add the same item twice
     try await mediaIndex.addMedia(media: [testItem])
