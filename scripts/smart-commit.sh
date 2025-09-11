@@ -333,9 +333,6 @@ if [ "$PROCEED" = true ]; then
     git commit -m "$(cat <<EOF
 $COMMIT_MSG$COMMIT_BODY
 
-🤖 Generated with [Claude Code](https://claude.ai/code)
-
-Co-Authored-By: Claude <noreply@anthropic.com>
 EOF
 )"
     
