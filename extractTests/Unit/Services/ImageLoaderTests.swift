@@ -17,11 +17,11 @@ import Testing
 #endif
 
 @Suite("ImageManager Tests")
-struct ImageManagerTests {
+struct ImageLoaderTests {
   @Test("ImageManager initialises correctly")
   @MainActor
   func imageManagerInitialisation() async {
-    let imageManager = ImageManager()
+    let imageManager = ImageLoader()
 
     #expect(imageManager.image == nil)
     #expect(imageManager.requestID == nil)
@@ -30,7 +30,7 @@ struct ImageManagerTests {
   @Test("ImageManager properly manages request lifecycle")
   @MainActor
   func imageManagerRequestLifecycle() async {
-    let imageManager = ImageManager()
+    let imageManager = ImageLoader()
     let mockAsset = MockPhotoAsset()
 
     // Initially no request
@@ -51,7 +51,7 @@ struct ImageManagerTests {
   @Test("ImageManager handles different asset types properly")
   @MainActor
   func imageManagerHandlesDifferentAssetTypes() async {
-    let imageManager = ImageManager()
+    let imageManager = ImageLoader()
 
     // Test with image asset
     let imageAsset = MockPhotoAsset.bundleImageAsset()
@@ -59,7 +59,7 @@ struct ImageManagerTests {
     #expect(imageManager.image == nil) // Mock assets don't load images
 
     // Reset for video test
-    let imageManager2 = ImageManager()
+    let imageManager2 = ImageLoader()
     let videoAsset = MockPhotoAsset.videoAsset()
     await imageManager2.loadImage(from: videoAsset, with: 100, at: 2.0)
     #expect(imageManager2.image == nil) // Mock assets don't load images
@@ -68,7 +68,7 @@ struct ImageManagerTests {
   @Test("ImageManager target size calculation logic")
   @MainActor
   func imageManagerTargetSizeCalculation() async {
-    let imageManager = ImageManager()
+    let imageManager = ImageLoader()
     let mockAsset = MockPhotoAsset()
 
     let testCases = [
@@ -79,7 +79,7 @@ struct ImageManagerTests {
     ]
 
     for testCase in testCases {
-      let newManager = ImageManager()
+      let newManager = ImageLoader()
       await newManager.loadImage(
         from: mockAsset,
         with: testCase.size,
@@ -98,7 +98,7 @@ struct ImageManagerTests {
   @Test("loadImage skips loading when image already exists")
   @MainActor
   func loadImageSkipsWhenImageExists() async {
-    let imageManager = ImageManager()
+    let imageManager = ImageLoader()
     let mockAsset = MockPhotoAsset()
 
     await imageManager.loadImage(from: mockAsset, with: 100, at: 2.0)
@@ -111,7 +111,7 @@ struct ImageManagerTests {
   @Test("loadImage handles MockPhotoAsset correctly")
   @MainActor
   func loadImageWithMockAsset() async {
-    let imageManager = ImageManager()
+    let imageManager = ImageLoader()
     let mockAsset = MockPhotoAsset(
       localIdentifier: "test-123",
       mediaType: .image,
@@ -128,7 +128,7 @@ struct ImageManagerTests {
   @Test("loadImage calculates correct target size")
   @MainActor
   func loadImageTargetSizeCalculation() async {
-    let imageManager = ImageManager()
+    let imageManager = ImageLoader()
     let mockAsset = MockPhotoAsset()
 
     let testCases = [
@@ -151,7 +151,7 @@ struct ImageManagerTests {
   @Test("loadImage handles nil asset gracefully")
   @MainActor
   func loadImageWithNilAsset() async {
-    let imageManager = ImageManager()
+    let imageManager = ImageLoader()
 
     let mockAsset = MockPhotoAsset(localIdentifier: "")
 
@@ -164,7 +164,7 @@ struct ImageManagerTests {
   @Test("cancel works when no request is active")
   @MainActor
   func cancelWithNoActiveRequest() async {
-    let imageManager = ImageManager()
+    let imageManager = ImageLoader()
 
     // Initially no request
     #expect(imageManager.requestID == nil)
@@ -178,7 +178,7 @@ struct ImageManagerTests {
   @Test("cancel clears requestID")
   @MainActor
   func cancelClearsRequestID() async {
-    let imageManager = ImageManager()
+    let imageManager = ImageLoader()
     let mockAsset = MockPhotoAsset()
 
     await imageManager.loadImage(from: mockAsset, with: 100, at: 2.0)
@@ -191,7 +191,7 @@ struct ImageManagerTests {
   @Test("multiple cancel calls are safe")
   @MainActor
   func multipleCancelCallsAreSafe() async {
-    let imageManager = ImageManager()
+    let imageManager = ImageLoader()
 
     imageManager.cancel()
     imageManager.cancel()
@@ -203,7 +203,7 @@ struct ImageManagerTests {
   @Test("loadImage with zero size")
   @MainActor
   func loadImageWithZeroSize() async {
-    let imageManager = ImageManager()
+    let imageManager = ImageLoader()
     let mockAsset = MockPhotoAsset()
 
     await imageManager.loadImage(from: mockAsset, with: 0, at: 2.0)
@@ -214,7 +214,7 @@ struct ImageManagerTests {
   @Test("loadImage with zero display scale")
   @MainActor
   func loadImageWithZeroDisplayScale() async {
-    let imageManager = ImageManager()
+    let imageManager = ImageLoader()
     let mockAsset = MockPhotoAsset()
 
     await imageManager.loadImage(from: mockAsset, with: 100, at: 0)
@@ -225,7 +225,7 @@ struct ImageManagerTests {
   @Test("loadImage with negative values")
   @MainActor
   func loadImageWithNegativeValues() async {
-    let imageManager = ImageManager()
+    let imageManager = ImageLoader()
     let mockAsset = MockPhotoAsset()
 
     await imageManager.loadImage(from: mockAsset, with: -50, at: -2.0)
@@ -236,7 +236,7 @@ struct ImageManagerTests {
   @Test("loadImage with extremely large values")
   @MainActor
   func loadImageWithExtremelyLargeValues() async {
-    let imageManager = ImageManager()
+    let imageManager = ImageLoader()
     let mockAsset = MockPhotoAsset()
 
     await imageManager.loadImage(
@@ -251,7 +251,7 @@ struct ImageManagerTests {
   @Test("concurrent loadImage calls")
   @MainActor
   func concurrentLoadImageCalls() async {
-    let imageManager = ImageManager()
+    let imageManager = ImageLoader()
     let mockAsset1 = MockPhotoAsset(localIdentifier: "asset1")
     let mockAsset2 = MockPhotoAsset(localIdentifier: "asset2")
 
@@ -275,7 +275,7 @@ struct ImageManagerTests {
   @Test("Observable property changes")
   @MainActor
   func observablePropertyChanges() async {
-    let imageManager = ImageManager()
+    let imageManager = ImageLoader()
 
     #expect(imageManager.image == nil)
     #expect(imageManager.requestID == nil)
@@ -284,10 +284,10 @@ struct ImageManagerTests {
   @Test("ImageManager doesn't retain references unnecessarily")
   @MainActor
   func memoryManagement() async {
-    weak var weakManager: ImageManager?
+    weak var weakManager: ImageLoader?
 
     do {
-      let imageManager = ImageManager()
+      let imageManager = ImageLoader()
       weakManager = imageManager
 
       let mockAsset = MockPhotoAsset()
@@ -314,7 +314,7 @@ struct ImageManagerTests {
     @Test("macOS specific image handling")
     @MainActor
     func macOSSpecificImageHandling() async {
-      let imageManager = ImageManager()
+      let imageManager = ImageLoader()
 
       #expect(imageManager.image == nil)
 

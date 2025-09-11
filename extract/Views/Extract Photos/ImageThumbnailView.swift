@@ -16,7 +16,7 @@ struct ImageThumbnailView: View {
   @Environment(\.displayScale) private var displayScale: CGFloat
   @Environment(MediaStore.self) private var store
 
-  @State private var imageLoader = ImageManager()
+  @State private var imageLoader = ImageLoader()
   @State private var isSelected = false
 
   let asset: (any PhotoAsset)?
@@ -35,15 +35,9 @@ struct ImageThumbnailView: View {
   @ViewBuilder
   var thumbnailImage: some View {
     if let image = imageLoader.image {
-      #if os(iOS)
-        Image(uiImage: image)
-          .resizable()
-          .scaledToFill()
-      #else
-        Image(nsImage: image)
-          .resizable()
-          .scaledToFill()
-      #endif
+      Image(unsafePlatformAgnosticImage: image)
+        .resizable()
+        .scaledToFill()
     } else {
       Color.gray.opacity(0.2)
     }

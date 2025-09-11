@@ -33,13 +33,8 @@ struct PhotosView: View {
   var body: some View {
     ScrollView {
       LazyVStack {
-        PhotosHeaderView(
-          count: store.count,
-          photosCount: store.photosCount,
-          videoCount: store.videoCount,
-          image: "cat-portrait"
-        )
-        .photosHeaderViewFlexableModifider()
+        PhotosHeaderView()
+          .photosHeaderViewFlexableModifider()
 
         LazyVGrid(columns: columns) {
           ForEach(store.items, id: \.localIdentifier) { asset in

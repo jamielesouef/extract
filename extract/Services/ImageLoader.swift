@@ -1,5 +1,5 @@
 //
-//  ImageManager.swift
+//  ImageLoader.swift
 //  extract
 //
 //  Created by Jamie Le Souef on 11/9/2025.
@@ -9,7 +9,7 @@ import Photos
 import SwiftUI
 
 @Observable
-final class ImageManager {
+final class ImageLoader {
   #if os(iOS)
     private(set) var image: UIImage?
   #else
