@@ -32,7 +32,8 @@ struct PhotosView: View {
         PhotosHeaderView(count: store.count,
                          photosCount: store.photosCount,
                          videoCount: store.videoCount)
-        Divider()
+          .photosHeaderViewFlexableModifider()
+
         LazyVGrid(columns: columns) {
           ForEach(store.items, id: \.localIdentifier) { asset in
             ImageThumbnailView(asset: asset,
@@ -42,8 +43,10 @@ struct PhotosView: View {
       }
     }
     .ignoresSafeArea(.keyboard)
+    .ignoresSafeArea(.all)
     .toolbar(removing: .title)
     .showSelectAll()
+    .scrollViewGeometryReaader()
     .task {
       await refreshGuarded()
     }
@@ -80,17 +83,7 @@ struct PhotosView: View {
 
 #Preview("Photos Grid with 8 Items") {
   PhotosView()
+    .modelContainer(for: MediaItem.self, inMemory: true)
     .environment(AppState())
-    .environment(
-      MediaStore(items: [
-        MockPhotoAsset(mediaType: .image),
-        MockPhotoAsset(mediaType: .image),
-        MockPhotoAsset(mediaType: .video, duration: 30.5),
-        MockPhotoAsset(mediaType: .image),
-        MockPhotoAsset(mediaType: .image),
-        MockPhotoAsset(mediaType: .video, duration: 15.2),
-        MockPhotoAsset(mediaType: .image),
-        MockPhotoAsset(mediaType: .image)
-      ])
-    )
+    .environment(MediaStore())
 }

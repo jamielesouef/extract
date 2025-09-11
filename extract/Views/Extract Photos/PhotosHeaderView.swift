@@ -12,13 +12,53 @@ struct PhotosHeaderView: View {
   let photosCount: Int
   let videoCount: Int
 
+  private let textOpacity: CGFloat = 0.8
   var body: some View {
-    Text("total: \(count)")
-    Text("Photos: \(photosCount.formatted()), Videos: \(videoCount.formatted())")
-    Text("Media items since last backup")
+    Image(decorative: "cat-portrait")
+      .resizable()
+      .aspectRatio(contentMode: .fill)
+      .frame(minWidth: 0,
+             maxWidth: .infinity,
+             minHeight: 0,
+             maxHeight: .infinity)
+      .clipped()
+    #if os(iOS)
+      .backgroundExtensionEffect()
+    #endif
+      .overlay(alignment: .bottom) {
+        VStack {
+          Text("Media")
+            .font(.subheadline)
+            .fontWeight(.bold)
+            .foregroundStyle(.white)
+            .opacity(textOpacity)
+
+          Text(
+            "\(photosCount.formatted()) photos, \(videoCount.formatted()) videos"
+          )
+          .font(.largeTitle)
+          .fontWeight(.bold)
+          .foregroundStyle(.white)
+          .lineLimit(1)
+          .minimumScaleFactor(0.5)
+          .allowsTightening(true)
+          .frame(maxWidth: .infinity, alignment: .center)
+          .padding([.leading, .trailing])
+
+          Button(action: {}) {
+            Text("Backup now")
+          }
+          #if os(iOS)
+          .glassEffect()
+          #endif
+          .buttonStyle(.borderedProminent)
+          .padding([.bottom, .top], Constants.Image.padding)
+        }
+      }
   }
 }
 
 #Preview {
   PhotosHeaderView(count: 1234, photosCount: 1000, videoCount: 234)
+    .frame(height: 440)
 }
