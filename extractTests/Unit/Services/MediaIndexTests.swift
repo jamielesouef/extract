@@ -19,22 +19,18 @@ struct MediaIndexTests {
     let config = ModelConfiguration(isStoredInMemoryOnly: true)
     let container = try ModelContainer(for: schema, configurations: config)
 
-    let mediaIndex = MediaIndex(modelContainer: container)
+    let mediaIndex = await MediaIndex(modelContainer: container)
 
     // Create test data
     let testItems = [
-      MediaItemData(
-        mediaId: "test-1",
-        kind: .image,
-        status: .notBackedUp,
-        filename: "test1.jpg"
-      ),
-      MediaItemData(
-        mediaId: "test-2",
-        kind: .video,
-        status: .unknown,
-        filename: "test2.mp4"
-      ),
+      MediaItemData(mediaId: "test-1",
+                    kind: .image,
+                    status: .notBackedUp,
+                    filename: "test1.jpg"),
+      MediaItemData(mediaId: "test-2",
+                    kind: .video,
+                    status: .unknown,
+                    filename: "test2.mp4")
     ]
 
     // Add media items
@@ -47,7 +43,7 @@ struct MediaIndexTests {
 
     #expect(savedItems.count == 2)
 
-    let savedIds = Set(savedItems.map { $0.mediaId })
+    let savedIds = Set(savedItems.map(\.mediaId))
     #expect(savedIds.contains("test-1"))
     #expect(savedIds.contains("test-2"))
 
@@ -67,14 +63,12 @@ struct MediaIndexTests {
     let config = ModelConfiguration(isStoredInMemoryOnly: true)
     let container = try ModelContainer(for: schema, configurations: config)
 
-    let mediaIndex = MediaIndex(modelContainer: container)
+    let mediaIndex = await MediaIndex(modelContainer: container)
 
-    let testItem = MediaItemData(
-      mediaId: "duplicate-test",
-      kind: .image,
-      status: .notBackedUp,
-      filename: "duplicate.jpg"
-    )
+    let testItem = MediaItemData(mediaId: "duplicate-test",
+                                 kind: .image,
+                                 status: .notBackedUp,
+                                 filename: "duplicate.jpg")
 
     // Add the same item twice
     try await mediaIndex.addMedia(media: [testItem])
@@ -95,7 +89,7 @@ struct MediaIndexTests {
     let config = ModelConfiguration(isStoredInMemoryOnly: true)
     let container = try ModelContainer(for: schema, configurations: config)
 
-    let mediaIndex = MediaIndex(modelContainer: container)
+    let mediaIndex = await MediaIndex(modelContainer: container)
 
     // Add empty array
     try await mediaIndex.addMedia(media: [MediaItemData]())
@@ -114,7 +108,7 @@ struct MediaIndexTests {
     let config = ModelConfiguration(isStoredInMemoryOnly: true)
     let container = try ModelContainer(for: schema, configurations: config)
 
-    let mediaIndex = MediaIndex(modelContainer: container)
+    let mediaIndex = await MediaIndex(modelContainer: container)
 
     // Since we can't easily create PHAsset objects for testing,
     // we'll test the mapping through MediaItemData instead
@@ -122,7 +116,7 @@ struct MediaIndexTests {
       MediaItemData(mediaId: "image-test", kind: .image, status: .unknown, filename: nil),
       MediaItemData(mediaId: "video-test", kind: .video, status: .unknown, filename: nil),
       MediaItemData(mediaId: "audio-test", kind: .audio, status: .unknown, filename: nil),
-      MediaItemData(mediaId: "unknown-test", kind: .unknown, status: .unknown, filename: nil),
+      MediaItemData(mediaId: "unknown-test", kind: .unknown, status: .unknown, filename: nil)
     ]
 
     try await mediaIndex.addMedia(media: testItems)
@@ -153,21 +147,23 @@ struct MediaIndexTests {
     let config = ModelConfiguration(isStoredInMemoryOnly: true)
     let container = try ModelContainer(for: schema, configurations: config)
 
-    let mediaIndex = MediaIndex(modelContainer: container)
+    let mediaIndex = await MediaIndex(modelContainer: container)
 
     // Add initial items
     let initialItems = [
       MediaItemData(mediaId: "existing-1", kind: .image, status: .backedUp, filename: nil),
-      MediaItemData(mediaId: "existing-2", kind: .video, status: .notBackedUp, filename: nil),
+      MediaItemData(mediaId: "existing-2", kind: .video, status: .notBackedUp, filename: nil)
     ]
     try await mediaIndex.addMedia(media: initialItems)
 
     // Add mixed batch (some existing, some new)
     let mixedItems = [
-      MediaItemData(mediaId: "existing-1", kind: .image, status: .backedUp, filename: nil), // Duplicate
+      MediaItemData(mediaId: "existing-1", kind: .image, status: .backedUp, filename: nil),
+      // Duplicate
       MediaItemData(mediaId: "new-1", kind: .audio, status: .unknown, filename: nil), // New
-      MediaItemData(mediaId: "existing-2", kind: .video, status: .notBackedUp, filename: nil), // Duplicate
-      MediaItemData(mediaId: "new-2", kind: .image, status: .notBackedUp, filename: nil), // New
+      MediaItemData(mediaId: "existing-2", kind: .video, status: .notBackedUp, filename: nil),
+      // Duplicate
+      MediaItemData(mediaId: "new-2", kind: .image, status: .notBackedUp, filename: nil) // New
     ]
     try await mediaIndex.addMedia(media: mixedItems)
 
@@ -178,10 +174,80 @@ struct MediaIndexTests {
 
     #expect(savedItems.count == 4)
 
-    let savedIds = Set(savedItems.map { $0.mediaId })
+    let savedIds = Set(savedItems.map(\.mediaId))
     #expect(savedIds.contains("existing-1"))
     #expect(savedIds.contains("existing-2"))
     #expect(savedIds.contains("new-1"))
     #expect(savedIds.contains("new-2"))
+  }
+
+  @Test("Concurrent adds on single actor are deduplicated")
+  func concurrentAddsDeduplicate() async throws {
+    let schema = Schema([MediaItem.self])
+    let config = ModelConfiguration(isStoredInMemoryOnly: true)
+    let container = try ModelContainer(for: schema, configurations: config)
+
+    let mediaIndex = await MediaIndex(modelContainer: container)
+
+    let batch1 = [
+      MediaItemData(mediaId: "c-1", kind: .image, status: .unknown, filename: nil),
+      MediaItemData(mediaId: "c-2", kind: .video, status: .unknown, filename: nil),
+      MediaItemData(mediaId: "c-3", kind: .audio, status: .unknown, filename: nil)
+    ]
+
+    let batch2 = [
+      MediaItemData(mediaId: "c-2", kind: .video, status: .unknown, filename: nil), // overlap
+      MediaItemData(mediaId: "c-3", kind: .audio, status: .unknown, filename: nil), // overlap
+      MediaItemData(mediaId: "c-4", kind: .image, status: .unknown, filename: nil),
+      MediaItemData(mediaId: "c-5", kind: .video, status: .unknown, filename: nil)
+    ]
+
+    await withTaskGroup(of: Void.self) { group in
+      group.addTask {
+        try? await mediaIndex.addMedia(media: batch1)
+      }
+      group.addTask {
+        try? await mediaIndex.addMedia(media: batch2)
+      }
+      await group.waitForAll()
+    }
+
+    let descriptor = FetchDescriptor<MediaItem>()
+    let context = ModelContext(container)
+    let savedItems = try context.fetch(descriptor)
+
+    // Unique ids should be c-1..c-5 (5 total)
+    #expect(savedItems.count == 5)
+    let ids = Set(savedItems.map(\.mediaId))
+    for id in ["c-1", "c-2", "c-3", "c-4", "c-5"] {
+      #expect(ids.contains(id))
+    }
+  }
+
+  @Test("Within-batch duplicate ids are ignored")
+  func withinBatchDeduplication() async throws {
+    let schema = Schema([MediaItem.self])
+    let config = ModelConfiguration(isStoredInMemoryOnly: true)
+    let container = try ModelContainer(for: schema, configurations: config)
+
+    let mediaIndex = await MediaIndex(modelContainer: container)
+
+    let batch = [
+      MediaItemData(mediaId: "wb-1", kind: .image, status: .unknown, filename: nil),
+      MediaItemData(mediaId: "wb-1", kind: .image, status: .unknown, filename: nil),
+      // duplicate in same batch
+      MediaItemData(mediaId: "wb-2", kind: .video, status: .unknown, filename: nil)
+    ]
+
+    try await mediaIndex.addMedia(media: batch)
+
+    let descriptor = FetchDescriptor<MediaItem>()
+    let context = ModelContext(container)
+    let savedItems = try context.fetch(descriptor)
+
+    #expect(savedItems.count == 2)
+    let ids = Set(savedItems.map(\.mediaId))
+    #expect(ids.contains("wb-1"))
+    #expect(ids.contains("wb-2"))
   }
 }

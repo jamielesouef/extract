@@ -10,16 +10,14 @@ import SwiftData
 import SwiftUI
 
 @ModelActor
-actor MediaIndex {
-  func addMedia(media items: [PHAsset]) async throws {
+actor MediaIndex: MediaIndexing {
+  func addMedia(media items: [any PhotoAsset]) async throws {
     let mediaItems = items.map {
       let kind = getMediaType(from: $0.mediaType)
-      return MediaItemData(
-        mediaId: $0.localIdentifier,
-        kind: kind,
-        status: .unknown,
-        filename: nil
-      )
+      return MediaItemData(mediaId: $0.localIdentifier,
+                           kind: kind,
+                           status: .unknown,
+                           filename: nil)
     }
 
     try await addMedia(media: mediaItems)
@@ -29,17 +27,15 @@ actor MediaIndex {
     let descriptor = FetchDescriptor<MediaItem>()
 
     let existing: [MediaItem] = try modelContext.fetch(descriptor)
-    var existingIDs: Set<String> = Set(existing.map { $0.mediaId })
+    var existingIDs: Set<String> = Set(existing.map(\.mediaId))
 
     for item in items {
       let id = item.mediaId
       if existingIDs.contains(id) { continue }
 
-      let copy = MediaItem(
-        mediaId: id,
-        kind: item.kind,
-        status: item.status
-      )
+      let copy = MediaItem(mediaId: id,
+                           kind: item.kind,
+                           status: item.status)
 
       modelContext.insert(copy)
       existingIDs.insert(id)

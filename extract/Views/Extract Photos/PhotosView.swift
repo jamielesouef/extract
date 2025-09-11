@@ -16,33 +16,41 @@ struct PhotosView: View {
 
   @State private var isRefreshing = false
 
-  private let spacing: CGFloat = 8
   private let size: CGFloat = 100
-  private let roundedRadius = CGSize(width: 8, height: 8)
 
   private var columns: [GridItem] {
-    [GridItem(.adaptive(minimum: 100), spacing: spacing)]
+    [
+      GridItem(
+        .adaptive(
+          minimum: getIdealSizeForimage(),
+          maximum: getIdealSizeForimage()
+        ),
+        spacing: Constants.Image.spacing
+      )
+    ]
   }
 
   var body: some View {
     ScrollView {
       LazyVStack {
-        PhotosHeaderView(
-          count: store.count,
-          photosCount: store.photosCount,
-          videoCount: store.videoCount
-        )
-        Divider()
+        PhotosHeaderView()
+          .photosHeaderViewFlexableModifider()
+
         LazyVGrid(columns: columns) {
-          ForEach(store.items, id: \.self) { asset in
-            ImageThumbnailView(asset: asset, size: getIdealSizeForimage())
-              .clipShape(RoundedRectangle(cornerSize: roundedRadius))
+          ForEach(store.items, id: \.localIdentifier) { asset in
+            ImageThumbnailView(
+              asset: asset,
+              size: getIdealSizeForimage()
+            )
           }
         }
       }
     }
     .ignoresSafeArea(.keyboard)
+    .ignoresSafeArea(.all)
     .toolbar(removing: .title)
+    .showSelectAll()
+    .scrollViewGeometryReaader()
     .task {
       await refreshGuarded()
     }
@@ -61,23 +69,25 @@ struct PhotosView: View {
 
   private func getMediaAndIndex() async {
     await store.requestAndLoad()
-    let indexer = MediaIndex(modelContainer: modelContext.container)
-    do {
-      try await indexer.addMedia(media: store.items)
-    } catch {
-      slog(error)
-    }
+    //    let indexer = MediaIndex(modelContainer: modelContext.container)
+    //    do {
+    //      try await indexer.addMedia(media: store.items)
+    //    } catch {
+    //      slog(error)
+    //    }
   }
 
   private func getIdealSizeForimage() -> CGFloat {
-    let maxWidthForIPhone: CGFloat = 3
-    let minWidowSize = min(appState.windowSize.height, appState.windowSize.width) / maxWidthForIPhone
-    return minWidowSize - (spacing * 2)
+    let minWidth = min(appState.windowSize.height, appState.windowSize.width)
+
+    return (minWidth / Constants.Image.maxItemsForMinSpace)
+      - Constants.Image.spacing
   }
 }
 
-#Preview {
+#Preview("Photos Grid with 8 Items") {
   PhotosView()
+    .modelContainer(for: MediaItem.self, inMemory: true)
     .environment(AppState())
     .environment(MediaStore())
 }

@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-Extract is a SwiftUI-based macOS/iOS app for exporting photos and videos from iCloud Photo Library to various destinations (local drives, NAS, cloud storage like S3). The app targets macOS 26, iOS 26, and iPadOS 26.
+Photos Exporter (formerly Extract) is a privacy-respecting, cross-platform SwiftUI app for exporting photos and videos from iCloud Photo Library to multiple Archive destinations (local folders, NAS via SMB/WebDAV, S3-compatible storage). The app targets macOS 26, iOS 18, and iPadOS 18 with Swift 6 strict concurrency.
 
 ## Architecture
 
@@ -15,14 +15,27 @@ Extract is a SwiftUI-based macOS/iOS app for exporting photos and videos from iC
 - **State Management**: 
   - `AppState` - Global app state including navigation path and window size
   - `MediaStore` - Observable class managing Photos library access and asset loading
-- **Data Persistence**: SwiftData with `MediaItem` model for tracking backup status
+- **Data Persistence**: SwiftData with comprehensive models for export jobs and integrity tracking
 - **Photo Library Integration**: Uses PhotoKit (`PHAsset`, `PHPhotoLibrary`) for iCloud Photos access
+- **Export Architecture**: 
+  - `PhotosServiceProtocol` - Photos library access and asset retrieval with Swift 6 concurrency
+  - `ExportServiceProtocol` - Export job orchestration and queue management
+  - `ArchiveServiceProtocol` - Archive configuration and storage backend management
+  - `IntegrityServiceProtocol` - Checksum calculation and audit operations
+- **Archive Backends**: Pluggable adapters for Folder, NAS (SMB/WebDAV), and S3-compatible storage
 
 ### Key Models
 
-- **MediaItem**: SwiftData model tracking individual media items with backup status
-- **MediaStore**: Main data controller for Photos library integration
-- **NavigationOptions**: Enum defining app navigation structure (New Photos, Backed up Photos)
+- **Legacy Models** (existing):
+  - `MediaItem` - SwiftData model tracking individual media items with backup status
+  - `MediaStore` - Main data controller for Photos library integration  
+  - `NavigationOptions` - Enum defining app navigation structure
+- **New Export Models** (Photos Exporter feature):
+  - `Archive` - Archive destination configuration (local, NAS, S3)
+  - `ExportJob` - Batch export operation with progress tracking
+  - `ExportItem` - Individual media item within an export job
+  - `ArchiveRecord` - Audit trail of successfully exported items
+  - `AuditLog` - Integrity monitoring and verification results
 
 ### View Structure
 
@@ -62,6 +75,10 @@ The project uses standard Xcode build system with Makefile integration:
 - PhotoKit operations are performed on background queues via `Task.detached`
 - Models use SwiftData for persistence with in-memory storage during development
 - Navigation uses `NavigationPath` for programmatic navigation
+- **Swift 6 Concurrency**: Strict actor isolation with `@MainActor` for UI, `@ModelActor` for data, custom actors for I/O
+- **Archive Pattern**: Protocol-based adapters for pluggable storage backends
+- **Integrity-First**: SHA-256 checksums and audit trails for all exported content
+- **Background Processing**: BGProcessingTask integration for long-running exports
 
 ### Code Conventions
 
@@ -69,3 +86,9 @@ The project uses standard Xcode build system with Makefile integration:
 - SwiftUI view files use `#Preview` for previews
 - Environment objects passed via `.environment()` modifier
 - Async operations use modern Swift concurrency (async/await, Task)
+
+## Recent Changes
+
+- 001-photos-exporter: Added Swift 6 + Photos/SwiftData export architecture with NAS/S3 backends
+- Build system: Enhanced with SwiftLint to SwiftFormat migration  
+- Testing: Added comprehensive unit and integration test suite with Swift Testing

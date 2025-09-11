@@ -55,4 +55,6 @@ struct AppContainerView: View {
 
 #Preview {
   AppContainerView()
+    .environment(AppState())
+    .environment(MediaStore())
 }

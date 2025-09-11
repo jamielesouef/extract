@@ -24,17 +24,18 @@ Extract gives you full control over your iCloud Photo Library. While Photos is g
 Clone the repository and set up the development environment:
 
 ```bash
-git clone https://github.com/<your-org>/<repo>.git
+git clone https://github.com/jamielesouef/extract.git
 cd extract
 ```
 
 ### Prerequisites
 - **Xcode 16** or later
-- **SwiftLint** (for code quality)
+- **SwiftFormat** (for code formatting)
+- **GitHub CLI** (for pull requests and GitHub integration)
 
 Install dependencies:
 ```bash
-make install-deps  # Installs SwiftLint via Homebrew
+make setup  # Installs SwiftFormat and GitHub CLI via Homebrew
 ```
 
 ### Building the Project
@@ -42,10 +43,13 @@ make install-deps  # Installs SwiftLint via Homebrew
 **Using Makefile (Recommended):**
 ```bash
 make help        # Show all available commands
-make build       # Build with linting
-make run         # Build and launch app
-make test        # Run tests
+make open        # Open project in Xcode
+make format      # Run SwiftFormat on source code
+make build       # Build the project (runs format first)
+make run         # Build and run the app
+make test        # Run unit tests
 make clean       # Clean build artifacts
+make commit      # Create intelligent commit using current changes
 ```
 
 **Using Xcode:**
@@ -74,9 +78,13 @@ Then build and run with Cmd+R.
 Issues and PRs are welcome. Please open an issue to discuss significant changes before submitting a PR.
 
 #### Development Workflow
-1. Clone the repository and run `make install-deps`
-2. Use `make build` to ensure code passes linting before committing
-3. Run `make lint` to check code style
+1. Clone the repository and run `make setup`
+2. Use `make build` to ensure code passes formatting before committing
+3. Run `make format` to format code style
 4. Use `make test` to run the test suite
+5. Use `make commit` for intelligent commit creation
 
-The project uses SwiftLint for code quality. All builds automatically run linting checks to maintain consistent code style.
+The project uses SwiftFormat for code formatting and GitHub CLI for pull request management. All builds automatically run formatting checks to maintain consistent code style.
+
+## Documentation
+- [Product & Technical Spec](./SPEC.md)

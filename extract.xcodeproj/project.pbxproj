@@ -17,13 +17,38 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		E45E4AD42E7247D800524D46 /* CLAUDE.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = CLAUDE.md; sourceTree = "<group>"; };
+		E45E4AD52E7247D800524D46 /* LICENSE.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = LICENSE.md; sourceTree = "<group>"; };
+		E45E4AD62E7247D800524D46 /* Makefile */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.make; path = Makefile; sourceTree = "<group>"; };
+		E45E4AD72E7247D800524D46 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		E4BC458F2E5BE43A000E32A5 /* extract.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = extract.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E4BC45A22E5BE43A000E32A5 /* extractTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = extractTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		E44EAD702E6FB75F006D2575 /* Exceptions for "extract" folder in "extract" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = E4BC458E2E5BE43A000E32A5 /* extract */;
+		};
+		E465EE0E2E72A18C007EF750 /* Exceptions for "extract" folder in "extractTests" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Resources/Assets.xcassets,
+			);
+			target = E4BC45A12E5BE43A000E32A5 /* extractTests */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		E4BC45912E5BE43A000E32A5 /* extract */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				E44EAD702E6FB75F006D2575 /* Exceptions for "extract" folder in "extract" target */,
+				E465EE0E2E72A18C007EF750 /* Exceptions for "extract" folder in "extractTests" target */,
+			);
 			path = extract;
 			sourceTree = "<group>";
 		};
@@ -58,6 +83,10 @@
 				E4BC45912E5BE43A000E32A5 /* extract */,
 				E4BC45A32E5BE43A000E32A5 /* extractTests */,
 				E4BC45902E5BE43A000E32A5 /* Products */,
+				E45E4AD42E7247D800524D46 /* CLAUDE.md */,
+				E45E4AD52E7247D800524D46 /* LICENSE.md */,
+				E45E4AD62E7247D800524D46 /* Makefile */,
+				E45E4AD72E7247D800524D46 /* README.md */,
 			);
 			sourceTree = "<group>";
 		};
@@ -336,6 +365,7 @@
 				ENABLE_RESOURCE_ACCESS_PHOTO_LIBRARY = YES;
 				ENABLE_USER_SELECTED_FILES = readonly;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = extract/Info.plist;
 				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "Extract needs access to your Photos library to export and backup your photos and videos.";
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
@@ -394,6 +424,7 @@
 				ENABLE_RESOURCE_ACCESS_PHOTO_LIBRARY = YES;
 				ENABLE_USER_SELECTED_FILES = readonly;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = extract/Info.plist;
 				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "Extract needs access to your Photos library to export and backup your photos and videos.";
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;

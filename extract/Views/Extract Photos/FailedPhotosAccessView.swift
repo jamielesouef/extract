@@ -12,7 +12,7 @@ struct FailedPhotosAccessView: View {
   var body: some View {
     VStack {
       Text("""
-      **Well what did you expect?** You can't see anything here becuase you didn't give me access to your photos!. \
+      **Well what did you expect?** You can't see anything here becuase you didn't give me access to your photos! \n
       Now you have to go into settings and give me access to your photo library.
 
        Don't worry. I'll wait.
@@ -28,7 +28,9 @@ struct FailedPhotosAccessView: View {
             UIApplication.shared.open(url)
           }
         #elseif os(macOS)
-          if let url = URL(string: "x-apple.systempreferences:com.apple.preference.security?Privacy_Photos") {
+          if let url =
+            URL(string: "x-apple.systempreferences:com.apple.preference.security?Privacy_Photos")
+          {
             NSWorkspace.shared.open(url)
           }
         #endif
