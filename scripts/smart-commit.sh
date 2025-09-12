@@ -117,7 +117,7 @@ fi
 
 if echo "$CHANGED_FILES" | grep -q "MediaStore"; then
     if git diff --cached | grep -q "iso8601Formatter\|nonisolated"; then
-        CHANGES+=("optimize MediaStore with static formatter")
+        CHANGES+=("optimise MediaStore with static formatter")
     elif git diff --cached | grep -q "isInSelectMode"; then
         CHANGES+=("add selection mode to MediaStore")
     else
@@ -165,7 +165,7 @@ fi
 
 # Generate commit message
 if [ ${#CHANGES[@]} -eq 0 ]; then
-    # Fallback for unrecognized changes
+    # Fallback for unrecognised changes
     if [ $FILE_COUNT -eq 1 ]; then
         FILENAME=$(basename "$CHANGED_FILES")
         COMMIT_MSG="Update ${FILENAME%.*}"

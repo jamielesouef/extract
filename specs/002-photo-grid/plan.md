@@ -161,7 +161,7 @@ No unknowns identified in Technical Context. PhotoKit integration patterns are w
 - Mark [P] for parallel execution (different files)
 
 **Task Categories**:
-1. **Component Tests** (3 tasks): UI component behavior tests
+1. **Component Tests** (3 tasks): UI component behaviour tests
 2. **Service Tests** (2 tasks): Photo loading and selection logic
 3. **Integration Tests** (3 tasks): End-to-end user scenarios
 4. **Service Implementation** (2 tasks): Photo loading and selection services
@@ -169,7 +169,7 @@ No unknowns identified in Technical Context. PhotoKit integration patterns are w
 6. **Integration** (4 tasks): Permissions, performance, app integration
 7. **Polish** (3 tasks): Performance tuning, accessibility, documentation
 
-**Estimated Output**: 20 numbered, ordered tasks in tasks.md organized by TDD principles
+**Estimated Output**: 20 numbered, ordered tasks in tasks.md organised by TDD principles
 
 **Dependencies**:
 - Component tests must pass before view implementations

@@ -22,7 +22,7 @@ options.isNetworkAccessAllowed = true
 
 **Alternatives Considered**:
 - `PHImageManager.default()` - rejected due to lack of caching control
-- Custom caching solution - rejected due to complexity and PhotoKit optimization
+- Custom caching solution - rejected due to complexity and PhotoKit optimisation
 
 ## SwiftUI Grid Performance
 
@@ -37,7 +37,7 @@ options.isNetworkAccessAllowed = true
 
 **Alternatives Considered**:
 - Regular VGrid - rejected due to memory usage with large collections
-- Custom grid implementation - rejected due to SwiftUI optimization benefits
+- Custom grid implementation - rejected due to SwiftUI optimisation benefits
 
 ## Swift 6 Concurrency for Photos
 

@@ -164,7 +164,7 @@ protocol SelectionServiceProtocol {
 ## Configuration Types
 
 ### GridConfiguration
-Controls grid layout and behavior across platforms.
+Controls grid layout and behaviour across platforms.
 
 ```swift
 struct GridConfiguration {
@@ -202,7 +202,7 @@ enum GridColumns {
 ```
 
 ### ThumbnailCacheConfiguration
-Controls thumbnail caching behavior for performance.
+Controls thumbnail caching behaviour for performance.
 
 ```swift
 struct ThumbnailCacheConfiguration {

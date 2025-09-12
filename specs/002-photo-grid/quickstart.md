@@ -15,13 +15,13 @@ This guide walks through the essential user flows to validate the Photo Grid Dis
 ### Steps
 1. Launch Photos Exporter app (fresh install or after resetting permissions)
 2. Navigate to photo grid section
-3. Observe permission request dialog
+3. Observe permission request dialogue
 4. Grant Photos access when prompted
 5. Wait for initial grid population
 6. Verify grid displays with photo thumbnails
 
 ### Expected Results
-- Permission dialog appears immediately
+- Permission dialogue appears immediately
 - Clear messaging about why Photos access is needed
 - After granting permission, grid loads within 3 seconds
 - Thumbnails appear progressively as they load
@@ -35,7 +35,7 @@ This guide walks through the essential user flows to validate the Photo Grid Dis
 1. With grid populated, start scrolling vertically
 2. Scroll at moderate speed through 100+ photos
 3. Scroll quickly to test performance under stress
-4. Observe thumbnail loading behavior
+4. Observe thumbnail loading behaviour
 5. Change device orientation (iOS/iPadOS)
 6. Verify grid adapts to new layout
 
@@ -96,7 +96,7 @@ This guide walks through the essential user flows to validate the Photo Grid Dis
 
 ## Test Scenario 5: Platform-Specific Adaptations
 
-**Goal**: Verify platform-appropriate behavior
+**Goal**: Verify platform-appropriate behaviour
 
 ### iOS Testing
 1. Test on iPhone (portrait/landscape)
@@ -111,14 +111,14 @@ This guide walks through the essential user flows to validate the Photo Grid Dis
 4. Verify toolbar integration
 
 ### macOS Testing
-1. Test window resizing behavior
+1. Test window resizing behaviour
 2. Verify menu bar integration
 3. Test keyboard navigation
 4. Verify right-click context menus
 
 ### Expected Results
 - Grid adapts appropriately to each platform
-- Column count optimizes for screen size
+- Column count optimises for screen size
 - Platform-specific controls work correctly
 - Keyboard and mouse interactions feel native
 

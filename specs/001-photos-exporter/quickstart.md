@@ -116,7 +116,7 @@ This guide walks through the essential user flows to validate the Photos Exporte
 6. Simulate network interruption:
    - Disconnect WiFi for 30 seconds
    - Or temporarily block NAS IP in router
-7. Observe error handling and retry behavior
+7. Observe error handling and retry behaviour
 8. Restore network connectivity
 9. Verify export resumes from checkpoint
 10. Complete full export
@@ -186,7 +186,7 @@ This guide walks through the essential user flows to validate the Photos Exporte
 8. Wake device and check job status
 9. Plug/unplug power to test power requirements
 10. Switch to cellular to test WiFi requirement
-11. Verify appropriate pause/resume behavior
+11. Verify appropriate pause/resume behaviour
 
 ### Expected Results
 - Export continues in background for reasonable time
@@ -264,4 +264,4 @@ This guide walks through the essential user flows to validate the Photos Exporte
 7. **Low Memory**: Graceful degradation without crashes
 8. **Thermal Throttling**: Automatic concurrency reduction
 
-Each error scenario should result in clear user messaging and appropriate fallback behavior without data loss or corruption.
+Each error scenario should result in clear user messaging and appropriate fallback behaviour without data loss or corruption.

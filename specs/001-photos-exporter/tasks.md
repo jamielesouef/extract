@@ -138,7 +138,7 @@
 - [ ] T058 [P] Background manager tests in `extractTests/Services/BackgroundManagerTests.swift`
 
 ### Performance Optimization
-- [ ] T059 Concurrent transfer optimization in existing services
+- [ ] T059 Concurrent transfer optimisation in existing services
 - [ ] T060 Memory management for large transfers in existing services
 - [ ] T061 [P] Performance benchmarking suite in `extractTests/Performance/BenchmarkTests.swift`
 
@@ -205,9 +205,9 @@ Task: "S3ArchiveAdapter in extract/Services/PhotosExporter/Adapters/S3Adapter.sw
 9. **UI Components** (12): SwiftUI views for all user flows
 10. **Background Processing** (3): Background task management
 11. **System Integration** (6): Platform integration and app updates
-12. **Performance & Polish** (11): Testing, optimization, documentation
+12. **Performance & Polish** (11): Testing, optimisation, documentation
 
-**Total Tasks**: 65 numbered, ordered tasks organized by TDD principles
+**Total Tasks**: 65 numbered, ordered tasks organised by TDD principles
 
 ## Notes
 - [P] tasks = different files, no dependencies

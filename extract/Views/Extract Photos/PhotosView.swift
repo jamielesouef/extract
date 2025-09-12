@@ -52,11 +52,11 @@ struct PhotosView: View {
     .showSelectAll()
     .scrollViewGeometryReaader()
     .task {
-//      await refreshGuarded()
+      await refreshGuarded()
     }
     .refreshable {
       slog("refresh")
-//      await refreshGuarded()
+      await refreshGuarded()
     }
   }
 
@@ -87,9 +87,13 @@ struct PhotosView: View {
   }
 }
 
-#Preview("Photos Grid with 8 Items") {
+#Preview("Photos Grid with 12 Items") {
   @Previewable @State var appState = AppState()
   @Previewable @State var store = MediaStore(items: [
+    MockPhotoAsset(),
+    MockPhotoAsset(),
+    MockPhotoAsset(),
+    MockPhotoAsset(),
     MockPhotoAsset(),
     MockPhotoAsset(),
     MockPhotoAsset(),
@@ -101,10 +105,10 @@ struct PhotosView: View {
   ])
 
   PhotosView()
-    .onGeometryChange(for: CGFloat.self, of: { proxy in
-      min(proxy.size.width, proxy.size.height)
-    }, action: {
-      appState.windowSize = CGSize(width: $0, height: $0)
+    .onGeometryChange(for: CGSize.self, of: { proxy in
+      proxy.size
+    }, action: { _, value in
+      appState.windowSize = value
     })
     .modelContainer(for: MediaItem.self, inMemory: true)
     .environment(appState)

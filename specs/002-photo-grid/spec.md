@@ -32,7 +32,7 @@ Photo Grid Display is a focused feature that loads photos from iCloud Photos lib
 ### Flow 1: First Launch - Grant Photos Access
 1. User launches app
 2. App requests Photos library access
-3. User grants permission in system dialog
+3. User grants permission in system dialogue
 4. App loads and displays photo grid
 
 ### Flow 2: Browse Photos Grid
@@ -105,7 +105,7 @@ Photo Grid Display is a focused feature that loads photos from iCloud Photos lib
 - Intuitive grid navigation
 - Responsive to device orientation changes
 - Accessible (VoiceOver support)
-- Consistent behavior across platforms
+- Consistent behaviour across platforms
 
 ## 7. Future Considerations
 
@@ -113,6 +113,6 @@ This focused spec establishes the foundation for:
 - Export job creation (select photos → export)
 - Advanced filtering and search
 - Album-based browsing
-- Smart collections and favorites
+- Smart collections and favourites
 
 The grid component should be designed with these future extensions in mind, but not implement them in this phase.

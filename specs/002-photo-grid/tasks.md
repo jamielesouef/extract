@@ -162,9 +162,9 @@ Task: "iPadOS toolbar integration in extract/Views/Platform/iPadOSToolbar.swift"
 7. **UI Components** (3): SwiftUI views and components
 8. **Configuration** (2): Grid configuration and error handling
 9. **Platform Integration** (6): Permissions and platform adaptations
-10. **Performance & Polish** (9): Optimization, accessibility, documentation
+10. **Performance & Polish** (9): Optimisation, accessibility, documentation
 
-**Total Tasks**: 39 numbered, ordered tasks organized by TDD principles
+**Total Tasks**: 39 numbered, ordered tasks organised by TDD principles
 
 ## Success Criteria Mapping
 

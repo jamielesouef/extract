@@ -31,7 +31,7 @@
 
 ## Commit & Pull Request Guidelines
 - Use `make commit` to auto-format, build, analyze changes, and craft a descriptive message. Keep subjects imperative and scoped (e.g., “Add photo selection overlay”).
-- Group related changes; include tests for new behavior. Reference issues with `#123` when applicable.
+- Group related changes; include tests for new behaviour. Reference issues with `#123` when applicable.
 - PRs must include: clear description, linked issues, UI screenshots (if visual changes), test plan/steps, and confirmation that `make build` and `make format` pass.
 - Prefer feature branches named after spec IDs when relevant (e.g., `002-photo-grid`).
 
