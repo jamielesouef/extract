@@ -11,7 +11,7 @@ import SwiftUI
 
 @ModelActor
 actor MediaIndex: MediaIndexing {
-  func addMedia(media items: [any PhotoAsset]) async throws {
+  func addMedia(media items: [PHAsset]) async throws {
     let mediaItems = items.map {
       let kind = getMediaType(from: $0.mediaType)
       return MediaItemData(mediaId: $0.localIdentifier,

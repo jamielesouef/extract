@@ -11,10 +11,46 @@ import Testing
 @testable import extract
 
 #if os(iOS)
+  import UIImage
   import UIKit
 #else
   import AppKit
 #endif
+
+// MARK: - Test Mock
+
+final class MockPhotoAsset: PHAsset, @unchecked Sendable {
+  private let _localIdentifier: String
+  private let _mediaType: PHAssetMediaType
+  private let _creationDate: Date?
+  private let _pixelWidth: Int
+  private let _pixelHeight: Int
+  private let _duration: TimeInterval
+
+  init(
+    localIdentifier: String = UUID().uuidString,
+    mediaType: PHAssetMediaType = .image,
+    creationDate: Date? = Date(),
+    pixelWidth: Int = 1920,
+    pixelHeight: Int = 1080,
+    duration: TimeInterval = 0.0
+  ) {
+    _localIdentifier = localIdentifier
+    _mediaType = mediaType
+    _creationDate = creationDate
+    _pixelWidth = pixelWidth
+    _pixelHeight = pixelHeight
+    _duration = duration
+    super.init()
+  }
+
+  override var localIdentifier: String { _localIdentifier }
+  override var mediaType: PHAssetMediaType { _mediaType }
+  override var creationDate: Date? { _creationDate }
+  override var pixelWidth: Int { _pixelWidth }
+  override var pixelHeight: Int { _pixelHeight }
+  override var duration: TimeInterval { _duration }
+}
 
 @Suite("ImageManager Tests")
 struct ImageLoaderTests {
@@ -429,7 +465,7 @@ final class TestableImageManager {
   var lastDisplayScale: CGFloat = 0
   var loadImageCallCount = 0
 
-  func loadImage(from asset: PhotoAsset, with size: CGFloat, at displayScale: CGFloat) async {
+  func loadImage(from asset: PHAsset, with size: CGFloat, at displayScale: CGFloat) async {
     didCallLoadImage = true
     lastRequestedSize = size
     lastDisplayScale = displayScale
@@ -439,10 +475,10 @@ final class TestableImageManager {
     guard asset is PHAsset else { return }
 
     // Simulate request ID
-    requestID = PHImageRequestID(arc4random())
+    requestID = PHImageRequestID(Int32.random(in: Int32.min ... Int32.max))
   }
 
-  func simulateImageLoad(from asset: PhotoAsset, with size: CGFloat, at displayScale: CGFloat) async {
+  func simulateImageLoad(from asset: PHAsset, with size: CGFloat, at displayScale: CGFloat) async {
     await loadImage(from: asset, with: size, at: displayScale)
 
     // Load actual bundle image

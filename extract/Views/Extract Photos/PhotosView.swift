@@ -89,20 +89,7 @@ struct PhotosView: View {
 
 #Preview("Photos Grid with 12 Items") {
   @Previewable @State var appState = AppState()
-  @Previewable @State var store = MediaStore(items: [
-    MockPhotoAsset(),
-    MockPhotoAsset(),
-    MockPhotoAsset(),
-    MockPhotoAsset(),
-    MockPhotoAsset(),
-    MockPhotoAsset(),
-    MockPhotoAsset(),
-    MockPhotoAsset(),
-    MockPhotoAsset(),
-    MockPhotoAsset(),
-    MockPhotoAsset(),
-    MockPhotoAsset()
-  ])
+  @Previewable @State var store = MediaStore()
 
   PhotosView()
     .onGeometryChange(for: CGSize.self, of: { proxy in

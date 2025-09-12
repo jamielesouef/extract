@@ -25,7 +25,7 @@ struct SystemPhotoLibraryAuthorizer: PhotoLibraryAuthorizing {
 final class MediaStore: MediaStoring {
   private let authorizer: PhotoLibraryAuthorizing
 
-  var items: [any PhotoAsset] = []
+  var items: [PHAsset] = []
   var authorizationStatus: Bool?
   var isLoading = false
   var count: Int { items.count }
@@ -34,12 +34,14 @@ final class MediaStore: MediaStoring {
 
   var isInSelectMode = false
 
+  @ObservationIgnored private(set) var selectionContainer: SelectionContainer?
+
   // Static formatter for thread-safe reuse
   private nonisolated(unsafe) static let iso8601Formatter = ISO8601DateFormatter()
 
   private(set) var selected: Set<AnyHashable> = []
 
-  init(items: [any PhotoAsset] = [],
+  init(items: [PHAsset] = [],
        authorizer: PhotoLibraryAuthorizing = SystemPhotoLibraryAuthorizer())
   {
     self.items = items
@@ -64,7 +66,7 @@ final class MediaStore: MediaStoring {
     defer { isLoading = false }
 
     struct LoadResult {
-      let items: [any PhotoAsset]
+      let items: [PHAsset]
       let photosCount: Int
       let videoCount: Int
     }
@@ -76,7 +78,7 @@ final class MediaStore: MediaStoring {
       options.sortDescriptors = [NSSortDescriptor(key: "creationDate", ascending: false)]
       let fetched = PHAsset.fetchAssets(with: options)
 
-      var localItems: [any PhotoAsset] = []
+      var localItems: [PHAsset] = []
       var localPhotosCount = 0
       var localVideoCount = 0
 
@@ -110,7 +112,7 @@ final class MediaStore: MediaStoring {
     }
   }
 
-  func getCloudIdentifier(for asset: any PhotoAsset) async -> String? {
+  func getCloudIdentifier(for asset: PHAsset) async -> String? {
     await Task.detached {
       guard let creationDate = asset.creationDate else {
         return asset.localIdentifier
@@ -126,5 +128,15 @@ final class MediaStore: MediaStoring {
       let identifier = "\(dateString)-\(mediaType)-\(pixelWidth)x\(pixelHeight)-\(duration)"
       return identifier.replacingOccurrences(of: ":", with: "-")
     }.value
+  }
+
+  func createSelectionContainer() {
+    if selectionContainer == nil {
+      selectionContainer = .init()
+    }
+  }
+
+  func resetSelectionContainer() {
+    selectionContainer = nil
   }
 }

@@ -360,4 +360,27 @@ struct MediaStoreCloudIdentifierTests {
     #expect(identifier!.contains("video")) // Audio treated as video in the logic
     #expect(identifier!.contains("180.5"))
   }
+
+  @Test("createSelectionContainer handles creating a new storage object")
+  @MainActor
+  func createSelectionContainer() async throws {
+    let mediaStore = MediaStore()
+
+    #expect(mediaStore.selectionContainer == nil)
+    mediaStore.createSelectionContainer()
+    #expect(mediaStore.selectionContainer != nil)
+    #expect(mediaStore.selectionContainer?.selected.count == 0)
+  }
+
+  @Test("resetSelectionContainer handles sets the storage object to nil")
+  @MainActor
+  func resetSelectionContainer() async throws {
+    let mediaStore = MediaStore()
+    mediaStore.createSelectionContainer()
+
+    #expect(mediaStore.selectionContainer != nil)
+    mediaStore.resetSelectionContainer()
+
+    #expect(mediaStore.selectionContainer == nil)
+  }
 }

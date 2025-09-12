@@ -18,10 +18,8 @@ final class ImageLoader {
 
   private(set) var requestID: PHImageRequestID?
 
-  func loadImage(from asset: PhotoAsset, with size: CGFloat, at displayScale: CGFloat) async {
+  func loadImage(from asset: PHAsset, with size: CGFloat, at displayScale: CGFloat) async {
     guard image == nil else { return }
-    // Only load images for PHAsset instances (not mock assets in previews)
-    guard let phAsset = asset as? PHAsset else { return }
 
     let options = PHImageRequestOptions()
     options.isNetworkAccessAllowed = true
@@ -34,7 +32,7 @@ final class ImageLoader {
     )
 
     requestID = PHCachingImageManager.default().requestImage(
-      for: phAsset,
+      for: asset,
       targetSize: targetSize,
       contentMode: .aspectFill,
       options: options

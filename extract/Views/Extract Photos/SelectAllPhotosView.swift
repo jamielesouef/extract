@@ -62,6 +62,11 @@ struct SelectAllPhotosView: View {
           .glassEffectID("selectToggleButton", in: namespace)
         }
       }
+      .onChange(of: store.isInSelectMode) { _, newValue in
+        if newValue {
+          store.createSelectionContainer()
+        }
+      }
     #else
       Text("No mac")
     #endif
@@ -93,7 +98,6 @@ extension View {
 #Preview {
   @Previewable @State var store = MediaStore()
   VStack {
-    SelectAllPhotosView()
     SelectAllPhotosView()
   }
   .environment(store)

@@ -9,6 +9,6 @@ import Foundation
 import Photos
 
 protocol MediaIndexing: Sendable {
-  func addMedia(media items: [any PhotoAsset]) async throws
+  func addMedia(media items: [PHAsset]) async throws
   func addMedia(media items: [MediaItemData]) async throws
 }
