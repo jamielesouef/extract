@@ -12,7 +12,7 @@ import SwiftUI
 struct PhotosView: View {
   @Environment(MediaStore.self) private var store
   @Environment(AppState.self) private var appState
-  @Environment(\.modelContext) private var modelContext
+//  @Environment(\.modelContext) private var modelContext
 
   @State private var isRefreshing = false
 
@@ -52,11 +52,11 @@ struct PhotosView: View {
     .showSelectAll()
     .scrollViewGeometryReaader()
     .task {
-      await refreshGuarded()
+//      await refreshGuarded()
     }
     .refreshable {
       slog("refresh")
-      await refreshGuarded()
+//      await refreshGuarded()
     }
   }
 
@@ -80,14 +80,33 @@ struct PhotosView: View {
   private func getIdealSizeForimage() -> CGFloat {
     let minWidth = min(appState.windowSize.height, appState.windowSize.width)
 
+    guard minWidth > 0 else { return Constants.Image.idealImageSize }
+
     return (minWidth / Constants.Image.maxItemsForMinSpace)
       - Constants.Image.spacing
   }
 }
 
 #Preview("Photos Grid with 8 Items") {
+  @Previewable @State var appState = AppState()
+  @Previewable @State var store = MediaStore(items: [
+    MockPhotoAsset(),
+    MockPhotoAsset(),
+    MockPhotoAsset(),
+    MockPhotoAsset(),
+    MockPhotoAsset(),
+    MockPhotoAsset(),
+    MockPhotoAsset(),
+    MockPhotoAsset()
+  ])
+
   PhotosView()
+    .onGeometryChange(for: CGFloat.self, of: { proxy in
+      min(proxy.size.width, proxy.size.height)
+    }, action: {
+      appState.windowSize = CGSize(width: $0, height: $0)
+    })
     .modelContainer(for: MediaItem.self, inMemory: true)
-    .environment(AppState())
-    .environment(MediaStore())
+    .environment(appState)
+    .environment(store)
 }
