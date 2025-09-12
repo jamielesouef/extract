@@ -5,47 +5,42 @@
 //  Created by Jamie Le Souef on 10/9/2025.
 //
 
-import Photos
 import SwiftUI
 
 protocol SelectionContaining {
-  func select(_ asset: PHAsset)
-  func select(_ asset: [PHAsset])
-  func deselect(_ asset: PHAsset)
-  func deselect(_ asset: [PHAsset])
+  func select(_ asset: MediaAsset)
+  func select(_ assets: [MediaAsset])
+  func deselect(_ asset: MediaAsset)
+  func deselect(_ assets: [MediaAsset])
 }
 
 @Observable
 final class SelectionContainer: SelectionContaining {
-  private(set) var selected: [PHAsset] = []
-  private var assetToIdentifier: [ObjectIdentifier: String] = [:]
+  private(set) var selected: [MediaAsset] = []
+  private var selectedIds: Set<String> = []
 
-  func select(_ asset: PHAsset) {
+  func select(_ asset: MediaAsset) {
     select([asset])
   }
 
-  func select(_ asset: [PHAsset]) {
-    for item in asset {
-      // Use object identifier for uniqueness since localIdentifier might be empty
-      let objId = ObjectIdentifier(item)
-      if !assetToIdentifier.keys.contains(objId) {
-        let identifier = item.localIdentifier.isEmpty ? UUID().uuidString : item.localIdentifier
-        assetToIdentifier[objId] = identifier
-        selected.append(item)
+  func select(_ assets: [MediaAsset]) {
+    for asset in assets {
+      if !selectedIds.contains(asset.id) {
+        selectedIds.insert(asset.id)
+        selected.append(asset)
       }
     }
   }
 
-  func deselect(_ asset: PHAsset) {
+  func deselect(_ asset: MediaAsset) {
     deselect([asset])
   }
 
-  func deselect(_ asset: [PHAsset]) {
-    for item in asset {
-      let objId = ObjectIdentifier(item)
-      if let index = selected.firstIndex(where: { ObjectIdentifier($0) == objId }) {
-        selected.remove(at: index)
-        assetToIdentifier.removeValue(forKey: objId)
+  func deselect(_ assets: [MediaAsset]) {
+    for asset in assets {
+      if selectedIds.contains(asset.id) {
+        selectedIds.remove(asset.id)
+        selected.removeAll { $0.id == asset.id }
       }
     }
   }

@@ -25,7 +25,7 @@ struct SystemPhotoLibraryAuthorizer: PhotoLibraryAuthorizing {
 final class MediaStore: MediaStoring {
   private let authorizer: PhotoLibraryAuthorizing
 
-  var items: [PHAsset] = []
+  var items: [MediaAsset] = []
   var authorizationStatus: Bool?
   var isLoading = false
   var count: Int { items.count }
@@ -41,7 +41,7 @@ final class MediaStore: MediaStoring {
 
   private(set) var selected: Set<AnyHashable> = []
 
-  init(items: [PHAsset] = [],
+  init(items: [MediaAsset] = [],
        authorizer: PhotoLibraryAuthorizing = SystemPhotoLibraryAuthorizer())
   {
     self.items = items
@@ -66,7 +66,7 @@ final class MediaStore: MediaStoring {
     defer { isLoading = false }
 
     struct LoadResult {
-      let items: [PHAsset]
+      let items: [MediaAsset]
       let photosCount: Int
       let videoCount: Int
     }
@@ -78,19 +78,22 @@ final class MediaStore: MediaStoring {
       options.sortDescriptors = [NSSortDescriptor(key: "creationDate", ascending: false)]
       let fetched = PHAsset.fetchAssets(with: options)
 
-      var localItems: [PHAsset] = []
+      var localItems: [MediaAsset] = []
       var localPhotosCount = 0
       var localVideoCount = 0
 
       localItems.reserveCapacity(fetched.count)
 
-      fetched.enumerateObjects { asset, _, _ in
-        switch asset.mediaType {
+      fetched.enumerateObjects { phAsset, _, _ in
+        let mediaAsset = MediaAsset(from: phAsset)
+
+        switch mediaAsset.mediaType {
         case .image: localPhotosCount += 1
         case .video: localVideoCount += 1
-        default: break
+        case .audio, .unknown: break
         }
-        localItems.append(asset)
+
+        localItems.append(mediaAsset)
       }
 
       return LoadResult(items: localItems,

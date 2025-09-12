@@ -8,14 +8,5 @@
 import Foundation
 import Photos
 
-// MARK: - PHAsset Extensions
-
-extension PHAsset {
-  var isImage: Bool { mediaType == .image }
-  var isVideo: Bool { mediaType == .video }
-
-  var aspectRatio: Double {
-    guard pixelHeight > 0 else { return 1.0 }
-    return Double(pixelWidth) / Double(pixelHeight)
-  }
-}
+// This file is deprecated - MediaAsset now provides these properties
+// Keeping for backward compatibility during migration

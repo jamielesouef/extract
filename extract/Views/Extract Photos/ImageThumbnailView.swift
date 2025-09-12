@@ -19,7 +19,7 @@ struct ImageThumbnailView: View {
   @State private var imageLoader = ImageLoader()
   @State private var isSelected = false
 
-  let asset: PHAsset?
+  let asset: MediaAsset?
   let size: CGFloat
 
   var body: some View {
@@ -86,7 +86,7 @@ struct ImageThumbnailView: View {
 
 extension ImageThumbnailView {
   // Keep a non-optional API for production call sites
-  init(asset: PHAsset, size: CGFloat) {
+  init(asset: MediaAsset, size: CGFloat) {
     self.asset = asset
     self.size = size
   }

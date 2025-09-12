@@ -10,19 +10,19 @@ import Foundation
 import Photos
 import Testing
 
-
 @Suite("SelectionContainer Tests")
+@MainActor
 struct SelectionContainerTests {
   // MARK: - Helper function to create test assets
 
-  nonisolated func createTestAsset(id: String = UUID().uuidString, mediaType: PHAssetMediaType = .image) -> MockPHAsset {
-    MockPHAsset(localIdentifier: id, mediaType: mediaType)
+  func createTestAsset(id: String = UUID().uuidString, mediaType: MediaAssetType = .image) -> MediaAsset {
+    MediaAsset(id: id, localIdentifier: id, mediaType: mediaType)
   }
 
   // MARK: - Happy Path Tests
 
   @Test("SelectionContainer initializes empty")
-  @MainActor func initializesEmpty() async {
+  func initializesEmpty() async {
     let container = SelectionContainer()
 
     #expect(container.selected.isEmpty)
@@ -30,7 +30,7 @@ struct SelectionContainerTests {
   }
 
   @Test("Select single asset adds to selection")
-  @MainActor func selectSingleAsset() async {
+  func selectSingleAsset() async {
     let container = SelectionContainer()
     let asset = createTestAsset(id: "test-asset-1")
 
@@ -41,7 +41,7 @@ struct SelectionContainerTests {
   }
 
   @Test("Select multiple assets adds all to selection")
-  @MainActor func selectMultipleAssets() async {
+  func selectMultipleAssets() async {
     let container = SelectionContainer()
     let asset1 = createTestAsset(id: "test-asset-1")
     let asset2 = createTestAsset(id: "test-asset-2")
@@ -58,7 +58,7 @@ struct SelectionContainerTests {
   }
 
   @Test("Deselect removes asset from selection")
-  @MainActor func deselectRemovesAsset() async {
+  func deselectRemovesAsset() async {
     let container = SelectionContainer()
     let asset = createTestAsset(id: "test-asset-1")
 
@@ -71,7 +71,7 @@ struct SelectionContainerTests {
   }
 
   @Test("Deselect specific asset leaves others selected")
-  @MainActor func deselectSpecificAsset() async {
+  func deselectSpecificAsset() async {
     let container = SelectionContainer()
     let asset1 = createTestAsset(id: "test-asset-1")
     let asset2 = createTestAsset(id: "test-asset-2")
@@ -92,7 +92,7 @@ struct SelectionContainerTests {
   // MARK: - Edge Cases
 
   @Test("Select same asset multiple times maintains single instance")
-  @MainActor func selectDuplicateAsset() async {
+  func selectDuplicateAsset() async {
     let container = SelectionContainer()
     let asset = createTestAsset(id: "test-asset-1")
 
@@ -105,7 +105,7 @@ struct SelectionContainerTests {
   }
 
   @Test("Deselect non-selected asset does nothing")
-  @MainActor func deselectNonSelectedAsset() async {
+  func deselectNonSelectedAsset() async {
     let container = SelectionContainer()
     let selectedAsset = createTestAsset(id: "selected-asset")
     let nonSelectedAsset = createTestAsset(id: "non-selected-asset")
@@ -119,7 +119,7 @@ struct SelectionContainerTests {
   }
 
   @Test("Deselect from empty selection does nothing")
-  @MainActor func deselectFromEmptySelection() async {
+  func deselectFromEmptySelection() async {
     let container = SelectionContainer()
     let asset = createTestAsset(id: "test-asset")
 
@@ -130,7 +130,7 @@ struct SelectionContainerTests {
   }
 
   @Test("Select and deselect same asset multiple times")
-  @MainActor func selectDeselectCycle() async {
+  func selectDeselectCycle() async {
     let container = SelectionContainer()
     let asset = createTestAsset(id: "test-asset")
 
@@ -159,9 +159,10 @@ struct SelectionContainerTests {
   // MARK: - Different Asset Types Tests
 
   @Test("Works with image assets")
-  @MainActor func worksWithImageAssets() async {
+  func worksWithImageAssets() async {
     let container = SelectionContainer()
-    let imageAsset = MockPHAsset(
+    let imageAsset = MediaAsset(
+      id: "image-asset",
       localIdentifier: "image-asset",
       mediaType: .image,
       pixelWidth: 1920,
@@ -177,9 +178,10 @@ struct SelectionContainerTests {
   }
 
   @Test("Works with video assets")
-  @MainActor func worksWithVideoAssets() async {
+  func worksWithVideoAssets() async {
     let container = SelectionContainer()
-    let videoAsset = MockPHAsset(
+    let videoAsset = MediaAsset(
+      id: "video-asset",
       localIdentifier: "video-asset",
       mediaType: .video,
       duration: 30.5
@@ -194,10 +196,11 @@ struct SelectionContainerTests {
   }
 
   @Test("Works with mixed asset types")
-  @MainActor func worksWithMixedAssetTypes() async {
+  func worksWithMixedAssetTypes() async {
     let container = SelectionContainer()
     let imageAsset = createTestAsset(id: "image-asset", mediaType: .image)
-    let videoAsset = MockPHAsset(
+    let videoAsset = MediaAsset(
+      id: "video-asset",
       localIdentifier: "video-asset",
       mediaType: .video,
       duration: 15.2
@@ -214,10 +217,10 @@ struct SelectionContainerTests {
   // MARK: - Large Scale Tests
 
   @Test("Handles large number of assets")
-  @MainActor func handlesLargeNumberOfAssets() async {
+  func handlesLargeNumberOfAssets() async {
     let container = SelectionContainer()
     let assetCount = 1000
-    var assets: [MockPHAsset] = []
+    var assets: [MediaAsset] = []
 
     // Create and select many assets
     for i in 0 ..< assetCount {
@@ -253,7 +256,7 @@ struct SelectionContainerTests {
   // MARK: - Protocol Conformance Tests
 
   @Test("Conforms to SelectionContaining protocol")
-  @MainActor func conformsToSelectionContaining() async {
+  func conformsToSelectionContaining() async {
     let container: any SelectionContaining = SelectionContainer()
     let asset = createTestAsset(id: "protocol-test")
 
@@ -268,7 +271,7 @@ struct SelectionContainerTests {
   // MARK: - Memory and Performance Tests
 
   @Test("Selection set maintains uniqueness efficiently")
-  @MainActor func selectionSetMaintainsUniqueness() async {
+  func selectionSetMaintainsUniqueness() async {
     let container = SelectionContainer()
     let asset = createTestAsset(id: "unique-test")
 
@@ -283,15 +286,17 @@ struct SelectionContainerTests {
   }
 
   @Test("Assets with same identifier are treated as equal")
-  @MainActor func assetsWithSameIdentifierEqual() async {
+  func assetsWithSameIdentifierEqual() async {
     let container = SelectionContainer()
     let identifier = "same-identifier"
-    let asset1 = MockPHAsset(
+    let asset1 = MediaAsset(
+      id: identifier,
       localIdentifier: identifier,
       mediaType: .image,
       pixelWidth: 1920
     )
-    let asset2 = MockPHAsset(
+    let asset2 = MediaAsset(
+      id: identifier,
       localIdentifier: identifier,
       mediaType: .video,
       pixelWidth: 1080
@@ -302,12 +307,12 @@ struct SelectionContainerTests {
     container.select(asset1)
     container.select(asset2)
 
-    // Should contain both instances since PHAsset identity is based on object identity, not localIdentifier
-    #expect(container.selected.count == 2)
+    // Should contain only one instance since MediaAsset identity is based on ID
+    #expect(container.selected.count == 1)
   }
 
   @Test("Assets with different identifiers are treated as different")
-  @MainActor func assetsWithDifferentIdentifiersDifferent() async {
+  func assetsWithDifferentIdentifiersDifferent() async {
     let container = SelectionContainer()
     let asset1 = createTestAsset(id: "identifier-1")
     let asset2 = createTestAsset(id: "identifier-2")
@@ -325,7 +330,7 @@ struct SelectionContainerTests {
   // MARK: - Boundary and Error Conditions
 
   @Test("Container handles rapid select/deselect operations")
-  @MainActor func rapidSelectDeselectOperations() async {
+  func rapidSelectDeselectOperations() async {
     let container = SelectionContainer()
     let assets = (0 ..< 10).map { createTestAsset(id: "rapid-\($0)") }
 
@@ -343,20 +348,20 @@ struct SelectionContainerTests {
   }
 
   @Test("Container works with assets having empty identifiers")
-  @MainActor func emptyIdentifierAssets() async {
+  func emptyIdentifierAssets() async {
     let container = SelectionContainer()
     let emptyAsset1 = createTestAsset(id: "")
-    let emptyAsset2 = createTestAsset(id: "")
+    let emptyAsset2 = createTestAsset(id: "") // Same ID as emptyAsset1
 
     container.select(emptyAsset1)
     container.select(emptyAsset2)
 
-    // Both assets are different objects even with same identifier
-    #expect(container.selected.count == 2)
+    // Assets with same ID should be deduplicated
+    #expect(container.selected.count == 1)
   }
 
   @Test("Container handles very long identifiers")
-  @MainActor func veryLongIdentifiers() async {
+  func veryLongIdentifiers() async {
     let container = SelectionContainer()
     let longIdentifier = String(repeating: "a", count: 10000)
     let asset = createTestAsset(id: longIdentifier)
@@ -370,7 +375,7 @@ struct SelectionContainerTests {
   }
 
   @Test("Container handles special characters in identifiers")
-  @MainActor func specialCharacterIdentifiers() async {
+  func specialCharacterIdentifiers() async {
     let container = SelectionContainer()
     let specialChars = "!@#$%^&*()_+-=[]{}|;:,.<>?/~`\"'"
     let asset = createTestAsset(id: specialChars)

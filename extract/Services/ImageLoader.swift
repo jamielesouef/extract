@@ -18,8 +18,12 @@ final class ImageLoader {
 
   private(set) var requestID: PHImageRequestID?
 
-  func loadImage(from asset: PHAsset, with size: CGFloat, at displayScale: CGFloat) async {
+  func loadImage(from mediaAsset: MediaAsset, with size: CGFloat, at displayScale: CGFloat) async {
     guard image == nil else { return }
+
+    // Get PHAsset from localIdentifier for PhotoKit operations
+    let fetchResult = PHAsset.fetchAssets(withLocalIdentifiers: [mediaAsset.localIdentifier], options: nil)
+    guard let phAsset = fetchResult.firstObject else { return }
 
     let options = PHImageRequestOptions()
     options.isNetworkAccessAllowed = true
@@ -32,7 +36,7 @@ final class ImageLoader {
     )
 
     requestID = PHCachingImageManager.default().requestImage(
-      for: asset,
+      for: phAsset,
       targetSize: targetSize,
       contentMode: .aspectFill,
       options: options

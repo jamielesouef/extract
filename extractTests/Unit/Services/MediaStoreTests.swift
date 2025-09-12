@@ -33,46 +33,41 @@ struct MediaStoreTests {
     // Initially empty
     #expect(mediaStore.count == 0)
 
-    // This test would need mock PHAssets to test with actual items
-    // For now, we're testing the computed property works correctly
+    // Test with MediaAssets
+    let testAssets = [
+      MediaAsset(mediaType: .image),
+      MediaAsset(mediaType: .video),
+      MediaAsset(mediaType: .image)
+    ]
+
+    let mediaStoreWithItems = MediaStore(items: testAssets)
+    #expect(mediaStoreWithItems.count == 3)
   }
-}
 
-// MARK: - Cloud Identifier Tests
+  @Test("MediaStore handles MediaAssets correctly")
+  @MainActor
+  func mediaStoreWithMediaAssets() async {
+    let testAssets = [
+      MediaAsset(id: "image1", mediaType: .image, pixelWidth: 1920, pixelHeight: 1080),
+      MediaAsset(id: "video1", mediaType: .video, duration: 30.5),
+      MediaAsset(id: "image2", mediaType: .image, pixelWidth: 3840, pixelHeight: 2160)
+    ]
 
-@Suite("MediaStore Cloud Identifier Tests")
-struct MediaStoreCloudIdentifierTests {
-  // Mock PHAsset class for testing
-  class MockPHAsset: PHAsset, @unchecked Sendable {
-    private let _creationDate: Date?
-    private let _mediaType: PHAssetMediaType
-    private let _pixelWidth: Int
-    private let _pixelHeight: Int
-    private let _duration: TimeInterval
-    private let _localIdentifier: String
+    let mediaStore = MediaStore(items: testAssets)
 
-    init(creationDate: Date?,
-         mediaType: PHAssetMediaType,
-         pixelWidth: Int = 1920,
-         pixelHeight: Int = 1080,
-         duration: TimeInterval = 0.0,
-         localIdentifier: String = "test-local-id")
-    {
-      _creationDate = creationDate
-      _mediaType = mediaType
-      _pixelWidth = pixelWidth
-      _pixelHeight = pixelHeight
-      _duration = duration
-      _localIdentifier = localIdentifier
-      super.init()
-    }
+    #expect(mediaStore.items.count == 3)
+    #expect(mediaStore.count == 3)
 
-    override var creationDate: Date? { _creationDate }
-    override var mediaType: PHAssetMediaType { _mediaType }
-    override var pixelWidth: Int { _pixelWidth }
-    override var pixelHeight: Int { _pixelHeight }
-    override var duration: TimeInterval { _duration }
-    override var localIdentifier: String { _localIdentifier }
+    // Check that items maintain their properties
+    let firstItem = mediaStore.items[0]
+    #expect(firstItem.id == "image1")
+    #expect(firstItem.isImage == true)
+    #expect(firstItem.aspectRatio == 1920.0 / 1080.0)
+
+    let videoItem = mediaStore.items[1]
+    #expect(videoItem.id == "video1")
+    #expect(videoItem.isVideo == true)
+    #expect(videoItem.duration == 30.5)
   }
 
   @Test("createSelectionContainer handles creating a new storage object")
@@ -96,5 +91,18 @@ struct MediaStoreCloudIdentifierTests {
     mediaStore.resetSelectionContainer()
 
     #expect(mediaStore.selectionContainer == nil)
+  }
+
+  @Test("SelectionContainer works with MediaAssets")
+  @MainActor
+  func selectionContainerWithMediaAssets() async throws {
+    let mediaStore = MediaStore()
+    let testAsset = MediaAsset(id: "test-asset", mediaType: .image)
+
+    mediaStore.createSelectionContainer()
+    mediaStore.selectionContainer?.select(testAsset)
+
+    #expect(mediaStore.selectionContainer?.selected.count == 1)
+    #expect(mediaStore.selectionContainer?.selected.contains(testAsset) == true)
   }
 }
