@@ -12,9 +12,12 @@ struct SelectPhotoOptionView: View {
 
   @State private var isPressed = false
 
+  @Environment(MediaStore.self) private var store
+
   private let duration: TimeInterval = 0.2
   var body: some View {
     Button(action: {
+      updateStore()
       withAnimation(.spring(response: duration, dampingFraction: 0.1)) {
         isPressed = true
       }
@@ -31,6 +34,15 @@ struct SelectPhotoOptionView: View {
         .scaleEffect(isPressed ? 1.2 : 1.0)
     }
     .buttonStyle(.plain)
+  }
+
+  private func updateStore() {
+    switch option {
+    case .selectAll:
+      store.selectAll()
+    case .selectNone:
+      store.selectNone()
+    }
   }
 }
 

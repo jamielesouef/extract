@@ -1,7 +1,7 @@
 # Extract - Makefile
 # SwiftUI macOS/iOS app for photo library export
 
-.PHONY: help format build clean test run setup format-fix open commit
+.PHONY: help format build clean test test-macos test-ios test-all run setup format-fix open commit
 
 # Default target
 help:
@@ -10,7 +10,12 @@ help:
 	@echo "  make format      - Run SwiftFormat on source code"
 	@echo "  make build       - Build the project (runs format first)"
 	@echo "  make run         - Build and run the app"
-	@echo "  make test        - Run unit tests"
+	@echo "  make test               - Run unit tests on both platforms (default)"
+	@echo "  make test platform=macos - Run unit tests on macOS only"
+	@echo "  make test platform=ios   - Run unit tests on iOS Simulator only"
+	@echo "  make test-macos         - Run unit tests on macOS (alias)"
+	@echo "  make test-ios           - Run unit tests on iOS Simulator (alias)"
+	@echo "  make test-all           - Run unit tests on both platforms (alias)"
 	@echo "  make clean       - Clean build artifacts"
 	@echo "  make setup       - Install development dependencies (SwiftFormat, GitHub CLI)"
 	@echo "  make commit      - Create intelligent commit using current changes"
@@ -49,13 +54,38 @@ run: build
 	@echo "Launching Extract..."
 	open /Users/jamielesouef/Library/Developer/Xcode/DerivedData/extract-*/Build/Products/Debug/extract.app
 
-# Run tests
+# Run tests with platform support (defaults to both platforms)
+# Usage: make test, make test platform=macos, make test platform=ios, make test platform=all
 test: format
-	@echo "Building main app with testing enabled..."
-	xcodebuild -project extract.xcodeproj -target extract -configuration Debug build
-	@echo "Building test target..."
-	xcodebuild -project extract.xcodeproj -target extractTests -configuration Debug -destination 'platform=macOS' build
-	@echo "Test target built successfully. Note: Use Xcode to run tests interactively."
+	@if [ "$(platform)" = "macos" ]; then \
+		echo "Running tests on macOS..."; \
+		xcodebuild test -project extract.xcodeproj -scheme extract -destination 'platform=macOS'; \
+	elif [ "$(platform)" = "ios" ]; then \
+		echo "Running tests on iOS Simulator..."; \
+		xcodebuild test -project extract.xcodeproj -scheme extract -destination 'platform=iOS Simulator,name=iPhone 17'; \
+	else \
+		echo "Running tests on both macOS and iOS..."; \
+		echo "Running tests on macOS..."; \
+		xcodebuild test -project extract.xcodeproj -scheme extract -destination 'platform=macOS'; \
+		echo "Running tests on iOS Simulator..."; \
+		xcodebuild test -project extract.xcodeproj -scheme extract -destination 'platform=iOS Simulator,name=iPhone 17'; \
+	fi
+
+# Convenience aliases for backward compatibility
+test-macos: format
+	@echo "Running tests on macOS..."
+	xcodebuild test -project extract.xcodeproj -scheme extract -destination 'platform=macOS'
+
+test-ios: format
+	@echo "Running tests on iOS Simulator..."
+	xcodebuild test -project extract.xcodeproj -scheme extract -destination 'platform=iOS Simulator,name=iPhone 17'
+
+test-all: format
+	@echo "Running tests on both macOS and iOS..."
+	@echo "Running tests on macOS..."
+	xcodebuild test -project extract.xcodeproj -scheme extract -destination 'platform=macOS'
+	@echo "Running tests on iOS Simulator..."
+	xcodebuild test -project extract.xcodeproj -scheme extract -destination 'platform=iOS Simulator,name=iPhone 17'
 
 # Clean build artifacts
 clean:

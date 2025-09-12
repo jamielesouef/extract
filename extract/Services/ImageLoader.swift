@@ -37,7 +37,9 @@ final class ImageLoader {
       contentMode: .aspectFill,
       options: options
     ) { [weak self] img, _ in
-      self?.image = img
+      Task { @MainActor in
+        self?.image = img
+      }
     }
   }
 

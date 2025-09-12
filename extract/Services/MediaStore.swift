@@ -112,24 +112,6 @@ final class MediaStore: MediaStoring {
     }
   }
 
-  func getCloudIdentifier(for asset: PHAsset) async -> String? {
-    await Task.detached {
-      guard let creationDate = asset.creationDate else {
-        return asset.localIdentifier
-      }
-
-      // Use a static formatter to avoid repeated creation
-      let dateString = Self.iso8601Formatter.string(from: creationDate)
-      let mediaType = asset.mediaType == .image ? "photo" : "video"
-      let pixelWidth = asset.pixelWidth
-      let pixelHeight = asset.pixelHeight
-      let duration = asset.duration
-
-      let identifier = "\(dateString)-\(mediaType)-\(pixelWidth)x\(pixelHeight)-\(duration)"
-      return identifier.replacingOccurrences(of: ":", with: "-")
-    }.value
-  }
-
   func createSelectionContainer() {
     if selectionContainer == nil {
       selectionContainer = .init()
@@ -139,4 +121,8 @@ final class MediaStore: MediaStoring {
   func resetSelectionContainer() {
     selectionContainer = nil
   }
+
+  func selectAll() {}
+
+  func selectNone() {}
 }

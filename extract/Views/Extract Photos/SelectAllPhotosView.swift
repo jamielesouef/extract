@@ -65,6 +65,8 @@ struct SelectAllPhotosView: View {
       .onChange(of: store.isInSelectMode) { _, newValue in
         if newValue {
           store.createSelectionContainer()
+        } else {
+          store.resetSelectionContainer()
         }
       }
     #else
