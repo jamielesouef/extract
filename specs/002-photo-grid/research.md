@@ -3,7 +3,7 @@
 ## PhotoKit Integration Best Practices
 
 ### Decision: PHCachingImageManager for Performance
-**Rationale**: PHCachingImageManager provides optimal performance for grid-based thumbnail loading with built-in memory management and request prioritization.
+**Rationale**: PHCachingImageManager provides optimal performance for grid-based thumbnail loading with built-in memory management and request prioritisation.
 
 **Key Patterns**:
 - Use `PHCachingImageManager` for all thumbnail requests

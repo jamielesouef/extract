@@ -47,7 +47,7 @@ extension View {
 }
 
 extension View {
-  func scrollViewGeometryReaader() -> some View {
+  func scrollViewGeometryReader() -> some View {
     modifier(ScrollViewGeometryReaader())
   }
 }

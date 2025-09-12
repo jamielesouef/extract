@@ -38,7 +38,7 @@ Photo Grid Display is a focused SwiftUI component that loads photos from iCloud 
 **Target Platform**: iOS 18+, iPadOS 18+, macOS 26+
 **Project Type**: single - native Apple app component  
 **Performance Goals**: 60fps scrolling, <200ms thumbnail load times  
-**Constraints**: <500MB memory for 10k photos, respect iCloud optimization  
+**Constraints**: <500MB memory for 10k photos, respect iCloud optimisation  
 **Scale/Scope**: Single grid component, 3-4 views, basic selection
 
 ## Constitution Check
@@ -157,7 +157,7 @@ No unknowns identified in Technical Context. PhotoKit integration patterns are w
 - **Phase A - Foundation** (TDD): Component tests → Service tests
 - **Phase B - Services** (TDD): Service implementations
 - **Phase C - Views** (TDD): SwiftUI component implementations  
-- **Phase D - Integration**: Permission handling → Performance optimization
+- **Phase D - Integration**: Permission handling → Performance optimisation
 - Mark [P] for parallel execution (different files)
 
 **Task Categories**:
@@ -175,7 +175,7 @@ No unknowns identified in Technical Context. PhotoKit integration patterns are w
 - Component tests must pass before view implementations
 - Service tests must pass before service implementations
 - Services must exist before views can use them
-- All core functionality complete before performance optimization
+- All core functionality complete before performance optimisation
 
 **IMPORTANT**: This phase is executed by the /tasks command, NOT by /plan
 

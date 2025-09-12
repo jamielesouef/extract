@@ -50,7 +50,7 @@ struct PhotosView: View {
     .ignoresSafeArea(.all)
     .toolbar(removing: .title)
     .showSelectAll()
-    .scrollViewGeometryReaader()
+    .scrollViewGeometryReader()
     .task {
       await refreshGuarded()
     }
