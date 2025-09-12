@@ -17,9 +17,9 @@ struct FakeAuthorizer: PhotoLibraryAuthorizing {
 }
 
 @Suite("MediaStore Integration Tests")
+@MainActor
 struct MediaStoreIntegrationTests {
   @Test("requestAccess sets authorizationStatus true for .authorized")
-  @MainActor
   func requestAccessAuthorized() async {
     let store = MediaStore(authorizer: FakeAuthorizer(status: .authorized))
     await store.requestAccess()
@@ -27,7 +27,6 @@ struct MediaStoreIntegrationTests {
   }
 
   @Test("requestAccess sets authorizationStatus true for .limited")
-  @MainActor
   func requestAccessLimited() async {
     let store = MediaStore(authorizer: FakeAuthorizer(status: .limited))
     await store.requestAccess()
@@ -35,7 +34,6 @@ struct MediaStoreIntegrationTests {
   }
 
   @Test("requestAccess sets authorizationStatus false for denied-like statuses")
-  @MainActor
   func requestAccessDeniedRestrictedNotDetermined() async {
     for s in [PHAuthorizationStatus.denied, .notDetermined, .restricted] {
       let store = MediaStore(authorizer: FakeAuthorizer(status: s))

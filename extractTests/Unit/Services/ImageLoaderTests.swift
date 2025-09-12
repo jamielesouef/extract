@@ -18,9 +18,9 @@ import Testing
 #endif
 
 @Suite("ImageLoader Tests")
+@MainActor
 struct ImageLoaderTests {
   // Helper function to create test MediaAssets
-  @MainActor
   func createTestMediaAsset(
     id: String = UUID().uuidString,
     localIdentifier: String = UUID().uuidString,
@@ -40,7 +40,6 @@ struct ImageLoaderTests {
   }
 
   @Test("ImageLoader initializes correctly")
-  @MainActor
   func imageLoaderInitialization() async {
     let imageLoader = ImageLoader()
 
@@ -49,7 +48,6 @@ struct ImageLoaderTests {
   }
 
   @Test("ImageLoader properly manages request lifecycle")
-  @MainActor
   func imageLoaderRequestLifecycle() async {
     let imageLoader = ImageLoader()
     let mediaAsset = createTestMediaAsset()
@@ -70,7 +68,6 @@ struct ImageLoaderTests {
   }
 
   @Test("ImageLoader handles different asset types properly")
-  @MainActor
   func imageLoaderHandlesDifferentAssetTypes() async {
     let imageLoader = ImageLoader()
 
@@ -87,7 +84,6 @@ struct ImageLoaderTests {
   }
 
   @Test("ImageLoader target size calculation logic")
-  @MainActor
   func imageLoaderTargetSizeCalculation() async {
     let imageLoader = ImageLoader()
     let mediaAsset = createTestMediaAsset()
@@ -114,7 +110,6 @@ struct ImageLoaderTests {
   }
 
   @Test("loadImage skips loading when image already exists")
-  @MainActor
   func loadImageSkipsWhenImageExists() async {
     let imageLoader = ImageLoader()
     let mediaAsset = createTestMediaAsset()
@@ -126,7 +121,6 @@ struct ImageLoaderTests {
   }
 
   @Test("loadImage handles MediaAsset correctly")
-  @MainActor
   func loadImageWithMediaAsset() async {
     let imageLoader = ImageLoader()
     let mediaAsset = createTestMediaAsset(
@@ -144,7 +138,6 @@ struct ImageLoaderTests {
   }
 
   @Test("loadImage calculates correct target size")
-  @MainActor
   func loadImageTargetSizeCalculation() async {
     let imageLoader = ImageLoader()
     let mediaAsset = createTestMediaAsset()
@@ -167,7 +160,6 @@ struct ImageLoaderTests {
   }
 
   @Test("loadImage handles empty localIdentifier gracefully")
-  @MainActor
   func loadImageWithEmptyLocalIdentifier() async {
     let imageLoader = ImageLoader()
     let mediaAsset = createTestMediaAsset(localIdentifier: "")
@@ -179,7 +171,6 @@ struct ImageLoaderTests {
   }
 
   @Test("cancel works when no request is active")
-  @MainActor
   func cancelWithNoActiveRequest() async {
     let imageLoader = ImageLoader()
 
@@ -193,7 +184,6 @@ struct ImageLoaderTests {
   }
 
   @Test("cancel clears requestID")
-  @MainActor
   func cancelClearsRequestID() async {
     let imageLoader = ImageLoader()
     let mediaAsset = createTestMediaAsset()
@@ -205,7 +195,6 @@ struct ImageLoaderTests {
   }
 
   @Test("multiple cancel calls are safe")
-  @MainActor
   func multipleCancelCallsAreSafe() async {
     let imageLoader = ImageLoader()
 
@@ -217,7 +206,6 @@ struct ImageLoaderTests {
   }
 
   @Test("loadImage with zero size")
-  @MainActor
   func loadImageWithZeroSize() async {
     let imageLoader = ImageLoader()
     let mediaAsset = createTestMediaAsset()
@@ -228,7 +216,6 @@ struct ImageLoaderTests {
   }
 
   @Test("loadImage with zero display scale")
-  @MainActor
   func loadImageWithZeroDisplayScale() async {
     let imageLoader = ImageLoader()
     let mediaAsset = createTestMediaAsset()
@@ -239,7 +226,6 @@ struct ImageLoaderTests {
   }
 
   @Test("loadImage with negative values")
-  @MainActor
   func loadImageWithNegativeValues() async {
     let imageLoader = ImageLoader()
     let mediaAsset = createTestMediaAsset()
@@ -250,7 +236,6 @@ struct ImageLoaderTests {
   }
 
   @Test("loadImage with extremely large values")
-  @MainActor
   func loadImageWithExtremelyLargeValues() async {
     let imageLoader = ImageLoader()
     let mediaAsset = createTestMediaAsset()
@@ -265,7 +250,6 @@ struct ImageLoaderTests {
   }
 
   @Test("concurrent loadImage calls")
-  @MainActor
   func concurrentLoadImageCalls() async {
     let imageLoader = ImageLoader()
     let mediaAsset1 = createTestMediaAsset(localIdentifier: "asset1")
@@ -289,7 +273,6 @@ struct ImageLoaderTests {
   }
 
   @Test("Observable property changes")
-  @MainActor
   func observablePropertyChanges() async {
     let imageLoader = ImageLoader()
 
@@ -298,7 +281,6 @@ struct ImageLoaderTests {
   }
 
   @Test("ImageLoader doesn't retain references unnecessarily")
-  @MainActor
   func memoryManagement() async {
     weak var weakLoader: ImageLoader?
 
@@ -317,7 +299,7 @@ struct ImageLoaderTests {
 
   #if os(iOS)
     @Test("iOS specific image handling")
-    @MainActor
+
     func iOSSpecificImageHandling() async {
       let imageLoader = ImageLoader()
 
@@ -328,7 +310,7 @@ struct ImageLoaderTests {
     }
   #else
     @Test("macOS specific image handling")
-    @MainActor
+
     func macOSSpecificImageHandling() async {
       let imageLoader = ImageLoader()
 

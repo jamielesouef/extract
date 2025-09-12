@@ -10,9 +10,9 @@ import SwiftUI
 import Testing
 
 @Suite("AppState Tests")
+@MainActor
 struct AppStateTests {
   @Test("AppState initializes with correct default values")
-  @MainActor
   func appStateInitialization() async {
     let appState = AppState()
 
@@ -21,7 +21,6 @@ struct AppStateTests {
   }
 
   @Test("Navigation path can be modified")
-  @MainActor
   func navigationPathModification() async {
     let appState = AppState()
 
@@ -38,7 +37,6 @@ struct AppStateTests {
   }
 
   @Test("Window size can be updated")
-  @MainActor
   func windowSizeUpdate() async {
     let appState = AppState()
 

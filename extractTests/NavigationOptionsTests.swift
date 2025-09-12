@@ -10,9 +10,9 @@ import SwiftUI
 import Testing
 
 @Suite("NavigationOptions Tests")
+@MainActor
 struct NavigationOptionsTests {
   @Test("NavigationOptions id property returns correct string values")
-  @MainActor
   func idProperty() async {
     #expect(NavigationOptions.newPhotos.id == "newPhotos")
     #expect(NavigationOptions.backedUpPhotos.id == "backedUpPhotos")
@@ -20,7 +20,6 @@ struct NavigationOptionsTests {
   }
 
   @Test("NavigationOptions pages static property contains correct cases")
-  @MainActor
   func pagesProperty() async {
     let expectedPages: [NavigationOptions] = [.newPhotos, .backedUpPhotos]
 
@@ -32,7 +31,6 @@ struct NavigationOptionsTests {
   }
 
   @Test("NavigationOptions icon property returns correct SF Symbols")
-  @MainActor
   func iconProperty() async {
     #expect(NavigationOptions.newPhotos.icon == "photo.circle")
     #expect(NavigationOptions.backedUpPhotos.icon == "lock.circle")
@@ -40,7 +38,6 @@ struct NavigationOptionsTests {
   }
 
   @Test("NavigationOptions name property returns correct localized strings")
-  @MainActor
   func nameProperty() async {
     // Test that the name properties return the expected localized string keys
     let newPhotosName = NavigationOptions.newPhotos.name
@@ -54,7 +51,6 @@ struct NavigationOptionsTests {
   }
 
   @Test("NavigationOptions conforms to Equatable")
-  @MainActor
   func equatableConformance() async {
     #expect(NavigationOptions.newPhotos == NavigationOptions.newPhotos)
     #expect(NavigationOptions.backedUpPhotos == NavigationOptions.backedUpPhotos)
@@ -66,7 +62,6 @@ struct NavigationOptionsTests {
   }
 
   @Test("NavigationOptions conforms to Hashable")
-  @MainActor
   func hashableConformance() async {
     let set: Set<NavigationOptions> = [.newPhotos, .backedUpPhotos, .failedPhotosAccess]
 
@@ -77,7 +72,6 @@ struct NavigationOptionsTests {
   }
 
   @Test("NavigationOptions conforms to Identifiable")
-  @MainActor
   func identifiableConformance() async {
     // Test that each case has a unique ID
     let options: [NavigationOptions] = [.newPhotos, .backedUpPhotos, .failedPhotosAccess]
@@ -91,7 +85,6 @@ struct NavigationOptionsTests {
   }
 
   @Test("NavigationOptions viewForPage returns correct view types")
-  @MainActor
   func testViewForPage() async {
     // Test that viewForPage returns views without crashing
     // Note: We can't easily test the exact view types due to SwiftUI's type erasure,
@@ -108,7 +101,6 @@ struct NavigationOptionsTests {
   }
 
   @Test("NavigationOptions all cases coverage")
-  @MainActor
   func allCases() async {
     // Test that we have all the expected cases
     let allTestCases: [NavigationOptions] = [.newPhotos, .backedUpPhotos, .failedPhotosAccess]
@@ -122,7 +114,6 @@ struct NavigationOptionsTests {
   }
 
   @Test("NavigationOptions pages excludes failedPhotosAccess")
-  @MainActor
   func pagesExcludesFailedAccess() async {
     // Verify that failedPhotosAccess is not included in the pages array
     // This is important for navigation UI that shouldn't show the error state

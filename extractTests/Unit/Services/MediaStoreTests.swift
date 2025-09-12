@@ -11,9 +11,9 @@ import Photos
 import Testing
 
 @Suite("MediaStore Tests")
+@MainActor
 struct MediaStoreTests {
   @Test("MediaStore initializes correctly")
-  @MainActor
   func mediaStoreInitialization() async {
     let mediaStore = MediaStore()
 
@@ -26,7 +26,6 @@ struct MediaStoreTests {
   }
 
   @Test("Count property returns correct value")
-  @MainActor
   func countProperty() async {
     let mediaStore = MediaStore()
 
@@ -45,7 +44,6 @@ struct MediaStoreTests {
   }
 
   @Test("MediaStore handles MediaAssets correctly")
-  @MainActor
   func mediaStoreWithMediaAssets() async {
     let testAssets = [
       MediaAsset(id: "image1", mediaType: .image, pixelWidth: 1920, pixelHeight: 1080),
@@ -71,7 +69,6 @@ struct MediaStoreTests {
   }
 
   @Test("createSelectionContainer handles creating a new storage object")
-  @MainActor
   func createSelectionContainer() async throws {
     let mediaStore = MediaStore()
 
@@ -82,7 +79,6 @@ struct MediaStoreTests {
   }
 
   @Test("resetSelectionContainer handles sets the storage object to nil")
-  @MainActor
   func resetSelectionContainer() async throws {
     let mediaStore = MediaStore()
     mediaStore.createSelectionContainer()
@@ -94,7 +90,6 @@ struct MediaStoreTests {
   }
 
   @Test("SelectionContainer works with MediaAssets")
-  @MainActor
   func selectionContainerWithMediaAssets() async throws {
     let mediaStore = MediaStore()
     let testAsset = MediaAsset(id: "test-asset", mediaType: .image)

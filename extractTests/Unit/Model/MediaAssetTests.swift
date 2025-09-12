@@ -11,11 +11,10 @@ import Testing
 
 @testable import extract
 
-@MainActor
 @Suite("MediaAsset Tests")
+@MainActor
 struct MediaAssetTests {
   @Test("MediaAsset initializes correctly from test data")
-  @MainActor
   func mediaAssetInitialization() {
     let testDate = Date(timeIntervalSince1970: 1_609_459_200) // 2021-01-01T00:00:00Z
 
@@ -44,7 +43,6 @@ struct MediaAssetTests {
   }
 
   @Test("MediaAsset handles video correctly")
-  @MainActor
   func mediaAssetVideoHandling() {
     let mediaAsset = MediaAsset(
       mediaType: .video,
@@ -61,7 +59,6 @@ struct MediaAssetTests {
   }
 
   @Test("MediaAsset handles zero height gracefully")
-  @MainActor
   func mediaAssetZeroHeight() {
     let mediaAsset = MediaAsset(
       pixelWidth: 1920,
@@ -72,7 +69,6 @@ struct MediaAssetTests {
   }
 
   @Test("MediaAsset conforms to Identifiable")
-  @MainActor
   func mediaAssetIdentifiable() {
     let mediaAsset1 = MediaAsset(id: "id1")
     let mediaAsset2 = MediaAsset(id: "id2")
@@ -83,7 +79,6 @@ struct MediaAssetTests {
   }
 
   @Test("MediaAsset conforms to Hashable")
-  @MainActor
   func mediaAssetHashable() {
     let mediaAsset1 = MediaAsset(id: "same-id", localIdentifier: "local-1")
     let mediaAsset2 = MediaAsset(id: "same-id", localIdentifier: "local-2")
@@ -97,7 +92,6 @@ struct MediaAssetTests {
   }
 
   @Test("MediaAssetType conversion from PHAssetMediaType")
-  @MainActor
   func mediaAssetTypeConversion() {
     #expect(MediaAssetType(from: .image) == .image)
     #expect(MediaAssetType(from: .video) == .video)
@@ -106,7 +100,6 @@ struct MediaAssetTests {
   }
 
   @Test("Array extensions work correctly")
-  @MainActor
   func arrayExtensions() {
     let assets = [
       MediaAsset(mediaType: .image),
